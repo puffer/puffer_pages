@@ -5,22 +5,22 @@
 
 Gem::Specification.new do |s|
   s.name = %q{puffer_pages}
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["pyromaniac"]
-  s.date = %q{2011-02-04}
+  s.date = %q{2011-02-08}
   s.description = %q{Puffer pages is integratable rails CMS with puffer admin interface}
   s.email = %q{kinwizard@gmail.com}
   s.extra_rdoc_files = [
-    "README.rdoc"
+    "README.md"
   ]
   s.files = [
     ".rspec",
     "Gemfile",
     "Gemfile.lock",
     "MIT-LICENSE",
-    "README.rdoc",
+    "README.md",
     "Rakefile",
     "VERSION",
     "app/controllers/pages_controller.rb",
@@ -28,10 +28,15 @@ Gem::Specification.new do |s|
     "app/controllers/puffer_pages/pages_controller.rb",
     "app/controllers/puffer_pages/snippets_controller.rb",
     "app/helpers/puffer_pages_helper.rb",
+    "app/helpers/puffer_tree_helper.rb",
     "app/models/layout.rb",
     "app/models/page.rb",
     "app/models/page_part.rb",
     "app/models/snippet.rb",
+    "app/views/puffer_pages/_page_part_builder.html.erb",
+    "app/views/puffer_pages/_page_parts.html.erb",
+    "app/views/puffer_pages/_tree_page.html.erb",
+    "app/views/puffer_tree/tree.html.erb",
     "autotest/discover.rb",
     "config/locales/en.yml",
     "config/puffer_routes.rb",
@@ -45,8 +50,16 @@ Gem::Specification.new do |s|
     "lib/generators/puffer_pages/install/templates/migrate/20090504132337_create_page_parts.rb",
     "lib/generators/puffer_pages/install/templates/migrate/20090506102004_create_layouts.rb",
     "lib/generators/puffer_pages/install/templates/migrate/20090510121824_create_snippets.rb",
+    "lib/generators/puffer_pages/install/templates/puffer/javascripts/puffer_pages.js",
+    "lib/generators/puffer_pages/install/templates/puffer/javascripts/right-dialog.js",
+    "lib/generators/puffer_pages/install/templates/puffer/javascripts/right-tabs.js",
+    "lib/generators/puffer_pages/install/templates/puffer/stylesheets/puffer_pages.css",
+    "lib/generators/puffer_pages/install/templates/puffer/stylesheets/puffer_tree.css",
+    "lib/generators/puffer_pages/install/templates/puffer_pages.rb",
+    "lib/puffer/inputs/page_parts.rb",
+    "lib/puffer/inputs/page_parts_body.rb",
+    "lib/puffer/tree_base.rb",
     "lib/puffer_pages.rb",
-    "lib/puffer_pages/base.rb",
     "lib/puffer_pages/engine.rb",
     "lib/puffer_pages/extensions/core.rb",
     "lib/puffer_pages/extensions/mapper.rb",
@@ -72,10 +85,11 @@ Gem::Specification.new do |s|
     "spec/dummy/config/initializers/backtrace_silencers.rb",
     "spec/dummy/config/initializers/inflections.rb",
     "spec/dummy/config/initializers/mime_types.rb",
+    "spec/dummy/config/initializers/puffer.rb",
+    "spec/dummy/config/initializers/puffer_pages.rb",
     "spec/dummy/config/initializers/secret_token.rb",
     "spec/dummy/config/initializers/session_store.rb",
     "spec/dummy/config/locales/en.yml",
-    "spec/dummy/config/puffer.rb",
     "spec/dummy/config/routes.rb",
     "spec/dummy/db/migrate/20090422092419_create_pages.rb",
     "spec/dummy/db/migrate/20090504132337_create_page_parts.rb",
@@ -92,30 +106,17 @@ Gem::Specification.new do |s|
     "spec/dummy/public/javascripts/effects.js",
     "spec/dummy/public/javascripts/prototype.js",
     "spec/dummy/public/javascripts/rails.js",
-    "spec/dummy/public/puffer/javascripts/application.js",
-    "spec/dummy/public/puffer/javascripts/rails-src.js",
-    "spec/dummy/public/puffer/javascripts/right-autocompleter-src.js",
+    "spec/dummy/public/puffer/javascripts/puffer.js",
+    "spec/dummy/public/puffer/javascripts/puffer_pages.js",
+    "spec/dummy/public/puffer/javascripts/rails.js",
     "spec/dummy/public/puffer/javascripts/right-autocompleter.js",
-    "spec/dummy/public/puffer/javascripts/right-autocompleter.js.gz",
-    "spec/dummy/public/puffer/javascripts/right-calendar-src.js",
     "spec/dummy/public/puffer/javascripts/right-calendar.js",
-    "spec/dummy/public/puffer/javascripts/right-calendar.js.gz",
-    "spec/dummy/public/puffer/javascripts/right-in-edit-src.js",
-    "spec/dummy/public/puffer/javascripts/right-in-edit.js",
-    "spec/dummy/public/puffer/javascripts/right-in-edit.js.gz",
-    "spec/dummy/public/puffer/javascripts/right-lightbox-src.js",
-    "spec/dummy/public/puffer/javascripts/right-lightbox.js",
-    "spec/dummy/public/puffer/javascripts/right-lightbox.js.gz",
-    "spec/dummy/public/puffer/javascripts/right-sortable-src.js",
-    "spec/dummy/public/puffer/javascripts/right-sortable.js",
-    "spec/dummy/public/puffer/javascripts/right-sortable.js.gz",
-    "spec/dummy/public/puffer/javascripts/right-src.js",
-    "spec/dummy/public/puffer/javascripts/right-tabs-src.js",
+    "spec/dummy/public/puffer/javascripts/right-dialog.js",
     "spec/dummy/public/puffer/javascripts/right-tabs.js",
-    "spec/dummy/public/puffer/javascripts/right-tabs.js.gz",
     "spec/dummy/public/puffer/javascripts/right.js",
-    "spec/dummy/public/puffer/javascripts/right.js.gz",
     "spec/dummy/public/puffer/stylesheets/puffer.css",
+    "spec/dummy/public/puffer/stylesheets/puffer_pages.css",
+    "spec/dummy/public/puffer/stylesheets/puffer_tree.css",
     "spec/dummy/public/puffer/stylesheets/reset.css",
     "spec/dummy/public/stylesheets/.gitkeep",
     "spec/dummy/script/rails",
@@ -146,9 +147,10 @@ Gem::Specification.new do |s|
     "spec/dummy/config/initializers/backtrace_silencers.rb",
     "spec/dummy/config/initializers/inflections.rb",
     "spec/dummy/config/initializers/mime_types.rb",
+    "spec/dummy/config/initializers/puffer.rb",
+    "spec/dummy/config/initializers/puffer_pages.rb",
     "spec/dummy/config/initializers/secret_token.rb",
     "spec/dummy/config/initializers/session_store.rb",
-    "spec/dummy/config/puffer.rb",
     "spec/dummy/config/routes.rb",
     "spec/dummy/db/migrate/20090422092419_create_pages.rb",
     "spec/dummy/db/migrate/20090504132337_create_page_parts.rb",
@@ -171,7 +173,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<rails>, ["~> 3.0.3"])
       s.add_runtime_dependency(%q<liquid>, [">= 0"])
       s.add_runtime_dependency(%q<nested_set>, [">= 0"])
-      s.add_runtime_dependency(%q<puffer>, [">= 0.0.11"])
+      s.add_runtime_dependency(%q<puffer>, [">= 0.0.13"])
       s.add_runtime_dependency(%q<will_paginate>, ["~> 3.0.pre2"])
       s.add_runtime_dependency(%q<cells>, ["~> 3.4.4"])
       s.add_development_dependency(%q<capybara>, [">= 0.4.0"])
@@ -186,7 +188,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rails>, ["~> 3.0.3"])
       s.add_dependency(%q<liquid>, [">= 0"])
       s.add_dependency(%q<nested_set>, [">= 0"])
-      s.add_dependency(%q<puffer>, [">= 0.0.11"])
+      s.add_dependency(%q<puffer>, [">= 0.0.13"])
       s.add_dependency(%q<will_paginate>, ["~> 3.0.pre2"])
       s.add_dependency(%q<cells>, ["~> 3.4.4"])
       s.add_dependency(%q<capybara>, [">= 0.4.0"])
@@ -202,7 +204,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rails>, ["~> 3.0.3"])
     s.add_dependency(%q<liquid>, [">= 0"])
     s.add_dependency(%q<nested_set>, [">= 0"])
-    s.add_dependency(%q<puffer>, [">= 0.0.11"])
+    s.add_dependency(%q<puffer>, [">= 0.0.13"])
     s.add_dependency(%q<will_paginate>, ["~> 3.0.pre2"])
     s.add_dependency(%q<cells>, ["~> 3.4.4"])
     s.add_dependency(%q<capybara>, [">= 0.4.0"])
