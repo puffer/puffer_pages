@@ -9,7 +9,6 @@ class CreatePages < ActiveRecord::Migration
       t.text :keywords
       t.string :layout_name
       t.string :status
-      t.boolean :root, :default => false
 
       t.integer :parent_id
       t.integer :lft

@@ -15,18 +15,18 @@ describe Page do
       @root = Fabricate :page, :layout_name => 'foo_layout'
     end
 
-    it 'should have `/` slug and location if root' do
-      @root.slug.should == '/'
-      @root.location.should == '/'
+    it 'should have empty slug and nil location if root' do
+      @root.slug.should == ''
+      @root.location.should == nil
     end
 
     it 'should generate proper location' do
       @foo = Fabricate :page, :slug => 'foo', :parent => @root
       @bar = Fabricate :page, :slug => 'bar', :parent => @foo
       @baz = Fabricate :page, :slug => 'baz', :parent => @bar
-      @foo.location.should == '/foo'
-      @bar.location.should == '/foo/bar'
-      @baz.location.should == '/foo/bar/baz'
+      @foo.location.should == 'foo'
+      @bar.location.should == 'foo/bar'
+      @baz.location.should == 'foo/bar/baz'
     end
 
     it 'should check slug uniqueness' do
@@ -45,15 +45,15 @@ describe Page do
 
       @foo.update_attributes :slug => 'moo'
 
-      @foo.reload.location.should == '/moo'
-      @bar.reload.location.should == '/moo/bar'
-      @baz.reload.location.should == '/moo/bar/baz'
+      @foo.reload.location.should == 'moo'
+      @bar.reload.location.should == 'moo/bar'
+      @baz.reload.location.should == 'moo/bar/baz'
 
       @bar.update_attributes :slug => 'fuu'
 
-      @foo.reload.location.should == '/moo'
-      @bar.reload.location.should == '/moo/fuu'
-      @baz.reload.location.should == '/moo/fuu/baz'
+      @foo.reload.location.should == 'moo'
+      @bar.reload.location.should == 'moo/fuu'
+      @baz.reload.location.should == 'moo/fuu/baz'
     end
 
   end
@@ -63,13 +63,13 @@ describe Page do
     before :each do
       @root = Fabricate :page, :layout_name => 'foo_layout'
       @foo = Fabricate :page, :slug => 'foo', :parent => @root
-      @bar = Fabricate :page, :slug => 'bar', :parent => @foo, :page_parts => [Fabricate(:page_part, :name => 'main', :body => '4')]
+      @bar = Fabricate :page, :slug => 'bar', :parent => @foo, :page_parts => [Fabricate(:page_part, :name => PufferPages.primary_page_part_name, :body => '4')]
       @baz = Fabricate :page, :slug => 'baz', :parent => @bar, :page_parts => [Fabricate(:page_part, :name => 'sidebar', :body => '5'), Fabricate(:page_part, :name => 'additional', :body => '3')]
       @foo.page_parts = [Fabricate(:page_part, :name => 'sidebar', :body => '2')]
     end
 
     it 'should create default `main` part for root page' do
-      @root.page_parts.map(&:name).should == [PufferPages::MAIN_PART]
+      @root.page_parts.map(&:name).should == [PufferPages.primary_page_part_name]
     end
 
     it 'should receive proper inherited page parts' do
@@ -111,7 +111,7 @@ describe Page do
 
     before :each do
       @root = Fabricate :page, :layout_name => 'foo_layout'
-      @main = Fabricate :page_part, :name => 'main', :body => '{{ self.title }}'
+      @main = Fabricate :page_part, :name => PufferPages.primary_page_part_name, :body => '{{ self.title }}'
       @sidebar = Fabricate :page_part, :name => 'sidebar', :body => '{{ self.name }}'
       @root.page_parts = [@main, @sidebar]
     end

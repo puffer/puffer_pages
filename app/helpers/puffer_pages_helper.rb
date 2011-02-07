@@ -16,4 +16,12 @@ module PufferPagesHelper
     record.inherited_layout_name ? [[t('puffer.inherited_layout', :name => record.inherited_layout_name), '']] : []
   end
 
+  def possible_statuses
+    Page.statuses
+  end
+
+  def tree_page record
+    render :partial => 'tree_page', :object => record
+  end
+
 end

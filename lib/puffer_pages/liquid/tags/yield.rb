@@ -9,7 +9,7 @@ module PufferPages
           if markup =~ Syntax
             @name = $1
           else
-            @name = PufferPages::MAIN_PART
+            @name = PufferPages.primary_page_part_name
           end
 
           super

@@ -1,5 +1,9 @@
-class PufferPages::LayoutsController < PufferPages::Base
+class PufferPages::LayoutsController < Puffer::Base
   unloadable
+
+  configure do
+    group :cms
+  end
 
   index do
     field :name

@@ -1,6 +1,3 @@
-class LayoutError < StandardError
-end
-
 class Page < ActiveRecord::Base
 
   acts_as_nested_set
@@ -20,9 +17,11 @@ class Page < ActiveRecord::Base
   def self.find_page location
     page = Page.find_by_location location
     raise ActiveRecord::RecordNotFound if page.nil? || page.draft?
+    page
   end
 
-  has_many :page_parts, :order => "name = '#{PufferPages::MAIN_PART}' desc, name", :dependent => :destroy
+  has_many :page_parts, :order => "name = '#{PufferPages.primary_page_part_name}' desc, name", :dependent => :destroy
+  accepts_nested_attributes_for :page_parts, :allow_destroy => true
   belongs_to :layout, :primary_key => :name, :foreign_key => :layout_name
 
   validates_presence_of :name
@@ -31,11 +30,11 @@ class Page < ActiveRecord::Base
   end
   validates_uniqueness_of :slug, :scope => :parent_id
   validates_format_of :slug,
-    :with => /\A([a-zA-Z0-9]+[\w-]*(\.[a-zA-Z0-9]+)?|\*)\Z/,
+    :with => /\A([\w]+[\w-]*(\.[\w]+)?|\*)\Z/,
     :message => :slug_format,
     :unless => :root?
   validates_format_of :slug,
-    :with => /\A\/\Z/,
+    :with => /\A\Z/,
     :message => :root_slug_format,
     :if => :root?
   validates_inclusion_of :status, :in => Page.statuses
@@ -49,7 +48,7 @@ class Page < ActiveRecord::Base
 
   before_save :update_location
   def update_location
-    self.location = [(swallow_nil{parent.location} || '/'), slug].compact.join('/').gsub(/\/+/, '/')
+    self.location = [swallow_nil{parent.location}, slug].compact.join('/').presence
   end
 
   before_update :update_locations
@@ -59,7 +58,7 @@ class Page < ActiveRecord::Base
 
   after_save :create_main_part
   def create_main_part
-    page_parts.create(:name => PufferPages::MAIN_PART) if root?
+    page_parts.create(:name => PufferPages.primary_page_part_name) if root?
   end
 
   statuses.each do |status_name|
@@ -96,7 +95,7 @@ class Page < ActiveRecord::Base
   end
 
   def inherited_page_parts
-    PagePart.where(:page_id => self_and_ancestors.map(&:id).reverse).group('name').order("name = '#{PufferPages::MAIN_PART}' desc, name")
+    PagePart.where(:page_id => self_and_ancestors.map(&:id).reverse).group('name').order("name = '#{PufferPages.primary_page_part_name}' desc, name")
   end
 
   def part name

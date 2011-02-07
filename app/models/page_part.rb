@@ -17,7 +17,7 @@ class PagePart < ActiveRecord::Base
   end
 
   def main?
-    name == PufferPages::MAIN_PART
+    name == PufferPages.primary_page_part_name
   end
 
 end

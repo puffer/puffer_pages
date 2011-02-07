@@ -41,7 +41,6 @@ ActiveRecord::Schema.define(:version => 20090510121824) do
     t.text     "keywords"
     t.string   "layout_name"
     t.string   "status"
-    t.boolean  "root",        :default => false
     t.integer  "parent_id"
     t.integer  "lft"
     t.integer  "rgt"
