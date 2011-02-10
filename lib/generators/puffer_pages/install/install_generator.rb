@@ -17,4 +17,8 @@ class PufferPages::InstallGenerator < Rails::Generators::Base
     copy_file 'puffer_pages.rb', 'config/initializers/puffer_pages.rb'
   end
 
+  def generate_routes
+    route "namespace :admin do\n    resources :pages\n    resources :layouts\n    resources :snippets\n  end"
+  end
+
 end

@@ -19,6 +19,15 @@ Next step is:
 This will install puffer pages config file in your initializers, some css/js, controllers and migrations
 <pre>rake db:migrate</pre>
 
+To start working with admin interface, you need to have some routes like:
+<pre>
+namespace :admin do
+  resources :pages
+  resources :layouts
+  resources :snippets
+end
+<pre>
+
 ## Introduction.
 
 The first thing, you should do - setup routes if you want pages path different from /(*path).
