@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/puffer/puffer.git
+  revision: a0bb8c9f6b68e4664bb323aa587ed30d9be0572e
+  specs:
+    puffer (0.0.14)
+      cells (~> 3.4.4)
+      rails (~> 3.0.3)
+      will_paginate (~> 3.0.pre2)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -82,10 +91,6 @@ GEM
       railties (>= 3.0.0)
     nokogiri (1.4.4)
     polyglot (0.3.1)
-    puffer (0.0.13)
-      cells (~> 3.4.4)
-      rails (~> 3.0.3)
-      will_paginate (~> 3.0.pre2)
     rack (1.2.1)
     rack-mount (0.6.13)
       rack (>= 1.0.0)
@@ -141,15 +146,13 @@ PLATFORMS
 DEPENDENCIES
   autotest
   capybara (>= 0.4.0)
-  cells (~> 3.4.4)
   fabrication (= 0.9.2)
   forgery
   jeweler
   liquid
   mongrel
   nested_set
-  puffer (>= 0.0.13)
+  puffer!
   rails (~> 3.0.3)
   rspec-rails
   sqlite3-ruby
-  will_paginate (~> 3.0.pre2)

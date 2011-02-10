@@ -12,6 +12,9 @@ module PufferPages
 
 end
 
+require 'liquid'
+require 'nested_set'
+
 require 'puffer_pages/engine'
 require 'puffer_pages/extensions/core'
 require 'puffer_pages/extensions/mapper'
