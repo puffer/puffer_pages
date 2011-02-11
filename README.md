@@ -26,7 +26,7 @@ namespace :admin do
   resources :layouts
   resources :snippets
 end
-<pre>
+</pre>
 
 ## Introduction.
 
