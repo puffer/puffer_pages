@@ -1,7 +1,7 @@
 class PufferPages::LayoutsController < Puffer::Base
   unloadable
 
-  configure do
+  setup do
     group :cms
   end
 

@@ -4,7 +4,7 @@ class PufferPages::PagesController < Puffer::TreeBase
   view_paths_fallbacks_prepend :puffer_pages
   helper :puffer_pages
 
-  configure do
+  setup do
     group :cms
   end
 

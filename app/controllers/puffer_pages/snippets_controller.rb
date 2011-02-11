@@ -1,7 +1,7 @@
 class PufferPages::SnippetsController < Puffer::Base
   unloadable
 
-  configure do
+  setup do
     group :cms
   end
 

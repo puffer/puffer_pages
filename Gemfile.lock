@@ -82,7 +82,7 @@ GEM
       railties (>= 3.0.0)
     nokogiri (1.4.4)
     polyglot (0.3.1)
-    puffer (0.0.15)
+    puffer (0.0.17)
       cells (~> 3.4.4)
       rails (~> 3.0.3)
       will_paginate (~> 3.0.pre2)
@@ -147,7 +147,7 @@ DEPENDENCIES
   liquid
   mongrel
   nested_set
-  puffer (>= 0.0.15)
+  puffer (>= 0.0.17)
   rails (~> 3.0.3)
   rspec-rails
   sqlite3-ruby
