@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{puffer_pages}
-  s.version = "0.0.4"
+  s.version = "0.0.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["pyromaniac"]
-  s.date = %q{2011-02-10}
+  s.date = %q{2011-02-12}
   s.description = %q{Puffer pages is integratable rails CMS with puffer admin interface}
   s.email = %q{kinwizard@gmail.com}
   s.extra_rdoc_files = [
@@ -71,6 +71,8 @@ Gem::Specification.new do |s|
     "spec/dummy/app/controllers/admin/pages_controller.rb",
     "spec/dummy/app/controllers/admin/snippets_controller.rb",
     "spec/dummy/app/controllers/application_controller.rb",
+    "spec/dummy/app/controllers/puffer/dashboard_controller.rb",
+    "spec/dummy/app/controllers/puffer/sessions_controller.rb",
     "spec/dummy/app/helpers/application_helper.rb",
     "spec/dummy/app/views/layouts/application.html.erb",
     "spec/dummy/config.ru",
@@ -136,6 +138,8 @@ Gem::Specification.new do |s|
     "spec/dummy/app/controllers/admin/pages_controller.rb",
     "spec/dummy/app/controllers/admin/snippets_controller.rb",
     "spec/dummy/app/controllers/application_controller.rb",
+    "spec/dummy/app/controllers/puffer/dashboard_controller.rb",
+    "spec/dummy/app/controllers/puffer/sessions_controller.rb",
     "spec/dummy/app/helpers/application_helper.rb",
     "spec/dummy/config/application.rb",
     "spec/dummy/config/boot.rb",
@@ -172,7 +176,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<rails>, ["~> 3.0.3"])
       s.add_runtime_dependency(%q<liquid>, [">= 0"])
       s.add_runtime_dependency(%q<nested_set>, [">= 0"])
-      s.add_runtime_dependency(%q<puffer>, [">= 0.0.15"])
+      s.add_runtime_dependency(%q<puffer>, [">= 0.0.17"])
       s.add_development_dependency(%q<capybara>, [">= 0.4.0"])
       s.add_development_dependency(%q<sqlite3-ruby>, [">= 0"])
       s.add_development_dependency(%q<rspec-rails>, [">= 0"])
@@ -185,7 +189,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rails>, ["~> 3.0.3"])
       s.add_dependency(%q<liquid>, [">= 0"])
       s.add_dependency(%q<nested_set>, [">= 0"])
-      s.add_dependency(%q<puffer>, [">= 0.0.15"])
+      s.add_dependency(%q<puffer>, [">= 0.0.17"])
       s.add_dependency(%q<capybara>, [">= 0.4.0"])
       s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
       s.add_dependency(%q<rspec-rails>, [">= 0"])
@@ -199,7 +203,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rails>, ["~> 3.0.3"])
     s.add_dependency(%q<liquid>, [">= 0"])
     s.add_dependency(%q<nested_set>, [">= 0"])
-    s.add_dependency(%q<puffer>, [">= 0.0.15"])
+    s.add_dependency(%q<puffer>, [">= 0.0.17"])
     s.add_dependency(%q<capybara>, [">= 0.4.0"])
     s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
     s.add_dependency(%q<rspec-rails>, [">= 0"])
