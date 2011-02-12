@@ -8,7 +8,7 @@ Interface of pages based on [puffer](https://github.com/puffer/puffer)
 * Flexibility. Puffer designed to be as flexible as possible, so you can create your own functionality easily.
 * Layouts. You can use rails layouts for pages and you can use pages as action layouts!
 
-## Installation.
+## Installation
 
 You can instal puffer as a gem:
 <pre>gem install puffer_pages</pre>
@@ -28,7 +28,7 @@ namespace :admin do
 end
 </pre>
 
-## Introduction.
+## Introduction
 
 The first thing, you should do - setup routes if you want pages path different from /(*path).
 Just put in your routes.rb:
@@ -38,16 +38,16 @@ Default pages route you can see with rake routes.
 Puffer_pages is radiant-like cms, so it has layouts, snippets and pages.
 Puffer_pages use liquid as template language.
 
-## Pages.
+## Pages
 Pages - tree-based structure of site.
 Every page has one or more page parts.
 Every page part must have main page part, named by default `body`. You can configure main page part name in config/initializers/puffer_pages.rb
 
-## Layouts.
+## Layouts
 Layout is page canvas, so you can draw page parts on it.
 You can use layouts from database or applcation for pages.
 
-### Application layouts.
+### Application layouts
 For application layout page part body will be inserted instead of SUDDENLY! <%= yield %>
 Rules are the same. If no page part name specified puffer will use page part with default name.
 See `yield` liquid tag reference
@@ -56,8 +56,9 @@ So, main page part is action view and other are partials. So easy.
 
 ## [Liquid](http://github.com/tobi/liquid/).
 
-### Variables.
+### Variables
 This variables accessible from every page:
+
 * self - current page reference.
 <pre>{{ self.name }}</pre>
 * root - root page reference.
