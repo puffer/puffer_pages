@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{puffer_pages}
-  s.version = "0.0.5"
+  s.version = "0.0.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["pyromaniac"]
@@ -126,6 +126,7 @@ Gem::Specification.new do |s|
     "spec/fabricators/pages_fabricator.rb",
     "spec/integration/navigation_spec.rb",
     "spec/models/page_spec.rb",
+    "spec/models/tags_spec.rb",
     "spec/puffer_pages_spec.rb",
     "spec/spec_helper.rb"
   ]
@@ -165,6 +166,7 @@ Gem::Specification.new do |s|
     "spec/fabricators/pages_fabricator.rb",
     "spec/integration/navigation_spec.rb",
     "spec/models/page_spec.rb",
+    "spec/models/tags_spec.rb",
     "spec/puffer_pages_spec.rb",
     "spec/spec_helper.rb"
   ]
