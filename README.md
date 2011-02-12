@@ -46,12 +46,16 @@ Pages - tree-based structure of site.
 Every page has one or more page parts.
 Every page part must have main page part, named by default `body`. You can configure main page part name in config/initializers/puffer_pages.rb
 
+## PageParts
+Page_parts are the same as content_for block in rails. You can insert current page page_patrs at layout.
+Also, page_parts are inheritable. It means, that if root has page_part named `sidebar`, all its children will have the same page_part until this page_part will be redefined.
+
 ## Layouts
 Layout is page canvas, so you can draw page parts on it.
 You can use layouts from database or applcation for pages.
 
 ### Application layouts
-For application layout page part body will be inserted instead of SUDDENLY! <%= yield %>
+For application layout page_part body will be inserted instead of SUDDENLY! <%= yield %>
 Rules are the same. If no page part name specified puffer will use page part with default name.
 See `yield` liquid tag reference
 
