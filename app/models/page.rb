@@ -95,7 +95,13 @@ class Page < ActiveRecord::Base
   end
 
   def inherited_page_parts
-    PagePart.select('page_parts.*, count(page_parts.*)').where(:page_id => self_and_ancestors.map(&:id).reverse).group('name').order("name = '#{PufferPages.primary_page_part_name}' desc, name")
+    scope = PagePart.where(:page_id => self_and_ancestors.map(&:id).reverse).order("name = '#{PufferPages.primary_page_part_name}' desc, name")
+    case PagePart.connection.adapter_name.downcase
+    when 'postgresql' then
+      scope.select('distinct on (name) *')
+    else
+      scope.group('name')
+    end
   end
 
   def part name
