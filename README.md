@@ -50,7 +50,15 @@ In puffer pages you can use puffer pages layouts or applcation layouts.
 For puffer pages layouts page parts placeholder is liquid tag yield.
 <pre>{% yield [page_part_name] %}</pre>
 
-If no page_part_name specified, puffer layout will use page part with default name (`body`). You can change defaul page part name in puffer pages setup initializer.
+If no page_part_name specified, puffer layout will use page part with default name ('body'). You can change defaul page part name in puffer pages setup initializer.
+
+Ex.
+<pre>
+  {% yield %} # renders body
+  {% yield 'sidebar' %} # renders sidebar
+  {% assign sb = 'sidebar' %}
+  {% yield sb %} # renders sidebar too
+</pre>
 
 ### Application layouts.
 For application layout page part body will be inserted instead of SUDDENLY! <%= yield %>

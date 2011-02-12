@@ -3,20 +3,20 @@ module PufferPages
     module Tags
 
       class Yield < ::Liquid::Tag
-        Syntax = /(\w+)/
+        Syntax = /(#{::Liquid::QuotedFragment}+)/
 
         def initialize(tag_name, markup, tokens)
           if markup =~ Syntax
             @name = $1
           else
-            @name = PufferPages.primary_page_part_name
+            @name = "'#{PufferPages.primary_page_part_name}'"
           end
 
           super
         end
 
         def render(context)
-          swallow_nil{context.registers[:page].part(@name).render(context)}
+          context.registers[:page].part(context[@name]).render(context)
         end
       end
 

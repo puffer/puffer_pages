@@ -99,7 +99,7 @@ class Page < ActiveRecord::Base
   end
 
   def part name
-    inherited_page_parts.detect {|part| part.name = name}
+    inherited_page_parts.detect {|part| part.name == name}
   end
 
   def is_layout?
