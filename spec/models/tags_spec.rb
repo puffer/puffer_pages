@@ -39,14 +39,34 @@ describe 'Tags' do
       @snippet = Fabricate :snippet, :name => 'snip', :body => 'snippet body'
     end
 
-    it 'should render yield with string param' do
+    it 'should render render_snippet with string param' do
       @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% render_snippet 'snip' %}"
       render_page(@page).should == @snippet.body
     end
 
-    it 'should render yield with variable param' do
+    it 'should render render_snippet with variable param' do
       @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% assign sn = 'snip' %}{% render_snippet sn %}"
       render_page(@page).should == @snippet.body
+    end
+
+  end
+
+  describe 'stylesheets' do
+
+    it 'should render stylesheets with proper params' do
+      @page = Fabricate :page, :layout_name => 'foo_layout'
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% assign st = 'styles' %}{% stylesheets 'reset', st %}"
+      render_page(@page).should == "<%= stylesheet_link_tag 'reset', 'styles' %>"
+    end
+
+  end
+
+  describe 'javascripts' do
+
+    it 'should render javascripts with proper params' do
+      @page = Fabricate :page, :layout_name => 'foo_layout'
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% assign ctrl = 'controls' %}{% javascripts 'prototype', ctrl %}"
+      render_page(@page).should == "<%= javascript_include_tag 'prototype', 'controls' %>"
     end
 
   end

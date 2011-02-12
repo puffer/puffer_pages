@@ -3,7 +3,7 @@ module PufferPages
     module Tags
 
       class RenderSnippet < ::Liquid::Tag
-        Syntax = /(#{::Liquid::QuotedFragment}+)/
+        Syntax = /^(#{::Liquid::QuotedFragment})/
 
         def initialize(tag_name, markup, tokens)
           if markup =~ Syntax

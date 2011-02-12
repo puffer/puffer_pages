@@ -14,6 +14,9 @@ You can instal puffer as a gem:
 <pre>gem install puffer_pages</pre>
 Or in Gemfile:
 <pre>gem "puffer_pages"</pre>
+
+Did you install [puffer](https://github.com/puffer/puffer) properly?
+
 Next step is:
 <pre>rails g puffer_pages:install</pre>
 This will install puffer_pages config file in your initializers, some css/js, controllers and migrations
@@ -71,7 +74,7 @@ Both `self` and `root` are instances of page drop. View [this](https://github.co
 
 If no page_part_name specified, puffer layout will use page part with default name ('body'). You can change defaul page part name in puffer_pages setup initializer.
 
-Ex.
+Usage example:
 <pre>
   {% yield %} # renders body
   {% yield 'sidebar' %} # renders sidebar
@@ -83,10 +86,21 @@ Ex.
 <pre>{% render_snippet snippet_name %}</pre>
 Renders specified snippet`s content.
 
-Ex.
+Usage example:
 <pre>
   {% render_snippet 'navigation' %}
   {% assign nav = 'navigation' %}
   {% render_snippet nav %}
+</pre>
+
+### stylesheets, javascripts
+<pre>{% stylesheets path [, path, path ...] %}</pre>
+Both tags syntax is equal
+Tags renders rail`s stylesheet_link_tag or javascript_include_tag.
+
+Usage example:
+<pre>
+  {% assign ctrl = 'controls' %}
+  {% javascripts 'prototype', ctrl %}
 </pre>
 

@@ -31,11 +31,11 @@ module PufferPages
       end
 
       def path
-        @page.location
+        
       end
 
       def url
-        @url ||= @request.protocol + @request.host_with_port + path
+        
       end
 
     end
