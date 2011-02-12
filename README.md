@@ -54,7 +54,7 @@ See `yield` liquid tag reference
 
 So, main page part is action view and other are partials. So easy.
 
-## [Liquid](http://github.com/tobi/liquid/).
+## [Liquid](http://github.com/tobi/liquid/)
 
 ### Variables
 This variables accessible from every page:
