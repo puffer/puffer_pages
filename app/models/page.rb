@@ -95,7 +95,7 @@ class Page < ActiveRecord::Base
   end
 
   def inherited_page_parts
-    PagePart.select('*, count(*)').where(:page_id => self_and_ancestors.map(&:id).reverse).group('name').order("name = '#{PufferPages.primary_page_part_name}' desc, name")
+    PagePart.select('page_parts.*, count(page_parts.*)').where(:page_id => self_and_ancestors.map(&:id).reverse).group('name').order("name = '#{PufferPages.primary_page_part_name}' desc, name")
   end
 
   def part name
