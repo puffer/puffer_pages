@@ -19,6 +19,7 @@ require 'puffer_pages/engine'
 require 'puffer_pages/extensions/core'
 require 'puffer_pages/extensions/mapper'
 require 'puffer_pages/liquid/tags/yield'
+require 'puffer_pages/liquid/tags/render_snippet'
 
 Puffer.setup do |config|
   config.javascripts += %w(right-dialog right-tabs puffer_pages)

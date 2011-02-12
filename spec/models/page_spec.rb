@@ -122,9 +122,9 @@ describe Page do
     end
 
     it 'should render layout' do
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "|{% yield %}|{% yield 'sidebar' %}|{% assign sb = 'sidebar' %}|{% yield sb %}|"
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% yield %} {% yield 'sidebar' %}"
       result = @root.render 'self' => PufferPages::Liquid::PageDrop.new(@root)
-      result.should == "|#{@root.title}|#{@root.name}||#{@root.name}|"
+      result.should == "#{@root.title} #{@root.name}"
     end
 
   end

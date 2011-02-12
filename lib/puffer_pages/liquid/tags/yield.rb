@@ -16,7 +16,13 @@ module PufferPages
         end
 
         def render(context)
-          context.registers[:page].part(context[@name]).render(context)
+          name = context[@name]
+          part = context.registers[:page].part(name)
+          if part
+            part.render(context)
+          else
+            raise ArgumentError.new("Argument error in 'yield' - Can not find page part named '#{name}'")
+          end
         end
       end
 
