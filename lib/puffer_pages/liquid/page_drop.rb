@@ -19,18 +19,10 @@ module PufferPages
         @parent ||= self.class.new(page.parent, @request)
       end
 
-      %w(ancestors children).each do |attribute|
+      %w(ancestors self_and_ancestors children self_and_children siblings self_and_siblings).each do |attribute|
         define_method attribute do
           instance_variable_get("@#{attribute}") || instance_variable_set("@#{attribute}", page.send(attribute).map{ |ac| self.class.new(ac, request)})
         end
-      end
-
-      def ancestors?
-        !page.root?
-      end
-
-      def children?
-        page.children.present?
       end
 
       def path

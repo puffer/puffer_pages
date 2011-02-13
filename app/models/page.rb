@@ -110,4 +110,8 @@ class Page < ActiveRecord::Base
     Rack::Mime.mime_type(File.extname(slug), 'text/html')
   end
 
+  def self_and_children
+    [self] + children
+  end
+
 end
