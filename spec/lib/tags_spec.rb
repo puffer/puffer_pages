@@ -6,7 +6,7 @@ describe 'Tags' do
     page.render 'self' => PufferPages::Liquid::PageDrop.new(page)
   end
 
-  describe 'yield' do
+  describe 'include page part' do
 
     before :each do
       @page = Fabricate :page, :layout_name => 'foo_layout'
@@ -15,37 +15,32 @@ describe 'Tags' do
       @page.page_parts = [@main, @sidebar]
     end
 
-    it 'should render yield without params' do
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% yield %}"
+    it 'should include page_part with string param' do
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include 'body' %}"
       render_page(@page).should == @main.body
     end
 
-    it 'should render yield with string param' do
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% yield 'sidebar' %}"
-      render_page(@page).should == @sidebar.body
-    end
-
-    it 'should render yield with variable param' do
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% assign sb = 'sidebar' %}{% yield sb %}"
+    it 'should include page_part with variable param' do
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% assign sb = 'sidebar' %}{% include sb %}"
       render_page(@page).should == @sidebar.body
     end
 
   end
 
-  describe 'render_snippet' do
+  describe 'include snippet' do
 
     before :each do
       @page = Fabricate :page, :layout_name => 'foo_layout'
       @snippet = Fabricate :snippet, :name => 'snip', :body => 'snippet body'
     end
 
-    it 'should render render_snippet with string param' do
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% render_snippet 'snip' %}"
+    it 'should include snippet with string param' do
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include 'snippets/snip' %}"
       render_page(@page).should == @snippet.body
     end
 
-    it 'should render render_snippet with variable param' do
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% assign sn = 'snip' %}{% render_snippet sn %}"
+    it 'should include snippet with variable param' do
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% assign sn = 'snippets/snip' %}{% include sn %}"
       render_page(@page).should == @snippet.body
     end
 

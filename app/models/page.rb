@@ -68,9 +68,9 @@ class Page < ActiveRecord::Base
   def render(drops_or_context)
     if inherited_layout
       @template = Liquid::Template.parse(inherited_layout.body)
-      tracker.cleanup @template.render(drops_or_context, :registers => {:tracker => tracker, :page => self})
+      tracker.cleanup @template.render(drops_or_context, :registers => {:tracker => tracker, :page => self, :file_system => PufferPages::Liquid::FileSystem.new})
     else
-      inherited_page_parts.map{|part| part.render(drops_or_context, true)}.join
+      inherited_page_parts.map{|part| part.render(drops_or_context, self)}.join
     end
   end
 

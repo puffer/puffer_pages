@@ -1,7 +1,7 @@
 source "http://rubygems.org"
 
 gem 'rails', '~> 3.0.3'
-gem 'liquid'
+gem 'liquid', :git => 'git://github.com/tobi/liquid.git'
 gem 'nested_set'
 gem 'puffer', '>= 0.0.17'
 
