@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{puffer_pages}
-  s.version = "0.0.8"
+  s.version = "0.0.9"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["pyromaniac"]
-  s.date = %q{2011-02-12}
+  s.date = %q{2011-02-13}
   s.description = %q{Puffer pages is integratable rails CMS with puffer admin interface}
   s.email = %q{kinwizard@gmail.com}
   s.extra_rdoc_files = [
@@ -84,6 +84,7 @@ Gem::Specification.new do |s|
     "spec/dummy/config/database.yml",
     "spec/dummy/config/environment.rb",
     "spec/dummy/config/environments/development.rb",
+    "spec/dummy/config/environments/pg_test.rb",
     "spec/dummy/config/environments/production.rb",
     "spec/dummy/config/environments/test.rb",
     "spec/dummy/config/initializers/backtrace_silencers.rb",
@@ -129,8 +130,8 @@ Gem::Specification.new do |s|
     "spec/fabricators/pages_fabricator.rb",
     "spec/fabricators/snippets_fabricator.rb",
     "spec/integration/navigation_spec.rb",
+    "spec/lib/tags_spec.rb",
     "spec/models/page_spec.rb",
-    "spec/models/tags_spec.rb",
     "spec/puffer_pages_spec.rb",
     "spec/spec_helper.rb"
   ]
@@ -150,6 +151,7 @@ Gem::Specification.new do |s|
     "spec/dummy/config/boot.rb",
     "spec/dummy/config/environment.rb",
     "spec/dummy/config/environments/development.rb",
+    "spec/dummy/config/environments/pg_test.rb",
     "spec/dummy/config/environments/production.rb",
     "spec/dummy/config/environments/test.rb",
     "spec/dummy/config/initializers/backtrace_silencers.rb",
@@ -170,8 +172,8 @@ Gem::Specification.new do |s|
     "spec/fabricators/pages_fabricator.rb",
     "spec/fabricators/snippets_fabricator.rb",
     "spec/integration/navigation_spec.rb",
+    "spec/lib/tags_spec.rb",
     "spec/models/page_spec.rb",
-    "spec/models/tags_spec.rb",
     "spec/puffer_pages_spec.rb",
     "spec/spec_helper.rb"
   ]
@@ -186,6 +188,8 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<puffer>, [">= 0.0.17"])
       s.add_development_dependency(%q<capybara>, [">= 0.4.0"])
       s.add_development_dependency(%q<sqlite3-ruby>, [">= 0"])
+      s.add_development_dependency(%q<pg>, [">= 0"])
+      s.add_development_dependency(%q<mysql>, [">= 0"])
       s.add_development_dependency(%q<rspec-rails>, [">= 0"])
       s.add_development_dependency(%q<autotest>, [">= 0"])
       s.add_development_dependency(%q<forgery>, [">= 0"])
@@ -199,6 +203,8 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<puffer>, [">= 0.0.17"])
       s.add_dependency(%q<capybara>, [">= 0.4.0"])
       s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
+      s.add_dependency(%q<pg>, [">= 0"])
+      s.add_dependency(%q<mysql>, [">= 0"])
       s.add_dependency(%q<rspec-rails>, [">= 0"])
       s.add_dependency(%q<autotest>, [">= 0"])
       s.add_dependency(%q<forgery>, [">= 0"])
@@ -213,6 +219,8 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<puffer>, [">= 0.0.17"])
     s.add_dependency(%q<capybara>, [">= 0.4.0"])
     s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
+    s.add_dependency(%q<pg>, [">= 0"])
+    s.add_dependency(%q<mysql>, [">= 0"])
     s.add_dependency(%q<rspec-rails>, [">= 0"])
     s.add_dependency(%q<autotest>, [">= 0"])
     s.add_dependency(%q<forgery>, [">= 0"])
