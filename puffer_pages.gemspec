@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{puffer_pages}
-  s.version = "0.0.9"
+  s.version = "0.0.10"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["pyromaniac"]
@@ -62,9 +62,9 @@ Gem::Specification.new do |s|
     "lib/puffer_pages/engine.rb",
     "lib/puffer_pages/extensions/core.rb",
     "lib/puffer_pages/extensions/mapper.rb",
+    "lib/puffer_pages/liquid/file_system.rb",
     "lib/puffer_pages/liquid/page_drop.rb",
     "lib/puffer_pages/liquid/tags/javascripts.rb",
-    "lib/puffer_pages/liquid/tags/render_snippet.rb",
     "lib/puffer_pages/liquid/tags/stylesheets.rb",
     "lib/puffer_pages/liquid/tags/yield.rb",
     "lib/puffer_pages/liquid/tracker.rb",
