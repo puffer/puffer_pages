@@ -77,10 +77,12 @@ GEM
       daemons (>= 1.0.3)
       fastthread (>= 1.0.1)
       gem_plugin (>= 0.2.3)
+    mysql (2.8.1)
     nested_set (1.6.3)
       activerecord (>= 3.0.0)
       railties (>= 3.0.0)
     nokogiri (1.4.4)
+    pg (0.10.1)
     polyglot (0.3.1)
     puffer (0.0.17)
       cells (~> 3.4.4)
@@ -146,7 +148,9 @@ DEPENDENCIES
   jeweler
   liquid
   mongrel
+  mysql
   nested_set
+  pg
   puffer (>= 0.0.17)
   rails (~> 3.0.3)
   rspec-rails

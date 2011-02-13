@@ -15,6 +15,13 @@ test:
   pool: 5
   timeout: 5000
 
+pg_test:
+  adapter: postgresql
+  hostname: localhost
+  database: puffer_pages
+  schema_search_path: public
+  encoding: utf8
+
 production:
   adapter: sqlite3
   database: db/development.sqlite3

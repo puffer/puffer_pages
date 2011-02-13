@@ -5,9 +5,11 @@ gem 'liquid'
 gem 'nested_set'
 gem 'puffer', '>= 0.0.17'
 
-group :development, :test do
+group :development, :test, :pg_test do
   gem "capybara", ">= 0.4.0"
   gem "sqlite3-ruby", :require => "sqlite3"
+  gem "pg"
+  gem "mysql"
 
   gem "rspec-rails"
   gem "autotest"
