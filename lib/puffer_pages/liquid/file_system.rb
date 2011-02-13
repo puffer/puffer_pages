@@ -9,11 +9,11 @@ module PufferPages
         when :snippet then
           template_path = template_path.gsub(/^snippets\//, '')
           snippet = Snippet.find_by_name(template_path)
-          raise FileSystemError, "No such snippet '#{template_path}' found" unless snippet
+          raise ::Liquid::FileSystemError, "No such snippet '#{template_path}' found" unless snippet
           snippet.body
         when :page_part then
           page_part = context.registers[:page].part(template_path)
-          raise FileSystemError, "No such page_part '#{template_path}' found for current page" unless page_part
+          raise ::Liquid::FileSystemError, "No such page_part '#{template_path}' found for current page" unless page_part
           page_part.body
         end
       end
