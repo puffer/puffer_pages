@@ -10,12 +10,9 @@ class Page < ActiveRecord::Base
     %w(draft hidden published)
   end
 
-  def self.root
-    roots.first
-  end
-
   def self.find_page location
-    page = Page.find_by_location location
+    page = PufferPages.single_section_page_path ?
+      Page.find_by_slug(location) : Page.find_by_location(location)
     raise ActiveRecord::RecordNotFound if page.nil? || page.draft?
     page
   end
@@ -28,7 +25,7 @@ class Page < ActiveRecord::Base
   validate do |page|
     page.errors.add(:layout_name, :blank) unless page.inherited_layout_name.present?
   end
-  validates_uniqueness_of :slug, :scope => :parent_id
+  validates_uniqueness_of :slug, :scope => (:parent_id unless PufferPages.single_section_page_path)
   validates_format_of :slug,
     :with => /\A([\w]+[\w-]*(\.[\w]+)?|\*)\Z/,
     :message => :slug_format,
@@ -63,6 +60,10 @@ class Page < ActiveRecord::Base
 
   statuses.each do |status_name|
     define_method "#{status_name}?" do status == status_name end
+  end
+
+  def to_location
+    PufferPages.single_section_page_path ? slug : location
   end
 
   def render(drops_or_context)

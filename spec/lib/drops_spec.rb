@@ -10,8 +10,8 @@ describe 'Drops' do
     request.host = 'test.com'
     request.port = 80
     request.path = "/#{current_page.location}"
-    current_page.render 'self' => PufferPages::Liquid::PageDrop.new(current_page, request, current_page),
-      'page' => (PufferPages::Liquid::PageDrop.new(page, request, current_page) if page)
+    current_page.render 'self' => PufferPages::Liquid::PageDrop.new(current_page, current_page, request),
+      'page' => (PufferPages::Liquid::PageDrop.new(page, current_page, request) if page)
   end
 
   describe 'page drop' do
