@@ -15,8 +15,8 @@ describe Page do
       @root = Fabricate :page, :layout_name => 'foo_layout'
     end
 
-    it 'should have empty slug and nil location if root' do
-      @root.slug.should == ''
+    it 'should have nil slug location if root' do
+      @root.slug.should == nil
       @root.location.should == nil
     end
 

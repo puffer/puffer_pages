@@ -31,20 +31,17 @@ class Page < ActiveRecord::Base
     :message => :slug_format,
     :unless => :root?
   validates_format_of :slug,
-    :with => /\A\Z/,
+    :with => nil,
     :message => :root_slug_format,
     :if => :root?
   validates_inclusion_of :status, :in => Page.statuses
 
   attr_protected :location
 
-  before_validation :set_status
-  def set_status
+  before_validation :default_values
+  def default_values
     self.status ||= 'draft'
-  end
-
-  before_save :update_location
-  def update_location
+    self.slug = slug.presence
     self.location = [swallow_nil{parent.location}, slug].compact.join('/').presence
   end
 
