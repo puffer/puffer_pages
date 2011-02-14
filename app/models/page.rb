@@ -22,24 +22,21 @@ class Page < ActiveRecord::Base
   belongs_to :layout, :primary_key => :name, :foreign_key => :layout_name
 
   validates_presence_of :name
-  validate do |page|
-    page.errors.add(:layout_name, :blank) unless page.inherited_layout_name.present?
-  end
   validates_uniqueness_of :slug, :scope => (:parent_id unless PufferPages.single_section_page_path)
+  validates_inclusion_of :status, :in => Page.statuses
   validates_format_of :slug,
     :with => /\A([\w]+[\w-]*(\.[\w]+)?|\*)\Z/,
     :message => :slug_format,
     :unless => :root?
-  validates_format_of :slug,
-    :with => nil,
-    :message => :root_slug_format,
-    :if => :root?
-  validates_inclusion_of :status, :in => Page.statuses
+  validate do |page|
+    page.errors.add(:layout_name, :blank) unless page.inherited_layout_name.present?
+    page.errors.add(:slug, :root_slug_format) if page.root? && !page.slug.nil?
+  end
 
   attr_protected :location
 
-  before_validation :default_values
-  def default_values
+  before_validation :defaultize_attributes
+  def defaultize_attributes
     self.status ||= 'draft'
     self.slug = slug.presence
     self.location = [swallow_nil{parent.location}, slug].compact.join('/').presence
