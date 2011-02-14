@@ -5,8 +5,8 @@ module PufferPages
       include ActionController::UrlFor
       include Rails.application.routes.url_helpers
 
-      def initialize page, request = nil
-        @page, @request = page, request
+      def initialize page, request = nil, current_page = nil
+        @page, @request, @current_page = page, request, current_page
       end
 
       (%w(name title description keywords created_at updated_at) + Page.statuses.map{|s| "#{s}?"}).each do |attribute|
@@ -16,12 +16,12 @@ module PufferPages
       end
 
       def parent
-        @parent ||= self.class.new(page.parent, @request)
+        @parent ||= self.class.new(page.parent, @request, current_page)
       end
 
-      %w(ancestors self_and_ancestors children self_and_children siblings self_and_siblings).each do |attribute|
+      %w(ancestors self_and_ancestors children self_and_children siblings self_and_siblings descendants, self_and_descendants).each do |attribute|
         define_method attribute do
-          instance_variable_get("@#{attribute}") || instance_variable_set("@#{attribute}", page.send(attribute).map{ |ac| self.class.new(ac, request)})
+          instance_variable_get("@#{attribute}") || instance_variable_set("@#{attribute}", page.send(attribute).map{ |ac| self.class.new(ac, request, current_page)})
         end
       end
 
@@ -34,22 +34,16 @@ module PufferPages
       end
 
       def current?
-        path == request.path_info
+        page == current_page
       end
 
       def ancestor?
-        request.path_info.start_with? path
+        page.is_ancestor_of? current_page
       end
 
     private
 
-      def request
-        @request
-      end
-
-      def page
-        @page
-      end
+      attr_reader :page, :request, :current_page
 
     end
   end

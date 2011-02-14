@@ -4,14 +4,14 @@ describe 'Drops' do
 
   include 
 
-  def render_page(page, one_more = nil)
+  def render_page(current_page, page = nil)
     request = ActionController::TestRequest.new
     request.env["rack.url_scheme"] = "http"
     request.host = 'test.com'
     request.port = 80
-    request.path = "/#{page.location}"
-    page.render 'self' => PufferPages::Liquid::PageDrop.new(page, request),
-      'page' => (PufferPages::Liquid::PageDrop.new(one_more, request) if one_more)
+    request.path = "/#{current_page.location}"
+    current_page.render 'self' => PufferPages::Liquid::PageDrop.new(current_page, request, current_page),
+      'page' => (PufferPages::Liquid::PageDrop.new(page, request, current_page) if page)
   end
 
   describe 'page drop' do
@@ -20,6 +20,9 @@ describe 'Drops' do
       @root = Fabricate :page, :layout_name => 'foo_layout'
       @foo = Fabricate :page, :slug => 'hello', :parent => @root
       @bar = Fabricate :page, :slug => 'world', :parent => @foo
+      @root.reload
+      @foo.reload
+      @bar.reload
     end
 
     it 'should render proper url and path' do
@@ -39,7 +42,7 @@ describe 'Drops' do
     it 'should render proper ancestor?' do
       @layout = Fabricate :layout, :name => 'foo_layout', :body => "{{ page.ancestor? }}"
 
-      render_page(@foo, @foo).should == 'true'
+      render_page(@foo, @foo).should == 'false'
       render_page(@foo, @root).should == 'true'
       render_page(@foo, @bar).should ==  'false'
     end

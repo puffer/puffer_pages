@@ -9,8 +9,8 @@ class PagesController < ApplicationController
 
   def drops
     {
-      :self => PufferPages::Liquid::PageDrop.new(@page, request),
-      :root => PufferPages::Liquid::PageDrop.new(Page.root, request)
+      :self => PufferPages::Liquid::PageDrop.new(@page, request, @page),
+      :root => PufferPages::Liquid::PageDrop.new(Page.root, request, @page)
     }.stringify_keys
   end
 
