@@ -127,6 +127,12 @@ describe Page do
       result.should == "#{@root.title} #{@root.name}"
     end
 
+    it 'should receive proper content type' do
+      @root.content_type.should == 'text/html'
+      page = Fabricate :page, :slug => 'style.css'
+      page.content_type.should == 'text/css'
+    end
+
   end
 
 end
