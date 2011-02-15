@@ -102,7 +102,7 @@ class Page < ActiveRecord::Base
   end
 
   def content_type
-    Rack::Mime.mime_type(File.extname(slug), 'text/html')
+    Rack::Mime.mime_type(File.extname(slug.to_s), 'text/html')
   end
 
   def self_and_children
