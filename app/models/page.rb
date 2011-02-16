@@ -3,7 +3,6 @@ class Page < ActiveRecord::Base
   acts_as_nested_set
 
   scope :published, where(:status => 'published')
-  default_scope order(:lft)
 
   def self.statuses
     %w(draft hidden published)
@@ -102,10 +101,6 @@ class Page < ActiveRecord::Base
 
   def content_type
     Rack::Mime.mime_type(File.extname(slug.to_s), 'text/html')
-  end
-
-  def self_and_children
-    [self] + children
   end
 
 end
