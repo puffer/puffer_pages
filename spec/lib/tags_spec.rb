@@ -44,6 +44,12 @@ describe 'Tags' do
       render_page(@page).should == @snippet.body
     end
 
+    it 'should include snippet with proper object name' do
+      @snippet = Fabricate :snippet, :name => 'var', :body => '{{ var }}'
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% assign sn = 'snippets/var' %}{% include sn with 'hello' %}"
+      render_page(@page).should == 'hello'
+    end
+
   end
 
   describe 'stylesheets' do

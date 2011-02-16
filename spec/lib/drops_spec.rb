@@ -2,8 +2,6 @@ require 'spec_helper'
 
 describe 'Drops' do
 
-  include 
-
   def render_page(current_page, page = nil)
     request = ActionController::TestRequest.new
     request.env["rack.url_scheme"] = "http"
