@@ -18,7 +18,7 @@ module PufferPages
 
       %w(ancestors self_and_ancestors children self_and_children siblings self_and_siblings descendants, self_and_descendants).each do |attribute|
         define_method attribute do
-          instance_variable_get("@#{attribute}") || instance_variable_set("@#{attribute}", page.send(attribute).map{ |ac| self.class.new(ac, current_page, request)})
+          instance_variable_get("@#{attribute}") || instance_variable_set("@#{attribute}", page.send(attribute).published.map{ |ac| self.class.new(ac, current_page, request)})
         end
       end
 

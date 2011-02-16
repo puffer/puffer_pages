@@ -2,7 +2,6 @@ class Page < ActiveRecord::Base
 
   acts_as_nested_set
 
-  scope :with_parts, includes(:page_parts)
   scope :published, where(:status => 'published')
   default_scope order(:lft)
 
