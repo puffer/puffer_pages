@@ -13,7 +13,7 @@ module PufferPagesHelper
   end
 
   def inherited_layout
-    record.inherited_layout_name ? [[t('puffer.inherited_layout', :name => record.inherited_layout_name), '']] : []
+    record.inherited_layout_name && !record.root? ? [[t('puffer.inherited_layout', :name => record.inherited_layout_name), '']] : []
   end
 
   def possible_statuses
