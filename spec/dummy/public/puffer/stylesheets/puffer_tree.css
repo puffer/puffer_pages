@@ -51,8 +51,14 @@
     color: #999;
 }
 
-.puffer_tree li .record .expand
+.puffer_tree li .record .toggle
 {
     position: absolute;
     left: -20px;
+}
+
+.puffer_tree li .record .toggle a
+{
+    color: #999;
+    text-decoration: none;
 }
