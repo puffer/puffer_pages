@@ -2,7 +2,7 @@ source "http://rubygems.org"
 
 gem 'rails', '~> 3.0.3'
 gem 'liquid', :git => 'git://github.com/puffer/liquid.git'
-gem 'nested_set'
+gem 'nested_set', :git => 'git://github.com/pyromaniac/nested_set.git'
 gem 'puffer', '>= 0.0.17'
 
 group :development, :test, :pg_test do

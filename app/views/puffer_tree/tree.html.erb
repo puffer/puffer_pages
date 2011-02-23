@@ -2,24 +2,7 @@
 <h1><%= @title %> Tree</h1>
 <% if records.present? %>
   <%= puffer_tree records, :class => 'puffer_tree' do |record, children| %>
-    <li id="<%= dom_id(record) %>">
-      <dl class="record columns">
-        <dt class="column">
-          <span class="handle">⇅</span>
-          <% tree_fields.each do |field| -%>
-            <span><%= render_field field, record %></span>
-          <% end -%>
-        </dt>
-        <dd class="column">
-          <%= link_to 'edit', resource.edit_path(record) if update_fields.present? %>
-          <% controller._members.each do |member| %>
-            <%= link_to member.label, resource.member_path(record, :action => member.action) if member.display? %>
-          <% end %>
-          <%= link_to 'destroy', resource.member_path(record), :confirm => "Are you sure?", :method => :delete if configuration.destroy %>
-        </dd>
-      </dl>
-      <%= children %>
-    </li>
+    <%= render :partial => 'record', :object => record, :locals => {:children => children} %>
   <% end %>
 <% else %>
   <p>Sorry, but there is no records in <%= resource.human %></p>

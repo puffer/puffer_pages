@@ -4,10 +4,18 @@ GIT
   specs:
     liquid (2.2.2)
 
+GIT
+  remote: git://github.com/pyromaniac/nested_set.git
+  revision: 796cc9191f7f9c8d70b63d2c46d4205d18becdf4
+  specs:
+    nested_set (1.6.4)
+      activerecord (>= 3.0.0)
+      railties (>= 3.0.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
-    ZenTest (4.4.2)
+    ZenTest (4.5.0)
     abstract (1.0.0)
     actionmailer (3.0.4)
       actionpack (= 3.0.4)
@@ -48,7 +56,7 @@ GEM
       rack-test (>= 0.5.4)
       selenium-webdriver (>= 0.0.27)
       xpath (~> 0.1.3)
-    celerity (0.8.7)
+    celerity (0.8.8)
     cells (3.4.4)
     cgi_multipart_eof_fix (2.5.0)
     childprocess (0.1.7)
@@ -84,9 +92,6 @@ GEM
       fastthread (>= 1.0.1)
       gem_plugin (>= 0.2.3)
     mysql (2.8.1)
-    nested_set (1.6.4)
-      activerecord (>= 3.0.0)
-      railties (>= 3.0.0)
     nokogiri (1.4.4)
     pg (0.10.1)
     polyglot (0.3.1)
@@ -155,7 +160,7 @@ DEPENDENCIES
   liquid!
   mongrel
   mysql
-  nested_set
+  nested_set!
   pg
   puffer (>= 0.0.17)
   rails (~> 3.0.3)

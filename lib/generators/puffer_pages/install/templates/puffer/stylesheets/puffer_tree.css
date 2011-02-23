@@ -5,6 +5,7 @@
 .puffer_tree li
 {
     list-style: none;
+    position: relative;
 }
 
 .puffer_tree li ul
@@ -48,4 +49,10 @@
 {
     padding-right: 10px;
     color: #999;
+}
+
+.puffer_tree li .record .expand
+{
+    position: absolute;
+    left: -20px;
 }

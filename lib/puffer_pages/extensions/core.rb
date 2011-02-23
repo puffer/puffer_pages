@@ -7,7 +7,7 @@ Kernel.class_eval do
 end
 
 Array.class_eval do
-  def arrange
+  def arranged
     arranged = ActiveSupport::OrderedHash.new
     insertion_points = [arranged]
     depth = 0
