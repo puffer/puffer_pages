@@ -38,6 +38,10 @@ module PufferPages
         page.is_ancestor_of? current_page
       end
 
+      def == drop
+        page.id == drop.id
+      end
+
     private
 
       attr_reader :page, :request, :current_page
