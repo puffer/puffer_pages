@@ -6,7 +6,7 @@ module PufferPages
       include Rails.application.routes.url_helpers
 
       delegate *(Page.statuses.map {|s| "#{s}?"} << {:to => :page})
-      delegate :id, :root, :name, :title, :description, :keywords, :created_at, :updated_at, :to => :page
+      delegate :root, :name, :title, :description, :keywords, :created_at, :updated_at, :to => :page
 
       def initialize page, current_page = nil, request = nil
         @page, @request, @current_page = page, request, current_page
@@ -39,7 +39,7 @@ module PufferPages
       end
 
       def == drop
-        page.id == drop.id
+        page.id == drop.send(:page).id
       end
 
     private
