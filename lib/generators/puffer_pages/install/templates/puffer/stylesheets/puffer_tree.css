@@ -1,5 +1,6 @@
-.puffer_tree ul
+.puffer_tree *
 {
+    font-size: 8pt;
 }
 
 .puffer_tree li
