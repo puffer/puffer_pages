@@ -6,7 +6,6 @@ module Puffer
         template.render :partial => 'page_parts', :locals => {:builder => builder}
       end
 
-
     end
   end
 end

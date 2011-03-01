@@ -6,7 +6,6 @@ module Puffer
         input
       end
 
-
     end
   end
 end

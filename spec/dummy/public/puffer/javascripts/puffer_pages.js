@@ -33,3 +33,14 @@ var page_part_tab_add = function(event) {
     this.hide();
   }).show();
 }
+
+$(document).onReady(function() {
+  $$('textarea[codemirror]').each(function(textarea) {
+    CodeMirror.fromTextArea(textarea._, {
+      basefiles: "/puffer/javascripts/codemirror-base.js",
+      parserfile: "/puffer/javascripts/codemirror-parser.js",
+      stylesheet: "/puffer/stylesheets/codemirror.css",
+      tabMode: 'shift'
+    });
+  });
+});

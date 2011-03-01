@@ -11,7 +11,7 @@ class PufferPages::LayoutsController < Puffer::Base
 
   form do
     field :name
-    field :body
+    field :body, :html => {:codemirror => true}
   end
 
 end
