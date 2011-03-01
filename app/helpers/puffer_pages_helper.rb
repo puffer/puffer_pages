@@ -1,11 +1,12 @@
 module PufferPagesHelper
 
   def possible_layouts
-    inherited_layout + (application_layouts + puffer_layouts).sort
+    inherited_layout + (application_layouts + puffer_layouts).uniq.sort
   end
 
   def application_layouts
-    view_paths.map {|path| Dir.glob("#{path}/layouts/[^_]*")}.flatten.map {|path| File.basename(path).gsub(/\..*$/, '')}.uniq
+    application_layouts_path = view_paths.detect {|path| path.to_s.starts_with? Rails.root }
+    Dir.glob("#{application_layouts_path}/layouts/[^_]*").flatten.map {|path| File.basename(path).gsub(/\..*$/, '')}.uniq
   end
 
   def puffer_layouts
