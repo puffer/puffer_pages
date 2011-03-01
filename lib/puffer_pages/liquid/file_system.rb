@@ -11,6 +11,11 @@ module PufferPages
           snippet = Snippet.find_by_name(template_path)
           raise ::Liquid::FileSystemError, "No such snippet '#{template_path}' found" unless snippet
           snippet.body
+        when :layout then
+          template_path = template_path.gsub(/^layouts\//, '')
+          layout = Layout.find_by_name(template_path)
+          raise ::Liquid::FileSystemError, "No such layout '#{template_path}' found" unless layout
+          layout.body
         when :page_part then
           page_part = context.registers[:page].part(template_path)
           raise ::Liquid::FileSystemError, "No such page_part '#{template_path}' found for current page" unless page_part
@@ -20,6 +25,7 @@ module PufferPages
 
       def template_type template_path
         return :snippet if template_path.start_with? 'snippets/'
+        return :layout if template_path.start_with? 'layouts/'
         return :page_part
       end
 
