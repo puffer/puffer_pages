@@ -11,6 +11,8 @@ Dummy::Application.routes.draw do
     resources :snippets
   end
 
+  match '/admin' => 'puffer/dashboard#index', :as => :admin
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

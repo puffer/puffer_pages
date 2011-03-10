@@ -27,12 +27,11 @@ class PufferPages::Page < ActiveRecord::Base
   validates_uniqueness_of :slug, :scope => (:parent_id unless PufferPages.single_section_page_path)
   validates_inclusion_of :status, :in => statuses
   validates_format_of :slug,
-    :with => /\A([\w]+[\w-]*(\.[\w]+)?|\*)\Z/,
+    :with => /\A[\w.-]*\Z/,
     :message => :slug_format,
-    :unless => :root?
+    :if => lambda { |page| page.name.present? }
   validate do |page|
     page.errors.add(:layout_name, :blank) unless page.inherited_layout_name.present?
-    page.errors.add(:slug, :root_slug_format) if page.root? && !page.slug.nil?
   end
 
   attr_protected :location

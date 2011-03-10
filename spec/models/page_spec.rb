@@ -2,13 +2,6 @@ require 'spec_helper'
 
 describe Page do
 
-  it 'should have only one root' do
-    @root = Fabricate :page, :layout_name => 'foo_layout'
-    @root2 = Fabricate :page, :layout_name => 'foo_layout'
-
-    Page.roots.should == [@root]
-  end
-
   describe 'attributes' do
 
     before :each do
