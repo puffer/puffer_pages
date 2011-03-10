@@ -1,3 +1,5 @@
 en:
-  puffer:
+  puffer_pages:
     inherited_layout: inherited (%{name})
+    tree_page:
+      view: view

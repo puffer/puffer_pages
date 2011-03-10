@@ -162,7 +162,7 @@ DEPENDENCIES
   mysql
   nested_set!
   pg
-  puffer (>= 0.0.17)
+  puffer (>= 0.0.19)
   rails
   rspec-rails
   sqlite3-ruby
