@@ -1,7 +1,10 @@
 class PufferPages::Page < ActiveRecord::Base
   self.abstract_class = true
 
-  acts_as_nested_set
+  def self.inherited base
+    base.acts_as_nested_set
+    super
+  end
 
   scope :published, where(:status => 'published')
 

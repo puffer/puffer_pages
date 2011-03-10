@@ -5,8 +5,8 @@ GIT
     liquid (2.2.2)
 
 GIT
-  remote: git://github.com/pyromaniac/nested_set.git
-  revision: 32c0d948cfccdb81324bc127daa3c5077d89be22
+  remote: git://github.com/skyeagle/nested_set.git
+  revision: d12b3333902b964a6b09f382a10e903cc4eeb579
   specs:
     nested_set (1.6.4)
       activerecord (>= 3.0.0)

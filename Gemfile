@@ -2,8 +2,8 @@ source "http://rubygems.org"
 
 gem 'rails'
 gem 'liquid', :git => 'git://github.com/puffer/liquid.git'
-gem 'nested_set', :git => 'git://github.com/pyromaniac/nested_set.git'
-gem 'puffer', '>= 0.0.17'
+gem 'nested_set', :git => 'git://github.com/skyeagle/nested_set.git'
+gem 'puffer', '>= 0.0.19'
 
 group :development, :test, :pg_test do
   gem "capybara", ">= 0.4.0"

@@ -1,6 +1,8 @@
 # Warning! This puffer_pages version requires liquid from puffer repo. So, add following line to your Gemfile until new liquid version will release.
 <pre>gem 'liquid', :git => 'git://github.com/puffer/liquid.git'</pre>
 I hope, it's temporarly
+Also, nested set is better install from repo too.
+<pre>gem 'nested_set', :git => 'git://github.com/skyeagle/nested_set.git'</pre>
 
 # Puffer_pages is lightweight rails 3 CMS
 
