@@ -2,6 +2,23 @@ require 'spec_helper'
 
 describe Page do
 
+  it 'should save root with empty or not slug' do
+    @root = Fabricate :page, :layout_name => 'foo_layout'
+    @root2 = Fabricate :page, :layout_name => 'foo_layout', :slug => 'foo'
+
+    @root.new_record?.should be_false
+    @root2.new_record?.should be_false
+  end
+
+  it 'should save non-root with not empty slug' do
+    @root = Fabricate :page, :layout_name => 'foo_layout'
+    @root2 = Fabricate :page, :layout_name => 'foo_layout', :slug => '', :parent => @root
+    @root3 = Fabricate :page, :layout_name => 'foo_layout', :slug => 'bar', :parent => @root
+
+    @root2.new_record?.should be_true
+    @root3.new_record?.should be_false
+  end
+
   describe 'attributes' do
 
     before :each do
