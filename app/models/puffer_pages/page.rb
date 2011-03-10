@@ -27,9 +27,9 @@ class PufferPages::Page < ActiveRecord::Base
   validates_uniqueness_of :slug, :scope => (:parent_id unless PufferPages.single_section_page_path)
   validates_inclusion_of :status, :in => statuses
   validates_format_of :slug,
-    :with => /\A[\w.-]*\Z/,
+    :with => /\A[\w.-]+\Z/,
     :message => :slug_format,
-    :if => lambda { |page| page.name.present? || !page.root?}
+    :if => lambda { |page| page.slug.present? || !page.root?}
   validate do |page|
     page.errors.add(:layout_name, :blank) unless page.inherited_layout_name.present?
   end
