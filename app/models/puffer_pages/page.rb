@@ -29,7 +29,7 @@ class PufferPages::Page < ActiveRecord::Base
   validates_format_of :slug,
     :with => /\A[\w.-]*\Z/,
     :message => :slug_format,
-    :if => lambda { |page| page.name.present? }
+    :if => lambda { |page| page.name.present? || !page.root?}
   validate do |page|
     page.errors.add(:layout_name, :blank) unless page.inherited_layout_name.present?
   end
