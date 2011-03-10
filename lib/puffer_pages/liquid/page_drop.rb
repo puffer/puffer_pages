@@ -6,14 +6,16 @@ module PufferPages
       include Rails.application.routes.url_helpers
 
       delegate *(Page.statuses.map {|s| "#{s}?"} << {:to => :page})
-      delegate :root, :name, :title, :description, :keywords, :created_at, :updated_at, :to => :page
+      delegate :name, :title, :description, :keywords, :created_at, :updated_at, :to => :page
 
       def initialize page, current_page = nil, request = nil
         @page, @request, @current_page = page, request, current_page
       end
 
-      def parent
-        @parent ||= self.class.new(page.parent, current_page, request)
+      %w(parent root).each do |attribute|
+        define_method attribute do
+          instance_variable_get("@#{attribute}") || instance_variable_set("@#{attribute}", self.class.new(page.parent, current_page, request))
+        end
       end
 
       %w(ancestors self_and_ancestors children self_and_children siblings self_and_siblings descendants, self_and_descendants).each do |attribute|
