@@ -10,7 +10,7 @@ describe 'Core' do
       @bar = Fabricate :page, :slug => 'bar', :parent => @foo
       @baz = Fabricate :page, :slug => 'baz', :parent => @root
 
-      @root.reload.self_and_descendants.all.arrange.should == @root.reload.self_and_descendants.arrange
+      @root.reload.self_and_descendants.all.arranged.should == @root.reload.self_and_descendants.arrange
     end
 
   end
