@@ -6,8 +6,8 @@ describe Page do
     @root = Fabricate :page, :layout_name => 'foo_layout'
     @root2 = Fabricate :page, :layout_name => 'foo_layout', :slug => 'foo'
 
-    @root.new_record?.should be_false
-    @root2.new_record?.should be_false
+    @root.errors.should be_empty
+    @root2.errors.should be_empty
   end
 
   it 'should save non-root with not empty slug' do
@@ -15,8 +15,9 @@ describe Page do
     @root2 = Fabricate :page, :layout_name => 'foo_layout', :slug => '', :parent => @root
     @root3 = Fabricate :page, :layout_name => 'foo_layout', :slug => 'bar', :parent => @root
 
-    @root2.new_record?.should be_true
-    @root3.new_record?.should be_false
+    @root.errors.should be_empty
+    @root2.errors.should_not be_empty
+    @root3.errors.should be_empty
   end
 
   describe 'attributes' do
