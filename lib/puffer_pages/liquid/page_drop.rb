@@ -9,7 +9,7 @@ module PufferPages
       delegate :name, :title, :description, :keywords, :created_at, :updated_at, :to => :page
 
       def initialize page, current_page = nil, request = nil
-        @page, @request, @current_page = page, request, current_page
+        @page, @current_page, @request = page, current_page, request
       end
 
       %w(parent root).each do |attribute|
@@ -45,7 +45,7 @@ module PufferPages
       end
 
       def before_method method
-        swallow_nil{page.page_parts(method).first.body}.presence
+        swallow_nil{page.part(method).body}
       end
 
     private
