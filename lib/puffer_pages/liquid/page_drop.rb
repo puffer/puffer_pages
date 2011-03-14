@@ -44,6 +44,10 @@ module PufferPages
         page.id == drop.send(:page).id
       end
 
+      def [] value
+        page.part value
+      end
+
     private
 
       attr_reader :page, :request, :current_page
