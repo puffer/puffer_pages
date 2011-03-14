@@ -44,8 +44,8 @@ module PufferPages
         page.id == drop.send(:page).id
       end
 
-      def [] value
-        page.part value
+      def before_method method
+        swallow_nil{page.page_parts(method).first.body}.presence
       end
 
     private

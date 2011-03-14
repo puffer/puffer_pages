@@ -29,6 +29,13 @@ describe 'Drops' do
       render_page(@bar).should == '/hello/world http://test.com/hello/world'
     end
 
+    it 'should render page_part' do
+      @bar.page_parts.create(:name => 'sidebar', :body => "{{ 'hello!' }}")
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{{ self.sidebar }}"
+
+      render_page(@bar).should == "{{ 'hello!' }}"
+    end
+
     it 'should render proper current?' do
       @layout = Fabricate :layout, :name => 'foo_layout', :body => "{{ page.current? }}"
 
