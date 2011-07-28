@@ -4,7 +4,8 @@ describe Page do
 
   it 'should have only one root' do
     @root = Fabricate :page, :layout_name => 'foo_layout'
-    @root2 = Fabricate :page, :layout_name => 'foo_layout'
+    @root2 = Fabricate.build :page, :layout_name => 'foo_layout'
+    @root2.save
 
     Page.roots.should == [@root]
   end
@@ -32,7 +33,7 @@ describe Page do
     it 'should check slug uniqueness' do
       @foo = Fabricate :page, :slug => 'foo', :parent => @root
       @bar = Fabricate :page, :slug => 'foo', :parent => @foo
-      @baz = Fabricate :page, :slug => 'foo', :parent => @root
+      @baz = Fabricate.build :page, :slug => 'foo', :parent => @root
       @foo.should be_valid
       @bar.should be_valid
       @baz.should_not be_valid
@@ -129,7 +130,7 @@ describe Page do
 
     it 'should receive proper content type' do
       @root.content_type.should == 'text/html'
-      page = Fabricate :page, :slug => 'style.css'
+      page = Fabricate :page, :slug => 'style.css', :parent => @root
       page.content_type.should == 'text/css'
     end
 

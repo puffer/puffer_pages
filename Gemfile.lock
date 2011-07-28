@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git://github.com/puffer/puffer.git
-  revision: a7407fcc2cb225bf5467e3c56a795a0bc64929f2
+  revision: 64792e0691ee4c9031028eaac84dbb15a5db9e17
   specs:
     puffer (0.0.20)
       apotomo
@@ -113,7 +113,7 @@ GEM
       rack (>= 1.0.0)
     rack-ssl (1.3.2)
       rack
-    rack-test (0.6.0)
+    rack-test (0.6.1)
       rack (>= 1.0)
     rails (3.1.0.rc5)
       actionmailer (= 3.1.0.rc5)
@@ -154,7 +154,7 @@ GEM
     sprockets (2.0.0.beta.12)
       hike (~> 1.2)
       rack (~> 1.0)
-      tilt (~> 1.1, != 1.3.0)
+      tilt (!= 1.3.0, ~> 1.1)
     sqlite3 (1.3.4)
     sqlite3-ruby (1.3.3)
       sqlite3 (>= 1.3.3)
