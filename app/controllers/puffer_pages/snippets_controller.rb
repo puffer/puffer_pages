@@ -2,7 +2,7 @@ class PufferPages::SnippetsController < Puffer::Base
   unloadable
 
   setup do
-    group :cms
+    group :pages
   end
 
   index do

@@ -4,7 +4,7 @@ class PufferPages::PagesController < Puffer::TreeBase
   helper :puffer_pages
 
   setup do
-    group :cms
+    group :pages
   end
 
   tree do

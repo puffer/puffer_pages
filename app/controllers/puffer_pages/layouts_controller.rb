@@ -2,7 +2,7 @@ class PufferPages::LayoutsController < Puffer::Base
   unloadable
 
   setup do
-    group :cms
+    group :pages
   end
 
   index do

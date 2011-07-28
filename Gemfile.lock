@@ -13,14 +13,6 @@ GIT
       kaminari
       rails (>= 3.1.0.rc4)
 
-GIT
-  remote: git://github.com/skyeagle/nested_set.git
-  revision: 71f5f86bd00b393c41b787d59c84e1d485e7e225
-  specs:
-    nested_set (1.6.7)
-      activerecord (>= 3.0.0)
-      railties (>= 3.0.0)
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -102,6 +94,9 @@ GEM
     mime-types (1.16)
     multi_json (1.0.3)
     mysql (2.8.1)
+    nested_set (1.6.7)
+      activerecord (>= 3.0.0)
+      railties (>= 3.0.0)
     nokogiri (1.5.0)
     onfire (0.2.0)
     pg (0.11.0)
@@ -181,7 +176,7 @@ DEPENDENCIES
   libnotify
   liquid!
   mysql
-  nested_set!
+  nested_set
   pg
   puffer!
   rails (>= 3.1.0.rc4)

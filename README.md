@@ -1,10 +1,8 @@
 # Warning! This puffer_pages version requires liquid from puffer repo. So, add following line to your Gemfile until new liquid version will release.
 <pre>gem 'liquid', :git => 'git://github.com/puffer/liquid.git'</pre>
 I hope, it's temporarly
-Also, nested set is better install from repo too.
-<pre>gem 'nested_set', :git => 'git://github.com/skyeagle/nested_set.git'</pre>
 
-# Puffer_pages is lightweight rails 3 CMS
+# Puffer_pages is lightweight rails 3.1 CMS
 
 Interface of pages based on [puffer](https://github.com/puffer/puffer)
 
@@ -24,11 +22,11 @@ Or in Gemfile:
 Did you install [puffer](https://github.com/puffer/puffer) properly?
 
 Next step is:
-<pre>rails g puffer_pages:install</pre>
+<pre>rake puffer_pages_engine:install:migrations</pre>
 This will install puffer_pages config file in your initializers, some css/js, controllers and migrations
 <pre>rake db:migrate</pre>
 
-To start working with admin interface, you need to have some routes like:
+To start working with admin interface, you need to add some routes like:
 <pre>
 namespace :admin do
   resources :pages
