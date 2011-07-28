@@ -1,4 +1,4 @@
-class Puffer::DashboardController < Puffer::DashboardBase
+class Puffer::DashboardController < Puffer::Dashboard
 
   def index
     p Rails.application.routes.puffer

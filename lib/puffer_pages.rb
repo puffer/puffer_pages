@@ -22,8 +22,3 @@ require 'puffer_pages/extensions/mapper'
 #require 'puffer_pages/liquid/tags/yield'
 require 'puffer_pages/liquid/tags/stylesheets'
 require 'puffer_pages/liquid/tags/javascripts'
-
-Puffer.setup do |config|
-  config.javascripts += %w(right-dialog right-tabs codemirror puffer_pages)
-  config.stylesheets += %w(puffer_pages puffer_tree)
-end

@@ -4,4 +4,5 @@ Fabricator(:page) do
   title { Forgery::LoremIpsum.sentence }
   description { Forgery::LoremIpsum.sentence }
   keywords { Forgery::LoremIpsum.sentence }
+  status {'published'}
 end

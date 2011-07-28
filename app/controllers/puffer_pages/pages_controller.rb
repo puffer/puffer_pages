@@ -1,7 +1,6 @@
 class PufferPages::PagesController < Puffer::TreeBase
   unloadable
 
-  view_paths_fallbacks_prepend :puffer_pages
   helper :puffer_pages
 
   setup do

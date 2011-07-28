@@ -2,12 +2,11 @@ module Puffer
   class TreeBase < Puffer::Base
     unloadable
 
-    view_paths_fallbacks_prepend :puffer_tree
     helper :puffer_tree
 
     define_fields :tree
 
-    def self.tree_fields
+    def self.tree_fi elds
       _tree_fields.presence || index_fields
     end
 

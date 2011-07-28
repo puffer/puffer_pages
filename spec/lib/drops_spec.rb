@@ -2,14 +2,12 @@ require 'spec_helper'
 
 describe 'Drops' do
 
+  include RSpec::Rails::RequestExampleGroup
+
   def render_page(current_page, page = nil)
-    request = ActionController::TestRequest.new
-    request.env["rack.url_scheme"] = "http"
-    request.host = 'test.com'
-    request.port = 80
-    request.path = "/#{current_page.location}"
-    current_page.render 'self' => PufferPages::Liquid::PageDrop.new(current_page, current_page, request),
-      'page' => (PufferPages::Liquid::PageDrop.new(page, current_page, request) if page)
+    get "/#{current_page.location}"
+    current_page.render 'self' => PufferPages::Liquid::PageDrop.new(current_page, current_page, controller),
+      'page' => (PufferPages::Liquid::PageDrop.new(page, current_page, controller) if page)
   end
 
   describe 'page drop' do
@@ -26,7 +24,7 @@ describe 'Drops' do
     it 'should render proper url and path' do
       @layout = Fabricate :layout, :name => 'foo_layout', :body => "{{ self.path }} {{ self.url }}"
 
-      render_page(@bar).should == '/hello/world http://test.com/hello/world'
+      render_page(@bar).should == '/hello/world http://www.example.com/hello/world'
     end
 
     it 'should render page_part' do

@@ -8,8 +8,8 @@ module PufferPages
       delegate *(Page.statuses.map {|s| "#{s}?"} << {:to => :page})
       delegate :name, :title, :description, :keywords, :created_at, :updated_at, :to => :page
 
-      def initialize page, current_page = nil, request = nil
-        @page, @current_page, @request = page, current_page, request
+      def initialize page, current_page = nil, controller = nil
+        @page, @current_page, @controller = page, current_page, controller
       end
 
       %w(parent root).each do |attribute|
@@ -50,7 +50,8 @@ module PufferPages
 
     private
 
-      attr_reader :page, :request, :current_page
+      attr_reader :page, :current_page, :controller
+      delegate :env, :request, :to => :controller, :allow_nil => true
 
     end
   end
