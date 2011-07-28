@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["pyromaniac"]
-  s.date = %q{2011-07-28}
+  s.date = %q{2011-07-29}
   s.description = %q{Puffer pages is integratable rails CMS with puffer admin interface}
   s.email = %q{kinwizard@gmail.com}
   s.extra_rdoc_files = [
@@ -24,15 +24,17 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "VERSION",
-    "app/assets/javascripts/puffer/codemirror-base.js",
-    "app/assets/javascripts/puffer/codemirror-parser.js",
-    "app/assets/javascripts/puffer/codemirror.js",
-    "app/assets/javascripts/puffer/puffer_pages.js",
-    "app/assets/javascripts/puffer/right-dialog.js",
-    "app/assets/javascripts/puffer/right-tabs.js",
-    "app/assets/stylesheets/codemirror.css",
-    "app/assets/stylesheets/puffer_pages.css",
-    "app/assets/stylesheets/puffer_tree.css",
+    "app/assets/javascripts/puffer_pages/application.js",
+    "app/assets/javascripts/puffer_pages/codemirror-base.js",
+    "app/assets/javascripts/puffer_pages/codemirror-parser.js",
+    "app/assets/javascripts/puffer_pages/codemirror.js",
+    "app/assets/javascripts/puffer_pages/puffer_pages.js",
+    "app/assets/javascripts/puffer_pages/right-dialog.js",
+    "app/assets/javascripts/puffer_pages/right-tabs.js",
+    "app/assets/stylesheets/puffer_pages/application.css",
+    "app/assets/stylesheets/puffer_pages/codemirror.css",
+    "app/assets/stylesheets/puffer_pages/puffer_pages.css",
+    "app/assets/stylesheets/puffer_pages/puffer_tree.css",
     "app/controllers/admin/layouts_controller.rb",
     "app/controllers/admin/pages_controller.rb",
     "app/controllers/admin/snippets_controller.rb",
@@ -81,13 +83,10 @@ Gem::Specification.new do |s|
     "spec/dummy/app/assets/javascripts/application.js",
     "spec/dummy/app/assets/stylesheets/application.css",
     "spec/dummy/app/controllers/application_controller.rb",
-    "spec/dummy/app/controllers/puffer/dashboard_controller.rb",
-    "spec/dummy/app/controllers/puffer/sessions_controller.rb",
     "spec/dummy/app/helpers/application_helper.rb",
     "spec/dummy/app/views/layouts/application.html.erb",
     "spec/dummy/config.ru",
     "spec/dummy/config/application.rb",
-    "spec/dummy/config/application.rb.orig",
     "spec/dummy/config/boot.rb",
     "spec/dummy/config/boot.rb.orig",
     "spec/dummy/config/database.yml",
@@ -104,7 +103,6 @@ Gem::Specification.new do |s|
     "spec/dummy/config/initializers/wrap_parameters.rb",
     "spec/dummy/config/locales/en.yml",
     "spec/dummy/config/routes.rb",
-    "spec/dummy/config/routes.rb.orig",
     "spec/dummy/db/migrate/20090422092419_create_pages.rb",
     "spec/dummy/db/migrate/20090504132337_create_page_parts.rb",
     "spec/dummy/db/migrate/20090506102004_create_layouts.rb",

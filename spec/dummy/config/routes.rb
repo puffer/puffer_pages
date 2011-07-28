@@ -1,17 +1,10 @@
 Dummy::Application.routes.draw do
 
-  namespace :puffer do
-    root :to => 'dashboard#index'
-    resource :session
-  end
-
   namespace :admin do
     resources :pages
     resources :layouts
     resources :snippets
   end
-
-  match '/admin' => 'puffer/dashboard#index', :as => :admin
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

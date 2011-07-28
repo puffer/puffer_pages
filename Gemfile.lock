@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git://github.com/puffer/puffer.git
-  revision: 64792e0691ee4c9031028eaac84dbb15a5db9e17
+  revision: f40c10025d48b38e11a4e57e2a87f115763f5bc3
   specs:
     puffer (0.0.20)
       apotomo
