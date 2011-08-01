@@ -6,9 +6,9 @@ GIT
 
 GIT
   remote: git://github.com/puffer/puffer.git
-  revision: 6fae9386a020bbaf20371381c0ee3b1a5ad7d4fa
+  revision: 133a50608537404ea10584bcd0907907f4bc596a
   specs:
-    puffer (0.0.22)
+    puffer (0.0.23)
       apotomo
       kaminari
       rails (>= 3.1.0.rc5)

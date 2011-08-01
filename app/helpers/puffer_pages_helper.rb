@@ -5,8 +5,7 @@ module PufferPagesHelper
   end
 
   def application_layouts
-    application_layouts_path = view_paths.detect {|path| path.to_s.starts_with? Rails.root }
-    Dir.glob("#{application_layouts_path}/layouts/[^_]*").flatten.map {|path| File.basename(path).gsub(/\..*$/, '')}.uniq
+    Dir.glob("#{view_paths.first}/layouts/[^_]*").flatten.map {|path| File.basename(path).gsub(/\..*$/, '')}.uniq
   end
 
   def puffer_layouts
