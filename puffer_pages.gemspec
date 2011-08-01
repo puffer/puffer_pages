@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{puffer_pages}
-  s.version = "0.0.16"
+  s.version = "0.0.17"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["pyromaniac"]
@@ -50,6 +50,7 @@ Gem::Specification.new do |s|
     "app/models/puffer_pages/page_part.rb",
     "app/models/puffer_pages/snippet.rb",
     "app/models/snippet.rb",
+    "app/views/layouts/puffer_pages.html.erb",
     "app/views/puffer_pages/pages_base/_page_part_builder.html.erb",
     "app/views/puffer_pages/pages_base/_page_parts.html.erb",
     "app/views/puffer_pages/pages_base/_tree_page.html.erb",
