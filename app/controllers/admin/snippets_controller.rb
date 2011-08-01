@@ -1,3 +1,3 @@
-class Admin::SnippetsController < PufferPages::SnippetsController
+class Admin::SnippetsController < PufferPages::SnippetsBase
 
 end

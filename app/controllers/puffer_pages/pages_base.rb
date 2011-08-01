@@ -1,4 +1,4 @@
-class PufferPages::PagesController < Puffer::TreeBase
+class PufferPages::PagesBase < Puffer::TreeBase
   unloadable
 
   helper :puffer_pages

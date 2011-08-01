@@ -1,3 +1,4 @@
+# encoding: UTF-8
 class PufferPages::Page < ActiveRecord::Base
   self.abstract_class = true
 

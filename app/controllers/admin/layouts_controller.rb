@@ -1,3 +1,3 @@
-class Admin::LayoutsController < PufferPages::LayoutsController
+class Admin::LayoutsController < PufferPages::LayoutsBase
 
 end

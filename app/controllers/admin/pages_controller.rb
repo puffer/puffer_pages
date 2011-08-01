@@ -1,3 +1,3 @@
-class Admin::PagesController < PufferPages::PagesController
+class Admin::PagesController < PufferPages::PagesBase
 
 end

@@ -1,4 +1,4 @@
-class PufferPages::SnippetsController < Puffer::Base
+class PufferPages::SnippetsBase < Puffer::Base
   unloadable
 
   setup do

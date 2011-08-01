@@ -1,4 +1,4 @@
-class PufferPages::LayoutsController < Puffer::Base
+class PufferPages::LayoutsBase < Puffer::Base
   unloadable
 
   setup do
