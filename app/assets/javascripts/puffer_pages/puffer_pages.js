@@ -34,13 +34,15 @@ var page_part_tab_add = function(event) {
   }).show();
 }
 
-$(document).onReady(function() {
-  $$('textarea[codemirror]').each(function(textarea) {
-    CodeMirror.fromTextArea(textarea._, {
-      basefiles: "/puffer/javascripts/codemirror-base.js",
-      parserfile: "/puffer/javascripts/codemirror-parser.js",
-      stylesheet: "/puffer/stylesheets/codemirror.css",
-      tabMode: 'shift'
-    });
+var init_codemirror = function(textarea) {
+  CodeMirror.fromTextArea(textarea._, {
+    basefiles: "/assets/puffer_pages/codemirror-base.js",
+    parserfile: "/assets/puffer_pages/codemirror-parser.js",
+    stylesheet: "/assets/puffer_pages/codemirror.css",
+    tabMode: 'shift'
   });
+}
+
+$(document).onReady(function() {
+  $$('textarea[codemirror]').each(init_codemirror);
 });

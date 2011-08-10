@@ -22,5 +22,5 @@
 <% end %>
 
 <%= javascript_tag do %>
-  var new_page_part_tab_panel = '<%= escape_javascript new_page_part_tab_panel.strip %>'
+  var new_page_part_tab_panel = '<%= escape_javascript new_page_part_tab_panel.strip.html_safe %>'
 <% end %>
