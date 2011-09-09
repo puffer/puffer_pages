@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{puffer_pages}
-  s.version = "0.0.17"
+  s.version = "0.0.18"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["pyromaniac"]
-  s.date = %q{2011-08-01}
+  s.authors = [%q{pyromaniac}]
+  s.date = %q{2011-09-09}
   s.description = %q{Puffer pages is integratable rails CMS with puffer admin interface}
   s.email = %q{kinwizard@gmail.com}
   s.extra_rdoc_files = [
@@ -29,11 +29,14 @@ Gem::Specification.new do |s|
     "app/assets/javascripts/puffer_pages/codemirror-parser.js",
     "app/assets/javascripts/puffer_pages/codemirror.js",
     "app/assets/javascripts/puffer_pages/puffer_pages.js",
-    "app/assets/javascripts/puffer_pages/right-dialog.js",
-    "app/assets/javascripts/puffer_pages/right-tabs.js",
+    "app/assets/javascripts/puffer_pages/right-tabs-src.js",
     "app/assets/stylesheets/puffer_pages/application.css",
     "app/assets/stylesheets/puffer_pages/codemirror.css",
     "app/assets/stylesheets/puffer_pages/puffer_pages.css",
+    "app/components/page_part_body/form.html.erb",
+    "app/components/page_part_body_component.rb",
+    "app/components/page_parts/form.html.erb",
+    "app/components/page_parts_component.rb",
     "app/controllers/admin/layouts_controller.rb",
     "app/controllers/admin/pages_controller.rb",
     "app/controllers/admin/snippets_controller.rb",
@@ -51,8 +54,6 @@ Gem::Specification.new do |s|
     "app/models/puffer_pages/snippet.rb",
     "app/models/snippet.rb",
     "app/views/layouts/puffer_pages.html.erb",
-    "app/views/puffer_pages/pages_base/_page_part_builder.html.erb",
-    "app/views/puffer_pages/pages_base/_page_parts.html.erb",
     "app/views/puffer_pages/pages_base/_tree_page.html.erb",
     "config/locales/en.yml",
     "config/puffer_routes.rb",
@@ -60,8 +61,6 @@ Gem::Specification.new do |s|
     "db/migrate/20090504132337_create_page_parts.rb",
     "db/migrate/20090506102004_create_layouts.rb",
     "db/migrate/20090510121824_create_snippets.rb",
-    "lib/puffer/inputs/page_parts.rb",
-    "lib/puffer/inputs/page_parts_body.rb",
     "lib/puffer_pages.rb",
     "lib/puffer_pages/engine.rb",
     "lib/puffer_pages/extensions/core.rb",
@@ -123,15 +122,15 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb"
   ]
   s.homepage = %q{http://github.com/puffer/puffer_pages}
-  s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.6.2}
+  s.require_paths = [%q{lib}]
+  s.rubygems_version = %q{1.8.6}
   s.summary = %q{Content management system}
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<rails>, [">= 3.1.0.rc5"])
+      s.add_runtime_dependency(%q<rails>, ["~> 3.1.0"])
       s.add_runtime_dependency(%q<puffer>, [">= 0"])
       s.add_runtime_dependency(%q<liquid>, [">= 0"])
       s.add_runtime_dependency(%q<nested_set>, [">= 0"])
@@ -148,7 +147,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<fabrication>, [">= 0"])
       s.add_development_dependency(%q<jeweler>, [">= 0"])
     else
-      s.add_dependency(%q<rails>, [">= 3.1.0.rc5"])
+      s.add_dependency(%q<rails>, ["~> 3.1.0"])
       s.add_dependency(%q<puffer>, [">= 0"])
       s.add_dependency(%q<liquid>, [">= 0"])
       s.add_dependency(%q<nested_set>, [">= 0"])
@@ -166,7 +165,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<jeweler>, [">= 0"])
     end
   else
-    s.add_dependency(%q<rails>, [">= 3.1.0.rc5"])
+    s.add_dependency(%q<rails>, ["~> 3.1.0"])
     s.add_dependency(%q<puffer>, [">= 0"])
     s.add_dependency(%q<liquid>, [">= 0"])
     s.add_dependency(%q<nested_set>, [">= 0"])
