@@ -1,6 +1,8 @@
 class PufferPages::SnippetsBase < Puffer::Base
   unloadable
 
+  layout 'puffer_pages'
+
   setup do
     group :pages
   end

@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem 'rails', '>= 3.1.0.rc5'
+gem 'rails', '~> 3.1.0'
 gem 'puffer', :git => 'git://github.com/puffer/puffer.git'
 gem 'liquid', :git => 'git://github.com/puffer/liquid.git'
 gem 'nested_set'

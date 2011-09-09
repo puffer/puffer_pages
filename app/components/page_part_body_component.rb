@@ -1,0 +1,3 @@
+class PagePartBodyComponent < BaseComponent
+
+end
