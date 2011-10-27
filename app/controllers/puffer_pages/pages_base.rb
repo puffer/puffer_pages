@@ -7,6 +7,7 @@ class PufferPages::PagesBase < Puffer::TreeBase
 
   setup do
     group :pages
+    model_name :page
   end
 
   tree do

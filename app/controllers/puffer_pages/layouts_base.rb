@@ -5,6 +5,7 @@ class PufferPages::LayoutsBase < Puffer::Base
 
   setup do
     group :pages
+    model_name :layout
   end
 
   index do
