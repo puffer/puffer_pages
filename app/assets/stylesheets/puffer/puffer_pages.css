@@ -1,0 +1,7 @@
+//= require puffer/codemirror
+//= require_tree ./codemirror
+
+.rui-tabs li
+{
+    margin-bottom: 0;
+}

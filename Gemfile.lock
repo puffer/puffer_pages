@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git://github.com/puffer/puffer.git
-  revision: d26c476ff1b150dc2452c865fc9acb9d6cbf4fbb
+  revision: 9b392031c0c1264d963c632794f92ede1895968b
   specs:
     puffer (0.0.30)
       kaminari
@@ -140,7 +140,7 @@ GEM
     sprockets (2.0.3)
       hike (~> 1.2)
       rack (~> 1.0)
-      tilt (~> 1.1, != 1.3.0)
+      tilt (!= 1.3.0, ~> 1.1)
     sqlite3 (1.3.4)
     sqlite3-ruby (1.3.3)
       sqlite3 (>= 1.3.3)

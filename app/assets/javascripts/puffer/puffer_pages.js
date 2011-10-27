@@ -1,3 +1,8 @@
+//= require puffer/right-tabs-src
+//= require puffer/codemirror
+//= require puffer/overlay
+//= require_tree ./codemirror
+
 Tabs.include({
   initialize: function(options) {
     this.$super(options);
@@ -26,21 +31,26 @@ var page_part_tab_add = function(event) {
   var new_id = new Date().getTime();
   var _this = this;
   new Dialog.Prompt({label: 'Enter new page part name'}).onOk(function() {
-    _this.add(this.input.value(), new_page_part_tab_panel.replace(/new_page_part_tab_panel_index/g, new_id), {id: new_id});
-    _this.tabs.last().panel.first('input[type=hidden]').value(this.input.value());
-    _this.tabs.last().select();
-    _this.addButton.insertTo(_this.tabsList);
-    this.hide();
+    var value = this.input.value();
+    if (!value.blank()) {
+      _this.add(value, new_page_part_tab_panel.replace(/new_page_part_tab_panel_index/g, new_id), {id: new_id});
+      _this.tabs.last().panel.first('input[type=hidden]').value(value);
+      _this.tabs.last().select();
+      _this.addButton.insertTo(_this.tabsList);
+      $$('textarea[codemirror]').each(init_codemirror);
+      this.hide();
+    }
   }).show();
 }
 
 var init_codemirror = function(textarea) {
-  CodeMirror.fromTextArea(textarea._, {
-    basefiles: "/assets/puffer_pages/codemirror-base.js",
-    parserfile: "/assets/puffer_pages/codemirror-parser.js",
-    stylesheet: "/assets/puffer_pages/codemirror.css",
-    tabMode: 'shift'
-  });
+  if (!textarea.codemirror) {
+    CodeMirror.fromTextArea(textarea._, {
+      mode: 'text/html',
+      lineNumbers: true
+    });
+    textarea.codemirror = true
+  }
 }
 
 $(document).onReady(function() {

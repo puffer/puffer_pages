@@ -1,8 +1,6 @@
 class PufferPages::PagesBase < Puffer::TreeBase
   unloadable
 
-  layout 'puffer_pages'
-
   helper :puffer_pages
 
   setup do
