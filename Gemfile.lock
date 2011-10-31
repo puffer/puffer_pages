@@ -6,9 +6,9 @@ GIT
 
 GIT
   remote: git://github.com/puffer/puffer.git
-  revision: 9b392031c0c1264d963c632794f92ede1895968b
+  revision: 94b79a146daa486d1a7974c5704a3e52e9d6df6e
   specs:
-    puffer (0.0.30)
+    puffer (0.0.32)
       kaminari
       orm_adapter
       rails (~> 3.1.0)

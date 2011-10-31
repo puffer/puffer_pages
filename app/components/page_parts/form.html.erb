@@ -1,31 +1,33 @@
-<ul id="<%= field.name %>" data-tabs="{closable: true, onRemove: page_part_tab_remove, addButton: page_part_tab_add}">
-  <ul>
-    <% opts[:form].object.send(field.name).each_with_index do |page_part, index| %>
-      <li><%= link_to page_part.name, "#page_part_tab_#{index}" %></li>
-    <% end %>
-  </ul>
-  <% opts[:form].object.send(field.name).each_with_index do |page_part, index| -%>
-    <li id="<%= "page_part_tab_#{index}" %>">
-      <% opts[:form].fields_for field.name, page_part, :hidden_field_id => true do |page_part_builder| %>
-        <% field.children.each do |field| %>
-          <%= field.render parent_controller, :form, :form => page_part_builder %>
-        <% end %>
-        <%= page_part_builder.hidden_field :id unless page_part_builder.object.persisted? %>
+<%= fields_for @record do |f| %>
+  <ul id="<%= field.name %>" data-tabs="{closable: true, onRemove: page_part_tab_remove, addButton: page_part_tab_add}">
+    <ul>
+      <% @record.send(field.name).each_with_index do |page_part, index| %>
+        <li><%= link_to page_part.name, "#page_part_tab_#{index}" %></li>
       <% end %>
-    </li>
-  <% end -%>
-</ul>
-<div id="page_parts_marked_for_destroy">
-</div>
+    </ul>
+    <% @record.send(field.name).each_with_index do |page_part, index| -%>
+      <li id="<%= "page_part_tab_#{index}" %>">
+        <%= f.fields_for field.name, page_part do |page_part_builder| %>
+          <% field.children.each do |field| %>
+            <%= field.render :form, parent_controller, page_part_builder.object, :builder => page_part_builder %>
+          <% end %>
+          <%= page_part_builder.hidden_field :id unless page_part_builder.object.persisted? %>
+        <% end %>
+      </li>
+    <% end -%>
+  </ul>
+  <div id="page_parts_marked_for_destroy">
+  </div>
 
-<% new_page_part_tab_panel = capture do %>
-  <% opts[:form].fields_for field.name, PagePart.new, :child_index => 'new_page_part_tab_panel_index' do |page_part_builder| %>
-    <% field.children.each do |field| %>
-      <%= field.render parent_controller, :form, :form => page_part_builder %>
+  <% new_page_part_tab_panel = capture do %>
+    <%= f.fields_for field.name, PagePart.new, :child_index => 'new_page_part_tab_panel_index' do |page_part_builder| %>
+      <% field.children.each do |field| %>
+        <%= field.render :form, parent_controller, page_part_builder.object, :builder => page_part_builder %>
+      <% end %>
     <% end %>
   <% end %>
-<% end %>
 
-<%= javascript_tag do %>
-  var new_page_part_tab_panel = '<%= j new_page_part_tab_panel.strip.html_safe %>'
+  <%= javascript_tag do %>
+    var new_page_part_tab_panel = '<%= j new_page_part_tab_panel.strip.html_safe %>'
+  <% end %>
 <% end %>
