@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git://github.com/puffer/puffer.git
-  revision: 29f08427c48943593703bdae4647393c8798cd34
+  revision: 6df1280c332486fc55e0eefac7f5bc98f87eff28
   specs:
     puffer (0.0.32)
       kaminari

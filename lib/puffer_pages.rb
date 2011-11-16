@@ -1,5 +1,11 @@
 module PufferPages
 
+  class PufferPagesError < StandardError
+  end
+
+  class DraftPage < PufferPagesError
+  end
+
   mattr_accessor :primary_page_part_name
   self.primary_page_part_name = 'body'
 

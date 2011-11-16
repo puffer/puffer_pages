@@ -16,7 +16,8 @@ class PufferPages::Page < ActiveRecord::Base
   def self.find_page location
     page = PufferPages.single_section_page_path ?
       ::Page.find_by_slug(location) : ::Page.find_by_location(location)
-    raise ActiveRecord::RecordNotFound if page.nil? || page.draft?
+    raise ActiveRecord::RecordNotFound unless page
+    raise PufferPages::DraftPage.new("Unfortunately, we can`t show this page because it is dtaft") if page.draft?
     page
   end
 
