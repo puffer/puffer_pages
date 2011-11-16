@@ -42,14 +42,15 @@ class PufferPages::Page < ActiveRecord::Base
     self.location = [swallow_nil{parent.location}, slug].compact.join('/').presence
   end
 
-  before_update :update_locations
+  before_update :update_locations, :if => :location_changed?
   def update_locations
-    self.class.update_all "location = replace(location, '#{location_was}', '#{location}')", ["location like ?", location_was + '%'] if location_changed?
+    self.class.update_all "location = replace(location, '#{location_was}', '#{location}')", ["location like ?", location_was + '%']
   end
 
-  after_save :create_main_part
-  def create_main_part
-    page_parts.create(:name => PufferPages.primary_page_part_name) if root?
+  after_initialize :build_main_part, :if => :root?
+  before_save :build_main_part, :if => :root?
+  def build_main_part
+    page_parts.build(:name => PufferPages.primary_page_part_name) unless page_parts.map(&:name).include?(PufferPages.primary_page_part_name)
   end
 
   statuses.each do |status_name|
@@ -63,7 +64,7 @@ class PufferPages::Page < ActiveRecord::Base
   def render(drops_or_context)
     if inherited_layout
       @template = Liquid::Template.parse(inherited_layout.body)
-      tracker.cleanup @template.render(drops_or_context, :registers => {:tracker => tracker, :page => self, :file_system => PufferPages::Liquid::FileSystem.new})
+      tracker.cleanup @template.render!(drops_or_context, :registers => {:tracker => tracker, :page => self, :file_system => PufferPages::Liquid::FileSystem.new})
     else
       inherited_page_parts.map{|part| part.render(drops_or_context, self)}.join
     end

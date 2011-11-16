@@ -70,15 +70,31 @@ describe Page do
       @foo.page_parts = [Fabricate(:page_part, :name => 'sidebar', :body => '2')]
     end
 
-    it 'should create default `main` part for root page' do
-      @root.page_parts.map(&:name).should == [PufferPages.primary_page_part_name]
-    end
-
     it 'should receive proper inherited page parts' do
       @root.inherited_page_parts.map(&:body).should == [nil]
       @foo.inherited_page_parts.map(&:body).should == [nil, '2']
       @bar.inherited_page_parts.map(&:body).should == ['4', '2']
       @baz.inherited_page_parts.map(&:body).should == ['4', '3', '5']
+    end
+
+  end
+
+  describe 'root page parts' do
+
+    it 'should build default `main` part for root page on initialization' do
+      root = Fabricate.build :page, :layout_name => 'foo_layout'
+      root.page_parts.map(&:name).should == [PufferPages.primary_page_part_name]
+    end
+
+    it 'should create default `main` part for root page' do
+      root = Fabricate :page, :layout_name => 'foo_layout'
+      root.page_parts.map(&:name).should == [PufferPages.primary_page_part_name]
+    end
+
+    it 'should not create `main` part for root page if it exists' do
+      root = Fabricate :page, :layout_name => 'foo_layout', :page_parts => [Fabricate.build(:page_part, :name => PufferPages.primary_page_part_name, :body => 'haha')]
+      root.page_parts.map(&:name).should == [PufferPages.primary_page_part_name]
+      root.page_parts.map(&:body).should == ['haha']
     end
 
   end
@@ -120,7 +136,7 @@ describe Page do
 
     it 'should render content_for blocks if rails layout used' do
       result = @root.render 'self' => PufferPages::Liquid::PageDrop.new(@root)
-      result.should == "#{@root.title}<% content_for :sidebar do %>#{@root.name}<% end %>"
+      result.should == "#{@root.title}<% content_for :'sidebar' do %>#{@root.name}<% end %>"
     end
 
     it 'should render layout' do

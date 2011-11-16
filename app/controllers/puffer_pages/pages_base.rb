@@ -27,8 +27,8 @@ class PufferPages::PagesBase < Puffer::TreeBase
       field :name, :type => :hidden
       field :_destroy, :type => :hidden, :html => { :class => 'destroy_mark' }
     end
-    field :layout_name, :select => :possible_layouts
-    field :status, :select => :possible_statuses
+    field :layout_name, :select => :possible_layouts, :include_blank => false
+    field :status, :select => :possible_statuses, :include_blank => false
     field :title
     field :description
     field :keywords

@@ -9,7 +9,7 @@ class PufferPages::PagePart < ActiveRecord::Base
   def render(drops_or_context, page = nil)
     template = Liquid::Template.parse(body)
     result = tracker.cleanup template.render(drops_or_context,  :registers => {:tracker => tracker, :page => page, :file_system => PufferPages::Liquid::FileSystem.new})
-    main? ? result : "<% content_for :#{name} do %>#{result}<% end %>"
+    main? ? result : "<% content_for :'#{name}' do %>#{result}<% end %>"
   end
 
   def tracker

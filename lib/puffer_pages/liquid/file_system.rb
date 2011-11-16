@@ -6,12 +6,12 @@ module PufferPages
         case template_type template_path
         when :snippet then
           template_path = template_path.gsub(/^snippets\//, '')
-          snippet = Snippet.find_by_name(template_path)
+          snippet = ::Snippet.find_by_name(template_path)
           raise ::Liquid::FileSystemError, "No such snippet '#{template_path}' found" unless snippet
           snippet.body
         when :layout then
           template_path = template_path.gsub(/^layouts\//, '')
-          layout = Layout.find_by_name(template_path)
+          layout = ::Layout.find_by_name(template_path)
           raise ::Liquid::FileSystemError, "No such layout '#{template_path}' found" unless layout
           layout.body
         when :page_part then
