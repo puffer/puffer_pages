@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{pyromaniac}]
-  s.date = %q{2011-10-31}
+  s.date = %q{2011-11-16}
   s.description = %q{Puffer pages is integratable rails CMS with puffer admin interface}
   s.email = %q{kinwizard@gmail.com}
   s.extra_rdoc_files = [
@@ -44,6 +44,7 @@ Gem::Specification.new do |s|
     "app/components/page_part_body_component.rb",
     "app/components/page_parts/form.html.erb",
     "app/components/page_parts_component.rb",
+    "app/components/render/_tree_page.html.erb",
     "app/controllers/admin/layouts_controller.rb",
     "app/controllers/admin/pages_controller.rb",
     "app/controllers/admin/snippets_controller.rb",
@@ -60,7 +61,6 @@ Gem::Specification.new do |s|
     "app/models/puffer_pages/page_part.rb",
     "app/models/puffer_pages/snippet.rb",
     "app/models/snippet.rb",
-    "app/views/puffer_pages/pages_base/_tree_page.html.erb",
     "config/locales/en.yml",
     "config/puffer_routes.rb",
     "db/migrate/20090422092419_create_pages.rb",

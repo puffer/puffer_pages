@@ -20,7 +20,7 @@ module PufferPagesHelper
     Page.statuses
   end
 
-  def tree_page record
+  def tree_page
     render :partial => 'tree_page', :object => record
   end
 

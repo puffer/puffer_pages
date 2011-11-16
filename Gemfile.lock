@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git://github.com/puffer/puffer.git
-  revision: 94b79a146daa486d1a7974c5704a3e52e9d6df6e
+  revision: 9933d92bd790d26eb17eddfda373880f920d3db9
   specs:
     puffer (0.0.32)
       kaminari
@@ -90,7 +90,7 @@ GEM
     nokogiri (1.5.0)
     orm_adapter (0.0.5)
     pg (0.11.0)
-    polyglot (0.3.2)
+    polyglot (0.3.3)
     rack (1.3.5)
     rack-cache (1.1)
       rack (>= 0.4)
@@ -149,7 +149,7 @@ GEM
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
-    tzinfo (0.3.30)
+    tzinfo (0.3.31)
     xpath (0.1.4)
       nokogiri (~> 1.3)
 
