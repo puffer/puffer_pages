@@ -8,21 +8,17 @@ module PufferPages
         def initialize(tag_name, markup, tokens)
           if markup =~ Syntax
             @name = $1
+          elsif markup.blank?
+            @name = nil
           else
-            @name = "'#{PufferPages.primary_page_part_name}'"
+            raise SyntaxError.new("Syntax Error in 'yield' - Valid syntax: yield [content_name]")
           end
 
           super
         end
 
         def render(context)
-          name = context[@name]
-          part = context.registers[:page].part(name)
-          if part
-            part.render(context)
-          else
-            raise ArgumentError.new("Argument error in 'yield' - Can not find page part named '#{name}'")
-          end
+          context.registers[:tracker].register(@name ? "<%= yield :'#{@name}' %>" : "<%= yield %>")
         end
       end
 

@@ -24,8 +24,8 @@ module PufferPages
 
         def variables_from_string(markup)
           markup.split(',').map do |var|
-          var.strip =~ /\s*(#{::Liquid::QuotedFragment})\s*/
-          $1 ? $1 : nil
+            var.strip =~ /\s*(#{::Liquid::QuotedFragment})\s*/
+            $1 ? $1 : nil
           end.compact
         end
 

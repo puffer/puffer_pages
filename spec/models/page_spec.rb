@@ -4,6 +4,7 @@ require 'spec_helper'
 describe Page do
 
   it 'should have only one root' do
+    pending 'rails validation bug'
     @root = Fabricate :page, :layout_name => 'foo_layout'
     @root2 = Fabricate.build :page, :layout_name => 'foo_layout'
     @root2.save
@@ -96,7 +97,7 @@ describe Page do
       root.page_parts.map(&:name).should == [PufferPages.primary_page_part_name]
       root.page_parts.map(&:body).should == ['haha']
     end
-
+    
   end
 
   describe 'layout' do
@@ -136,7 +137,7 @@ describe Page do
 
     it 'should render content_for blocks if rails layout used' do
       result = @root.render 'self' => PufferPages::Liquid::PageDrop.new(@root)
-      result.should == "#{@root.title}<% content_for :'sidebar' do %>#{@root.name}<% end %>"
+      result.should == "<% content_for :'sidebar' do %>#{@root.name}<% end %>#{@root.title}"
     end
 
     it 'should render layout' do
@@ -149,6 +150,80 @@ describe Page do
       @root.content_type.should == 'text/html'
       page = Fabricate :page, :slug => 'style.css', :parent => @root
       page.content_type.should == 'text/css'
+    end
+
+  end
+
+  describe 'find_page' do
+
+    def single_section_page_path
+      PufferPages.single_section_page_path = true
+      yield
+      PufferPages.single_section_page_path = false
+    end
+
+    before :each do
+      @root = Fabricate :page, :layout_name => 'foo_layout'
+      @foo = Fabricate :page, :slug => 'foo', :parent => @root
+      @bar = Fabricate :page, :slug => 'bar', :parent => @foo
+      @baz = Fabricate :page, :slug => 'baz', :parent => @bar, :status => 'draft'
+    end
+
+    it 'root page' do
+      Page.find_page(nil).should == @root
+    end
+
+    it 'not root page' do
+      Page.find_page('foo/bar').should == @bar
+    end
+
+    it 'not existent page' do
+      expect {Page.find_page('foo/baz') }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it 'draft page' do
+      expect {Page.find_page('foo/bar/baz') }.to raise_error(PufferPages::DraftPage)
+    end
+
+    it 'single section root page' do
+      single_section_page_path do
+        Page.find_page(nil).should == @root
+      end
+    end
+
+    it 'single section not root page' do
+      single_section_page_path do
+        Page.find_page('foo').should == @foo
+        Page.find_page('bar').should == @bar
+      end
+    end
+
+  end
+
+  describe 'find_layout_page' do
+
+    before :each do
+      @root = Fabricate :page, :layout_name => 'foo_layout'
+      @foo = Fabricate :page, :slug => 'foo', :parent => @root
+      @bar = Fabricate :page, :slug => '%', :parent => @foo
+      @baz = Fabricate :page, :slug => 'baz', :parent => @bar
+    end
+
+    it 'root page' do
+      pending 'maybe'
+      Page.find_layout_page('/').should == @root
+    end
+
+    it 'not root page' do
+      Page.find_layout_page('/foo').should == @foo
+      Page.find_layout_page('/foo/bar').should == @bar
+      Page.find_layout_page('/foo/baz').should == @bar
+      Page.find_layout_page('/foo/bar/baz').should == @baz
+      Page.find_layout_page('/foo/moo/baz').should == @baz
+    end
+
+    it 'not existent page' do
+      expect {Page.find_layout_page('/bar') }.to raise_error(PufferPages::LayoutMissed)
     end
 
   end

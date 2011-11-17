@@ -1,12 +1,10 @@
 module PufferPages
   module Extensions
     module Mapper
+      extend ActiveSupport::Concern
 
-      def self.included base
-        base.class_eval do
-          class_attribute :_puffer_pages
-          include InstanceMethods
-        end
+      included do
+        class_attribute :_puffer_pages
       end
 
       module InstanceMethods

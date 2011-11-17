@@ -15,9 +15,16 @@ class PufferPages::Page < ActiveRecord::Base
 
   def self.find_page location
     page = PufferPages.single_section_page_path ?
-      ::Page.find_by_slug(location) : ::Page.find_by_location(location)
+      find_by_slug(location) : find_by_location(location)
     raise ActiveRecord::RecordNotFound unless page
-    raise PufferPages::DraftPage.new("Unfortunately, we can`t show this page because it is dtaft") if page.draft?
+    raise PufferPages::DraftPage.new("PufferPages can`t show this page because it is draft") if page.draft?
+    page
+  end
+
+  def self.find_layout_page location
+    location.gsub!(/^\/|\/$/, '')
+    page = where(['? like location', location]).order('lft desc').first
+    raise PufferPages::LayoutMissed.new("PufferPages can`t render this page because layout page missed") unless page
     page
   end
 
@@ -29,7 +36,7 @@ class PufferPages::Page < ActiveRecord::Base
   validates_uniqueness_of :slug, :scope => (:parent_id unless PufferPages.single_section_page_path)
   validates_inclusion_of :status, :in => statuses
   validates_format_of :slug, :with => /\A\s*\Z/, :message => :root_slug_format, :if => :root?
-  validates_format_of :slug, :with => /\A([\w]+[\w-]*(\.[\w]+)?|\*)\Z/, :message => :slug_format, :unless => :root?
+  validates_format_of :slug, :with => /\A([\w]+[\w-]*(\.[\w]+)?|%)\Z/, :message => :slug_format, :unless => :root?
   validate do |page|
     page.errors.add(:layout_name, :blank) unless page.inherited_layout_name.present?
   end
@@ -67,7 +74,7 @@ class PufferPages::Page < ActiveRecord::Base
       @template = Liquid::Template.parse(inherited_layout.body)
       tracker.cleanup @template.render!(drops_or_context, :registers => {:tracker => tracker, :page => self, :file_system => PufferPages::Liquid::FileSystem.new})
     else
-      inherited_page_parts.map{|part| part.render(drops_or_context, self)}.join
+      inherited_page_parts.reverse.map{|part| part.render(drops_or_context, self)}.join
     end
   end
 
