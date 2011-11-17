@@ -1,7 +1,3 @@
-# Warning! This puffer_pages version requires liquid from puffer repo. So, add following line to your Gemfile until new liquid version will release.
-<pre>gem 'liquid', :git => 'git://github.com/puffer/liquid.git'</pre>
-I hope, it's temporarly
-
 # Puffer_pages is lightweight rails 3.1 CMS
 
 Interface of pages based on [puffer](https://github.com/puffer/puffer)

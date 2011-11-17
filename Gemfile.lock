@@ -1,10 +1,4 @@
 GIT
-  remote: git://github.com/puffer/liquid.git
-  revision: 3885290fefa0e6f92cfd812455a7cbd8eee9871b
-  specs:
-    liquid (2.2.2)
-
-GIT
   remote: git://github.com/puffer/puffer.git
   revision: 6df1280c332486fc55e0eefac7f5bc98f87eff28
   specs:
@@ -77,6 +71,7 @@ GEM
     kaminari (0.12.4)
       rails (>= 3.0.0)
     libnotify (0.5.7)
+    liquid (2.3.0)
     mail (2.3.0)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -165,7 +160,7 @@ DEPENDENCIES
   guard-rspec
   jeweler
   libnotify
-  liquid!
+  liquid
   mysql
   nested_set
   pg

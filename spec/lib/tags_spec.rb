@@ -46,7 +46,7 @@ describe 'Tags' do
 
     it 'should include snippet with proper object name' do
       @snippet = Fabricate :snippet, :name => 'var', :body => '{{ var }}'
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% assign sn = 'snippets/var' %}{% include sn with 'hello' %}"
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% assign sn = 'snippets/var' %}{% include sn with var:'hello' %}"
       render_page(@page).should == 'hello'
     end
 
