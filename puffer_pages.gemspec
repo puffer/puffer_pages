@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{pyromaniac}]
-  s.date = %q{2011-11-16}
+  s.date = %q{2011-11-17}
   s.description = %q{Puffer pages is integratable rails CMS with puffer admin interface}
   s.email = %q{kinwizard@gmail.com}
   s.extra_rdoc_files = [
@@ -61,6 +61,7 @@ Gem::Specification.new do |s|
     "app/models/puffer_pages/page_part.rb",
     "app/models/puffer_pages/snippet.rb",
     "app/models/snippet.rb",
+    "app/views/layouts/puffer_pages_layout.html.erb",
     "config/locales/en.yml",
     "config/puffer_routes.rb",
     "db/migrate/20090422092419_create_pages.rb",
@@ -69,6 +70,7 @@ Gem::Specification.new do |s|
     "db/migrate/20090510121824_create_snippets.rb",
     "lib/puffer_pages.rb",
     "lib/puffer_pages/engine.rb",
+    "lib/puffer_pages/extensions/controller.rb",
     "lib/puffer_pages/extensions/core.rb",
     "lib/puffer_pages/extensions/mapper.rb",
     "lib/puffer_pages/liquid/file_system.rb",
@@ -78,13 +80,19 @@ Gem::Specification.new do |s|
     "lib/puffer_pages/liquid/tags/yield.rb",
     "lib/puffer_pages/liquid/tracker.rb",
     "puffer_pages.gemspec",
+    "spec/controllers/articles_controller_spec.rb",
     "spec/dummy/Rakefile",
     "spec/dummy/app/assets/images/rails.png",
     "spec/dummy/app/assets/javascripts/application.js",
     "spec/dummy/app/assets/stylesheets/application.css",
+    "spec/dummy/app/controllers/admin/articles_controller.rb",
     "spec/dummy/app/controllers/application_controller.rb",
+    "spec/dummy/app/controllers/articles_controller.rb",
     "spec/dummy/app/helpers/application_helper.rb",
+    "spec/dummy/app/models/article.rb",
+    "spec/dummy/app/views/articles/show.html.erb",
     "spec/dummy/app/views/layouts/application.html.erb",
+    "spec/dummy/app/views/layouts/articles.html.erb",
     "spec/dummy/config.ru",
     "spec/dummy/config/application.rb",
     "spec/dummy/config/boot.rb",
@@ -107,6 +115,7 @@ Gem::Specification.new do |s|
     "spec/dummy/db/migrate/20090504132337_create_page_parts.rb",
     "spec/dummy/db/migrate/20090506102004_create_layouts.rb",
     "spec/dummy/db/migrate/20090510121824_create_snippets.rb",
+    "spec/dummy/db/migrate/20111117081813_create_articles.rb",
     "spec/dummy/db/schema.rb",
     "spec/dummy/db/seeds.rb",
     "spec/dummy/public/404.html",
@@ -115,6 +124,7 @@ Gem::Specification.new do |s|
     "spec/dummy/public/favicon.ico",
     "spec/dummy/public/robots.txt",
     "spec/dummy/script/rails",
+    "spec/fabricators/articles_fabricator.rb",
     "spec/fabricators/layouts_fabricator.rb",
     "spec/fabricators/page_parts_fabricator.rb",
     "spec/fabricators/pages_fabricator.rb",
