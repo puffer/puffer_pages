@@ -1,8 +1,3 @@
-//= require ./xml
-//= require ./css
-//= require ./javascript
-//= require_self
-
 CodeMirror.defineMode("htmlmixed", function(config, parserConfig) {
   var htmlMode = CodeMirror.getMode(config, {name: "xml", htmlMode: true});
   var jsMode = CodeMirror.getMode(config, "javascript");
@@ -75,6 +70,10 @@ CodeMirror.defineMode("htmlmixed", function(config, parserConfig) {
         return jsMode.indent(state.localState, textAfter);
       else
         return cssMode.indent(state.localState, textAfter);
+    },
+
+    compareStates: function(a, b) {
+      return htmlMode.compareStates(a.htmlState, b.htmlState);
     },
 
     electricChars: "/{}:"
