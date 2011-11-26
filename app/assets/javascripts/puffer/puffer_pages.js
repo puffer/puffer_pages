@@ -47,7 +47,8 @@ var init_codemirror = function(textarea) {
   if (!textarea.codemirror) {
     CodeMirror.fromTextArea(textarea._, {
       mode: 'text/html',
-      lineNumbers: true
+      lineNumbers: true,
+      lineWrapping: true
     });
     textarea.codemirror = true
   }
