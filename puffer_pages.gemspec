@@ -30,9 +30,11 @@ Gem::Specification.new do |s|
   s.add_development_dependency(%q<rspec-rails>, [">= 0"])
   s.add_development_dependency(%q<capybara>, [">= 0.4.0"])
   s.add_development_dependency(%q<database_cleaner>, [">= 0"])
-  s.add_development_dependency(%q<guard>, [">= 0"])
-  s.add_development_dependency(%q<libnotify>, [">= 0"])
-  s.add_development_dependency(%q<guard-rspec>, [">= 0"])
   s.add_development_dependency(%q<forgery>, [">= 0"])
   s.add_development_dependency(%q<fabrication>, [">= 0"])
+  
+  s.add_development_dependency(%q<guard>, [">= 0"])
+  s.add_development_dependency(%q<guard-rspec>, [">= 0"])
+  s.add_development_dependency(%q<libnotify>, [">= 0"])
+  s.add_development_dependency(%q<rb-inotify>, [">= 0"])
 end

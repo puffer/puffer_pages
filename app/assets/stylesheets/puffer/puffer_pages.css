@@ -1,7 +1,15 @@
 //= require puffer/codemirror
 //= require_tree ./codemirror
 
-.rui-tabs li
+#page_parts li
 {
-    margin-bottom: 0;
+  margin-bottom: 0;
+}
+
+#page_parts .rui-tabs-panel
+{
+  padding: 0;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  height: 300px;
 }

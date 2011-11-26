@@ -29,6 +29,8 @@ require 'puffer_pages/engine'
 require 'puffer_pages/extensions/core'
 require 'puffer_pages/extensions/mapper'
 require 'puffer_pages/extensions/controller'
+
 require 'puffer_pages/liquid/tags/yield'
 require 'puffer_pages/liquid/tags/stylesheets'
 require 'puffer_pages/liquid/tags/javascripts'
+require 'puffer_pages/liquid/tags/page_attribute'
