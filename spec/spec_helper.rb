@@ -5,7 +5,7 @@ require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require "rails/test_help"
 require "rspec/rails"
 
-Bundler.require(:default, ENV["RAILS_ENV"])
+Bundler.require :development
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
@@ -37,8 +37,8 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
   
   config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.strategy = :transaction
   end
 
   config.before(:each) do

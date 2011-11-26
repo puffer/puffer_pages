@@ -1,10 +1,19 @@
 GIT
   remote: git://github.com/puffer/puffer.git
-  revision: 6df1280c332486fc55e0eefac7f5bc98f87eff28
+  revision: cdbcc66e5b205cd8f95a48e84568c6748640f349
   specs:
-    puffer (0.0.32)
+    puffer (0.1.0)
       kaminari
       orm_adapter
+      rails (~> 3.1.0)
+
+PATH
+  remote: .
+  specs:
+    puffer_pages (0.1.0)
+      liquid
+      nested_set
+      puffer
       rails (~> 3.1.0)
 
 GEM
@@ -55,17 +64,12 @@ GEM
     fabrication (1.1.0)
     ffi (1.0.9)
     forgery (0.5.0)
-    git (1.2.5)
     guard (0.6.3)
       thor (~> 0.14.6)
     guard-rspec (0.4.5)
       guard (>= 0.4.0)
     hike (1.2.1)
     i18n (0.6.0)
-    jeweler (1.6.4)
-      bundler (~> 1.0)
-      git (>= 1.2.5)
-      rake
     json (1.6.1)
     json_pure (1.6.0)
     kaminari (0.12.4)
@@ -158,13 +162,10 @@ DEPENDENCIES
   forgery
   guard
   guard-rspec
-  jeweler
   libnotify
-  liquid
   mysql
-  nested_set
   pg
   puffer!
-  rails (~> 3.1.0)
+  puffer_pages!
   rspec-rails
   sqlite3-ruby
