@@ -28,7 +28,7 @@ class PufferPages::Page < ActiveRecord::Base
     page
   end
 
-  has_many :page_parts, :order => "name = '#{PufferPages.primary_page_part_name}' desc, name", :dependent => :destroy, :class_name => '::PagePart'
+  has_many :page_parts, :order => "name = '#{PufferPages.primary_page_part_name}' desc, name", :dependent => :destroy, :class_name => '::PagePart', :validate => true
   accepts_nested_attributes_for :page_parts, :allow_destroy => true
   belongs_to :layout, :primary_key => :name, :foreign_key => :layout_name, :class_name => '::Layout'
 
