@@ -210,7 +210,6 @@ describe Page do
     end
 
     it 'root page' do
-      pending 'maybe'
       Page.find_layout_page('/').should == @root
     end
 

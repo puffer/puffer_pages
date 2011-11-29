@@ -23,7 +23,8 @@ class PufferPages::Page < ActiveRecord::Base
 
   def self.find_layout_page location
     location.gsub!(/^\/|\/$/, '')
-    page = where(['? like location', location]).where(['status not in (?)', 'draft']).order('lft desc').first
+    page = location.blank? ? Page.roots.first :
+      where(['? like location', location]).where(['status not in (?)', 'draft']).order('lft desc').first
     raise PufferPages::LayoutMissed.new("PufferPages can`t render this page because layout page missed or draft") unless page
     page
   end
