@@ -1,7 +1,5 @@
 //= require puffer/right-tabs-src
 //= require puffer/codemirror
-//= require puffer/overlay
-//= require_tree ./codemirror
 
 Tabs.include({
   initialize: function(options) {

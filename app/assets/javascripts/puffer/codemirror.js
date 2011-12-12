@@ -1,3 +1,10 @@
+//= require_self
+//= require puffer/overlay
+//= require puffer/codemirror/xml
+//= require puffer/codemirror/javascript
+//= require puffer/codemirror/css
+//= require_tree ./codemirror
+
 // CodeMirror v2.18
 
 // All functions that need access to the editor's state live inside
