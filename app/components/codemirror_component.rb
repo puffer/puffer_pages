@@ -1,7 +1,9 @@
 class CodemirrorComponent < BaseComponent
-  class_attribute :buttons
-  self.buttons = [:fullscreen]
-
   helper_method :buttons
 
+private
+
+  def buttons
+    PufferPages.codemirror_buttons + Array.wrap(field.options[:buttons])
+  end
 end

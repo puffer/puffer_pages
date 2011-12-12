@@ -15,6 +15,9 @@ module PufferPages
   mattr_accessor :single_section_page_path
   self.single_section_page_path = false
 
+  mattr_accessor :codemirror_buttons
+  self.codemirror_buttons = [:fullscreen]
+
   def self.setup
     yield self
   end
