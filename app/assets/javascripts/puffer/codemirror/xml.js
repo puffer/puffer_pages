@@ -21,13 +21,13 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
     if (ch == "<") {
       if (stream.eat("!")) {
         if (stream.eat("[")) {
-          if (stream.match("CDATA[")) return chain(inBlock("atom", "]]>"));
+          if (stream.match("CDATA[")) return chain(inBlock("atom", "]]>", "!cdata"));
           else return null;
         }
         else if (stream.match("--")) return chain(inBlock("comment", "-->"));
         else if (stream.match("DOCTYPE", true, true)) {
           stream.eatWhile(/[\w\._\-]/);
-          return chain(inBlock("meta", ">"));
+          return chain(doctype(1));
         }
         else return null;
       }
@@ -90,7 +90,7 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
     };
   }
 
-  function inBlock(style, terminator) {
+  function inBlock(style, terminator, tp) {
     return function(stream, state) {
       while (!stream.eol()) {
         if (stream.match(terminator)) {
@@ -99,7 +99,28 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
         }
         stream.next();
       }
+      type = tp;
       return style;
+    };
+  }
+  function doctype(depth) {
+    return function(stream, state) {
+      var ch;
+      while ((ch = stream.next()) != null) {
+        if (ch == "<") {
+          state.tokenize = doctype(depth + 1);
+          return state.tokenize(stream, state);
+        } else if (ch == ">") {
+          if (depth == 1) {
+            state.tokenize = inText;
+            break;
+          } else {
+            state.tokenize = doctype(depth - 1);
+            return state.tokenize(stream, state);
+          }
+        }
+      }
+      return "meta";
     };
   }
 
@@ -138,7 +159,7 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
       if (err) setStyle = "error";
       return cont(endclosetag(err));
     }
-    else if (type == "string") {
+    else if (type == "!cdata") {
       if (!curState.context || curState.context.name != "!cdata") pushContext("!cdata");
       if (curState.tokenize == inText) popContext();
       return cont();

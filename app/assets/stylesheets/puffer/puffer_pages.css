@@ -1,15 +1,59 @@
 //= require puffer/codemirror
 //= require_tree ./codemirror
 
-#page_parts li
-{
+.cm-s-default {
+  background: #fff;
+}
+
+#page_parts li {
   margin-bottom: 0;
 }
 
-#page_parts .rui-tabs-panel
-{
+#page_parts .rui-tabs-panel {
   padding: 0;
   border-left: 1px solid #ccc;
   border-right: 1px solid #ccc;
   min-height: 300px;
+}
+
+.active_line {
+  background: #eee !important;
+}
+
+.fullscreen {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  margin: 0;
+  padding: 0;
+}
+
+.codemirror_buttons {
+  border-bottom: 1px dashed #ccc;
+  background: #fff;
+}
+
+.codemirror_buttons li {
+  list-style: none;
+  display: inline-block;
+  padding: 4px 10px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.codemirror_buttons li:hover {
+  color: #ff6600;
+}
+
+.codemirror_buttons_fulscreen {
+  display: block;
+  position: fixed;
+  top: -20px;
+  left: 0;
+  width: 100%;
+  z-index: 10000;
 }

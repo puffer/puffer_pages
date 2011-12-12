@@ -12,7 +12,7 @@ class PufferPages::SnippetsBase < Puffer::Base
 
   form do
     field :name
-    field :body, :html => {:codemirror => true}
+    field :body, :type => :codemirror
   end
 
 end

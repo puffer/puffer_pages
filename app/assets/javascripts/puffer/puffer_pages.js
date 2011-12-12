@@ -37,7 +37,7 @@ var page_part_tab_add = function(event) {
       _this.tabs.last().panel.first('input[type=hidden]').value(value);
       _this.tabs.last().select();
       _this.addButton.insertTo(_this.tabsList);
-      $$('textarea[codemirror]').each(init_codemirror);
+      $$('textarea[data-codemirror]').each(init_codemirror);
       this.hide();
     }
   }).show();
@@ -45,15 +45,53 @@ var page_part_tab_add = function(event) {
 
 var init_codemirror = function(textarea) {
   if (!textarea.codemirror) {
-    CodeMirror.fromTextArea(textarea._, {
+    var codemirror = CodeMirror.fromTextArea(textarea._, {
       mode: 'text/html',
       lineNumbers: true,
-      lineWrapping: true
+      lineWrapping: true,
+      onCursorActivity: function(editor) {
+        if (editor.last_active_line != undefined) {
+          editor.setLineClass(editor.last_active_line, null);
+        }
+        editor.last_active_line = editor.getCursor().line;
+        editor.setLineClass(editor.last_active_line, "active_line");
+      },
+      extraKeys: {
+        "Esc": codemirror_fullscreen
+      }
     });
-    textarea.codemirror = true
+
+    textarea.codemirror = codemirror;
+    codemirror.buttons = textarea.prev('.codemirror_buttons');
   }
 }
 
 $(document).onReady(function() {
-  $$('textarea[codemirror]').each(init_codemirror);
+  $$('textarea[data-codemirror]').each(init_codemirror);
 });
+
+"*[data-codemirror-button]".onClick(function(event) {
+  if (event.which != 1) return;
+  window['codemirror_' + this.data('codemirror-button')](this.parent('ul').next('textarea').codemirror);
+});
+
+".codemirror_buttons_fulscreen".onMouseenter('morph', {'top': '0px'});
+".codemirror_buttons_fulscreen".onMouseleave('morph', {'top': '-20px'});
+  
+var codemirror_fullscreen = function(editor) {
+  var scroll = $(editor.getWrapperElement()).children('.CodeMirror-scroll').first();
+  var body = $$('body').first();
+
+  if (scroll.hasClass('fullscreen')) {
+    scroll.removeClass('fullscreen');
+    editor.buttons.removeClass('codemirror_buttons_fulscreen');
+    body.setStyle('overflow', 'auto');
+  } else {
+    scroll.addClass('fullscreen');
+    editor.buttons.addClass('codemirror_buttons_fulscreen');
+    body.setStyle('overflow', 'hidden');
+  }
+
+  editor.refresh();
+  editor.focus();
+}

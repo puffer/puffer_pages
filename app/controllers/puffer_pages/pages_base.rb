@@ -23,7 +23,7 @@ class PufferPages::PagesBase < Puffer::TreeBase
     field :name
     field :slug
     field :page_parts, :type => :page_parts do
-      field :body, :type => :page_part_body, :html => {:codemirror => true}
+      field :body, :type => :codemirror, :input_only => true
       field :name, :type => :hidden
       field :_destroy, :type => :hidden, :html => { :class => 'destroy_mark' }
     end

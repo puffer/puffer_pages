@@ -1,0 +1,16 @@
+<%= component_fields_for @record do |f| %>
+  <% unless field.options[:input_only] %>
+    <div class="label">
+      <%= f.label field %>
+      <div class="field_error">
+        <%= @record.errors[field.name.to_sym].first %>
+      </div>
+    </div>
+  <% end %>
+  <ul class="codemirror_buttons">
+    <% buttons.each do |button| %>
+      <li data-codemirror-button="<%= button %>"><%= t(".#{button}") %></li>
+    <% end %>
+  </ul>
+  <%= f.text_area field, field.input_options.merge(:data => {:codemirror => true}) %>
+<% end %>
