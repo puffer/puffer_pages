@@ -1,1 +1,2 @@
-<%= render :inline => layout_page.render(layout_page_drops), :layout => ("layouts/#{layout_page.render_layout}" if layout_page.render_layout) %>
+<% drops = default_drops(layout_page).merge(@drops.presence || {}).stringify_keys %>
+<%= render :inline => layout_page.render(drops), :layout => ("layouts/#{layout_page.render_layout}" if layout_page.render_layout) %>

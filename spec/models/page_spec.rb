@@ -222,12 +222,12 @@ describe Page do
     end
 
     it 'not existent page' do
-      expect {Page.find_layout_page('/bar') }.to raise_error(PufferPages::LayoutMissed)
+      expect {Page.find_layout_page('/bar')}.to raise_error(PufferPages::LayoutMissed)
     end
 
     it 'draft page' do
       @bar.update_attributes(:status => 'draft')
-      expect {Page.find_layout_page('/foo/bar') }.to raise_error(PufferPages::LayoutMissed)
+      expect {Page.find_layout_page('/foo/bar')}.to raise_error(PufferPages::LayoutMissed)
     end
 
   end
