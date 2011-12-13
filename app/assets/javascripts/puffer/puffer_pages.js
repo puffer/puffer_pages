@@ -15,6 +15,13 @@ Tabs.include({
   }
 });
 
+var page_part_tab_select = function(event) {
+  var textarea = event.target.panel.first('textarea[data-codemirror]');
+  if (textarea.codemirror) {
+    textarea.codemirror.refresh();
+  }
+}
+
 var page_part_tab_remove = function(event) {
   var destroy_mark = event.target.panel.first('.destroy_mark');
   var page_part_param = destroy_mark.next();
