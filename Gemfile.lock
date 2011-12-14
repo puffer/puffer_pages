@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/puffer/puffer.git
-  revision: 981d9c22b5ea4f8787f40b8bc859d110b8ff689b
+  revision: e7c255cbc95a18cf5cf41e4f6101cdd83c21fa22
   specs:
     puffer (0.1.0)
       kaminari
@@ -48,6 +48,7 @@ GEM
     activesupport (3.1.3)
       multi_json (~> 1.0)
     arel (2.2.1)
+    bcrypt-ruby (3.0.1)
     builder (3.0.0)
     capybara (1.1.2)
       mime-types (>= 1.16)
@@ -160,6 +161,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bcrypt-ruby
   capybara (>= 0.4.0)
   database_cleaner
   fabrication
