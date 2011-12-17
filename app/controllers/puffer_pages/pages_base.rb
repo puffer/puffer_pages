@@ -22,6 +22,7 @@ class PufferPages::PagesBase < Puffer::TreeBase
   form do
     field :name
     field :slug
+    field :location
     field :page_parts, :type => :page_parts do
       field :body, :type => :codemirror, :input_only => true
       field :name, :type => :hidden
