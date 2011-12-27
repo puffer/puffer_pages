@@ -1,5 +1,11 @@
 //= require puffer/right-tabs-src
 //= require puffer/codemirror
+//= require puffer/overlay
+//= require puffer/codemirror/xml
+//= require puffer/codemirror/javascript
+//= require puffer/codemirror/css
+//= require_tree ./codemirror
+//= require puffer/liquid
 
 Tabs.include({
   initialize: function(options) {
@@ -51,7 +57,7 @@ var page_part_tab_add = function(event) {
 var init_codemirror = function(textarea) {
   if (!textarea.codemirror) {
     var codemirror = CodeMirror.fromTextArea(textarea._, {
-      mode: 'text/html',
+      mode: 'liquid',
       lineNumbers: true,
       lineWrapping: true,
       onCursorActivity: function(editor) {

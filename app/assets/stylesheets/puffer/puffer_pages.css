@@ -5,6 +5,10 @@
   background: #fff;
 }
 
+span.cm-liquid {
+  color: red;
+}
+
 #page_parts li {
   margin-bottom: 0;
 }

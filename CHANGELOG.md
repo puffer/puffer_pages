@@ -2,7 +2,8 @@
 
 ### New features
 
-* Updated codemirror to 2.2-pre version.
-* Custom component renamed to codemirror component.
-* Added buttons panel to codemirror editor.
-* Added fullscreen feature to codemirror.
+* Updated codemirror to 2.2 version.
+* Custom component renamed to Codemirror component.
+* Added buttons panel to Codemirror editor.
+* Added fullscreen feature to Codemirror.
+* Added Liquid overlay to Codemirror.
