@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/puffer/puffer_pages.png)](http://travis-ci.org/puffer/puffer_pages)
+
 # Puffer_pages is lightweight rails 3.1 CMS
 
 Interface of pages based on [puffer](https://github.com/puffer/puffer)
@@ -14,8 +16,6 @@ You can instal puffer as a gem:
 <pre>gem install puffer_pages</pre>
 Or in Gemfile:
 <pre>gem "puffer_pages"</pre>
-
-Did you install [puffer](https://github.com/puffer/puffer) properly?
 
 Next step is:
 <pre>rake puffer_pages_engine:install:migrations</pre>
