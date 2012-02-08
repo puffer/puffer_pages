@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # specify any dependencies here; for example:
-  s.add_runtime_dependency(%q<rails>, ["~> 3.1.0"])
+  s.add_runtime_dependency(%q<rails>, ["~> 3.1"])
   s.add_runtime_dependency(%q<puffer>, [">= 0"])
   s.add_runtime_dependency(%q<liquid>, [">= 0"])
   s.add_runtime_dependency(%q<nested_set>, [">= 0"])
@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency(%q<database_cleaner>, [">= 0"])
   s.add_development_dependency(%q<forgery>, [">= 0"])
   s.add_development_dependency(%q<fabrication>, [">= 0"])
-  
+
   s.add_development_dependency(%q<guard>, [">= 0"])
   s.add_development_dependency(%q<guard-rspec>, [">= 0"])
   s.add_development_dependency(%q<libnotify>, [">= 0"])

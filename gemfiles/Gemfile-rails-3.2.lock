@@ -1,14 +1,5 @@
-GIT
-  remote: git://github.com/puffer/puffer.git
-  revision: 719b80730fd723c7f665c95315a19edbb8148593
-  specs:
-    puffer (0.1.1)
-      kaminari
-      orm_adapter
-      rails (~> 3.1)
-
 PATH
-  remote: .
+  remote: /home/pyromaniac/work/opensource/puffer_pages
   specs:
     puffer_pages (0.1.1)
       liquid
@@ -93,6 +84,10 @@ GEM
     orm_adapter (0.0.6)
     pg (0.12.2)
     polyglot (0.3.3)
+    puffer (0.1.1)
+      kaminari
+      orm_adapter
+      rails (~> 3.1)
     rack (1.4.1)
     rack-cache (1.1)
       rack (>= 0.4)
@@ -169,8 +164,8 @@ DEPENDENCIES
   libnotify
   mysql
   pg
-  puffer!
   puffer_pages!
+  rails (~> 3.2.0)
   rb-inotify
   rspec-rails
   sqlite3-ruby
