@@ -118,10 +118,10 @@ describe Page do
     end
 
     it 'should return proper layout for render' do
-      @root.render_layout.should == 'foo_layout'
-      @foo.render_layout.should == 'foo_layout'
-      @bar.render_layout.should == false
-      @baz.render_layout.should == false
+      @root.layout_for_render.should == 'layouts/foo_layout'
+      @foo.layout_for_render.should == 'layouts/foo_layout'
+      @bar.layout_for_render.should == nil
+      @baz.layout_for_render.should == nil
     end
 
   end

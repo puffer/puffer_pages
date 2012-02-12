@@ -18,7 +18,7 @@ describe ArticlesController do
       get :show, :id => 'foo'
 
       assigns(:article).should == @article
-      controller.layout_page.should == @articles_wildcard
+      # assigns(:puffer_page).should == @articles_wildcard
     end
 
     it "renders the show template" do
@@ -60,6 +60,30 @@ describe ArticlesController do
       response.body.should == 'app - db - hello - foo - hello - db - app'
     end
 
+  end
+
+  describe "GET foo" do
+    render_views
+
+    before :each do
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include 'body' %}"
+      @root = Fabricate :page, :layout_name => 'foo_layout'
+      @moo = Fabricate :page, :slug => 'moo', :parent => @root
+      @bar = Fabricate :page, :slug => 'bar', :parent => @moo, :status => 'published'
+      @bar.page_parts = [Fabricate(:page_part, :name => PufferPages.primary_page_part_name, :body => 'hello from custom path')]
+    end
+
+    # it "assigns @puffer_page" do
+    #   get :foo
+
+    #   assigns(:puffer_page).should == @bar
+    # end
+
+    it "assigns @puffer_page" do
+      get :foo
+
+      response.body.should == "hello from custom path"
+    end
   end
 
 end

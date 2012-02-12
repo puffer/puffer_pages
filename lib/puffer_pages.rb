@@ -1,5 +1,10 @@
 module PufferPages
 
+  autoload :Snippet, 'puffer_pages/backends/models/snippet'
+  autoload :Layout, 'puffer_pages/backends/models/layout'
+  autoload :Page, 'puffer_pages/backends/models/page'
+  autoload :PagePart, 'puffer_pages/backends/models/page_part'
+
   class PufferPagesError < StandardError
   end
 
@@ -31,6 +36,7 @@ require 'nested_set'
 require 'puffer_pages/engine'
 require 'puffer_pages/extensions/core'
 require 'puffer_pages/extensions/mapper'
+require 'puffer_pages/extensions/renderer'
 require 'puffer_pages/extensions/controller'
 
 require 'puffer_pages/liquid/tags/yield'

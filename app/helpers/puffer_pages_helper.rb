@@ -24,4 +24,14 @@ module PufferPagesHelper
     render :partial => 'tree_page', :object => record
   end
 
+  def default_drops
+    {
+      :self => PufferPages::Liquid::PageDrop.new(@puffer_page, @puffer_page, controller),
+      :root => PufferPages::Liquid::PageDrop.new(@puffer_page.root, @puffer_page, controller)
+    }.stringify_keys
+  end
+
+  def drops
+  end
+
 end

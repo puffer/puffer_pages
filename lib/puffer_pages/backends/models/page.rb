@@ -95,8 +95,8 @@ class PufferPages::Page < ActiveRecord::Base
     @inherited_layout ||= swallow_nil{inherited_layout_page.layout}
   end
 
-  def render_layout
-    inherited_layout ? false : inherited_layout_name
+  def layout_for_render
+    "layouts/#{inherited_layout_name}" unless inherited_layout
   end
 
   def inherited_page_parts

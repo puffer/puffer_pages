@@ -1,5 +1,15 @@
 ## 0.1.2 \[ In Development \] \[ Branch: master \]
 
+* Ability to use render method to specify rendered page
+
+  ```
+    def index
+      render 'hello/world', :layout => 'puffer_pages'
+    end
+  ```
+
+  This example will render page with 'hello/world' location.
+
 ## 0.1.1
 
 ### New features

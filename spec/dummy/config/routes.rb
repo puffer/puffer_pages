@@ -7,7 +7,11 @@ Dummy::Application.routes.draw do
     resources :articles
   end
 
-  resources :articles, :only => [:show]
+  resources :articles, :only => [:show] do
+    collection do
+      get :foo
+    end
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

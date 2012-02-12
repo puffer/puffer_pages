@@ -4,3 +4,8 @@ rvm:
  - ruby-head
  #- rbx
  #- rbx-2.0
+
+gemfile:
+  - Gemfile
+  - gemfiles/Gemfile-rails-3.1
+  - gemfiles/Gemfile-rails-3.2

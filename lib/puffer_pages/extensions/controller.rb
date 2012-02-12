@@ -4,23 +4,8 @@ module PufferPages
       module Base
         extend ActiveSupport::Concern
 
-        included do
-          helper_method :layout_page, :default_drops
-        end
-
         def puffer_pages
-          'puffer_pages_layout'
-        end
-
-        def layout_page
-          @layout_page ||= ::Page.find_layout_page(@layout_path.presence || request.path_info)
-        end
-
-        def default_drops page
-          {
-            :self => PufferPages::Liquid::PageDrop.new(page, page, self),
-            :root => PufferPages::Liquid::PageDrop.new(page.root, page, self)
-          }.stringify_keys
+          'puffer_pages'
         end
       end
     end
