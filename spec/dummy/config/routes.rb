@@ -10,6 +10,8 @@ Dummy::Application.routes.draw do
   resources :articles, :only => [:show] do
     collection do
       get :foo
+      get :moo
+      get :bar
     end
   end
 

@@ -69,8 +69,9 @@ describe ArticlesController do
       @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include 'body' %}"
       @root = Fabricate :page, :layout_name => 'foo_layout'
       @moo = Fabricate :page, :slug => 'moo', :parent => @root
-      @bar = Fabricate :page, :slug => 'bar', :parent => @moo, :status => 'published'
-      @bar.page_parts = [Fabricate(:page_part, :name => PufferPages.primary_page_part_name, :body => 'hello from custom path')]
+      @moo.page_parts = [Fabricate(:page_part, :name => PufferPages.primary_page_part_name, :body => 'hello from @moo')]
+      @bar = Fabricate :page, :slug => 'bar', :parent => @moo
+      @bar.page_parts = [Fabricate(:page_part, :name => PufferPages.primary_page_part_name, :body => 'hello from @bar')]
     end
 
     # it "assigns @puffer_page" do
@@ -79,10 +80,30 @@ describe ArticlesController do
     #   assigns('puffer_page').should == @bar
     # end
 
-    it "assigns @puffer_page" do
+    it "render @bar content" do
       get :foo
+      response.body.should == "hello from @bar"
+    end
 
-      response.body.should == "hello from custom path"
+    it "render @moo content" do
+      get :moo
+      response.body.should == "hello from @moo"
+    end
+  end
+
+  describe "GET bar" do
+    render_views
+
+    before :each do
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include 'body' %}"
+      @root = Fabricate :page, :layout_name => 'foo_layout'
+      @bar = Fabricate :page, :slug => 'bar', :parent => @root, :status => 'published'
+      @bar.page_parts = [Fabricate(:page_part, :name => PufferPages.primary_page_part_name, :body => 'hello from @bar')]
+    end
+
+    it "render found page" do
+      get :bar
+      response.body.should == "hello from @bar"
     end
   end
 

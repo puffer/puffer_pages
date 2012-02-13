@@ -7,7 +7,16 @@ class ArticlesController < ApplicationController
   end
 
   def foo
-    render '/moo/bar', :layout => 'puffer_pages'
+    render 'moo/bar', :layout => 'puffer_pages'
+  end
+
+  def moo
+    render 'moo'
+  end
+
+  def bar
+    @page = Page.find_page 'bar'
+    render @page, :layout => true
   end
 
 end
