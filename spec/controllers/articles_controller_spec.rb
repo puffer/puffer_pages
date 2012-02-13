@@ -76,7 +76,7 @@ describe ArticlesController do
     # it "assigns @puffer_page" do
     #   get :foo
 
-    #   assigns(:puffer_page).should == @bar
+    #   assigns('puffer_page').should == @bar
     # end
 
     it "assigns @puffer_page" do

@@ -2,10 +2,10 @@ module PufferPages
   class Renderer < ActionView::TemplateRenderer
 
     def determine_template(options)
-      puffer_page = @view.assigns[:puffer_page]
+      puffer_page = @view.assigns['puffer_page']
       unless puffer_page
         puffer_page = puffer_pages_template(options[:file])
-        @view.assign(:puffer_page => puffer_page)
+        @view.assign('puffer_page' => puffer_page)
       end
       super
     rescue ActionView::MissingTemplate
