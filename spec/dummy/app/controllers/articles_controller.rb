@@ -16,7 +16,14 @@ class ArticlesController < ApplicationController
 
   def bar
     @page = Page.find_page 'bar'
-    render @page, :layout => true
+    render @page
+  end
+
+  def drops
+    @page = Page.find_page 'drops'
+    @first = 1
+    @second = 'two'
+    render @page
   end
 
 end

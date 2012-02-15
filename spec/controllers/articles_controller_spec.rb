@@ -18,7 +18,6 @@ describe ArticlesController do
       get :show, :id => 'foo'
 
       assigns(:article).should == @article
-      # assigns(:puffer_page).should == @articles_wildcard
     end
 
     it "renders the show template" do
@@ -74,12 +73,6 @@ describe ArticlesController do
       @bar.page_parts = [Fabricate(:page_part, :name => PufferPages.primary_page_part_name, :body => 'hello from @bar')]
     end
 
-    # it "assigns @puffer_page" do
-    #   get :foo
-
-    #   assigns('puffer_page').should == @bar
-    # end
-
     it "render @bar content" do
       get :foo
       response.body.should == "hello from @bar"
@@ -104,6 +97,21 @@ describe ArticlesController do
     it "render found page" do
       get :bar
       response.body.should == "hello from @bar"
+    end
+  end
+
+  describe "Drops assign" do
+    render_views
+
+    before :each do
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{{first}} {{second}} {{page}}"
+      @root = Fabricate :page, :layout_name => 'foo_layout'
+      @drops = Fabricate :page, :slug => 'drops', :parent => @root, :status => 'published'
+    end
+
+    it "assigns all" do
+      get :drops
+      response.body.should == "1 two "
     end
   end
 

@@ -8,7 +8,7 @@ module PufferPages
       end
 
       def render_with_puffer_pages(context, options)
-        if (options[:layout].is_a?(Proc) ? options[:layout].call : options[:layout]) == 'layouts/puffer_pages'
+        if options[:puffer_pages]
           render_puffer_page(context, options)
         else
           render_without_puffer_pages(context, options)
