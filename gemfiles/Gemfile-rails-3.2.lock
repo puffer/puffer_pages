@@ -1,3 +1,20 @@
+GIT
+  remote: git://github.com/puffer/puffer.git
+  revision: cafe5618a249026373f9224d1385930ab0311ebd
+  specs:
+    puffer (0.1.1)
+      kaminari
+      orm_adapter
+      rails (~> 3.1)
+
+GIT
+  remote: git://github.com/skyeagle/nested_set.git
+  revision: f85d29df9fd060fce3c2ab80ed2998297662e9e9
+  specs:
+    nested_set (1.6.8)
+      activerecord (>= 3.0.0)
+      railties (>= 3.0.0)
+
 PATH
   remote: /home/pyromaniac/work/opensource/puffer_pages
   specs:
@@ -77,17 +94,10 @@ GEM
     mime-types (1.17.2)
     multi_json (1.0.4)
     mysql (2.8.1)
-    nested_set (1.6.8)
-      activerecord (>= 3.0.0)
-      railties (>= 3.0.0)
     nokogiri (1.5.0)
     orm_adapter (0.0.6)
     pg (0.12.2)
     polyglot (0.3.3)
-    puffer (0.1.1)
-      kaminari
-      orm_adapter
-      rails (~> 3.1)
     rack (1.4.1)
     rack-cache (1.1)
       rack (>= 0.4)
@@ -163,7 +173,9 @@ DEPENDENCIES
   guard-rspec
   libnotify
   mysql
+  nested_set!
   pg
+  puffer!
   puffer_pages!
   rails (~> 3.2.0)
   rb-inotify

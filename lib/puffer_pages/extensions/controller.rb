@@ -14,7 +14,7 @@ module PufferPages
           layout_name = options.key?(:layout) ? options[:layout] : :default
           possible_layout = _layout_for_option(layout_name)
 
-          if (possible_layout.is_a?(Proc) ? possible_layout.call : possible_layout) == 'layouts/puffer_pages'
+          if (possible_layout.is_a?(Proc) ? possible_layout.call : possible_layout) =~ /puffer_pages$/
             options[:puffer_pages] = true
             options[:layout] = possible_layout
           end
