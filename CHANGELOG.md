@@ -10,6 +10,19 @@
 
     This example will render page with 'hello/world' location.
 
+*   All controller instance variable assigns will be transferret
+    to liquid as drops if they are respond to `to_liquid`
+
+    ```
+      def index
+        @answer = 42
+        render 'hello/world', :layout => 'puffer_pages'
+      end
+    ```
+
+    If `hello/world` page body: '{{count}}'
+    This action will produce '42'
+
 ## 0.1.1
 
 ### New features
