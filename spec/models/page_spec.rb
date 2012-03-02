@@ -232,4 +232,21 @@ describe Page do
 
   end
 
+  context 'renderable attributes' do
+    let!(:page_part){
+      Fabricate(:page_part,
+        :name => PufferPages.primary_page_part_name,
+        :body => '{{ self.name }}'
+    )}
+    let!(:page){
+      Fabricate(:page,
+        :layout_name => 'foo_layout',
+        :name => "{{ self.title }}",
+        :title => "hello from title",
+        :page_parts => [page_part]
+    )}
+
+    specify{page_part.render('self' => page.to_drop).should == "hello from title"}
+  end
+
 end

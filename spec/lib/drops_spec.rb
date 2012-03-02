@@ -6,8 +6,8 @@ describe 'Drops' do
 
   def render_page(current_page, page = nil)
     get "/#{current_page.location}"
-    current_page.render 'self' => PufferPages::Liquid::PageDrop.new(current_page, current_page, controller),
-      'page' => (PufferPages::Liquid::PageDrop.new(page, current_page, controller) if page)
+    current_page.render 'self' => current_page.to_drop(current_page, controller),
+      'page' => (page.to_drop(current_page, controller) if page)
   end
 
   describe 'page drop' do

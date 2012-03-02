@@ -23,6 +23,10 @@
     If `hello/world` page body: '{{count}}'
     This action will produce '42'
 
+*   Removed attributes tags. Now attributes are rendered with standart
+    variable call. I.e. `{{ page.title }}` - title here will be rendered
+    but not just inserted.
+
 ## 0.1.1
 
 ### New features

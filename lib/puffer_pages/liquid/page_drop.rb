@@ -6,10 +6,21 @@ module PufferPages
       include Rails.application.routes.url_helpers
 
       delegate *(Page.statuses.map {|s| "#{s}?"} << {:to => :page})
-      delegate :id, :name, :title, :description, :keywords, :created_at, :updated_at, :to => :page
+      delegate :id, :created_at, :updated_at, :to => :page
 
       def initialize page, current_page = nil, controller = nil
         @page, @current_page, @controller = page, current_page, controller
+      end
+
+      %w(name title description keywords).each do |attribute|
+        define_method attribute do
+          value = page.send(attribute)
+          if @context
+            ::Liquid::Template.parse(value).render(@context)
+          else
+            value
+          end
+        end
       end
 
       %w(parent root).each do |attribute|

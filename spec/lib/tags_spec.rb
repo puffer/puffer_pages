@@ -71,28 +71,4 @@ describe 'Tags' do
     end
 
   end
-
-  describe 'attributes: name, title, keywords, description' do
-
-    it 'should render self title without params' do
-      @page = Fabricate :page, :layout_name => 'foo_layout', :name => 'hello', :title => '{{self.name}}',
-        :page_parts => [Fabricate(:page_part, :name => PufferPages.primary_page_part_name, :body => '{% title %}')]
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include '#{PufferPages.primary_page_part_name}' %}"
-
-      render_page(@page).should == "hello"
-    end
-
-    it 'should render page title with param and should get page drop as self internally' do
-      @root = Fabricate :page, :layout_name => 'foo_layout', :name => 'hello', :title => '{{self.name}}',
-        :page_parts => [Fabricate(:page_part, :name => PufferPages.primary_page_part_name, :body => '{% title page %}')]
-      @page = Fabricate :page, :parent => @root, :slug => 'foo', :name => 'world', :title => '{{self.name}}'
-
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include '#{PufferPages.primary_page_part_name}' %}"
-      
-      render_page(@root, 'page' => PufferPages::Liquid::PageDrop.new(@page)).should == "world"
-    end
-
-  end
-
-
 end

@@ -115,4 +115,7 @@ class PufferPages::Page < ActiveRecord::Base
     Rack::Mime.mime_type(File.extname(slug.to_s), 'text/html')
   end
 
+  def to_drop *args
+    ::PufferPages::Liquid::PageDrop.new(self, *args)
+  end
 end

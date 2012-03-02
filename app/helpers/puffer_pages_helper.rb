@@ -26,8 +26,8 @@ module PufferPagesHelper
 
   def default_drops
     {
-      :self => PufferPages::Liquid::PageDrop.new(@puffer_page, @puffer_page, controller),
-      :root => PufferPages::Liquid::PageDrop.new(@puffer_page.root, @puffer_page, controller)
+      :self => @puffer_page.to_drop(@puffer_page, controller),
+      :root => @puffer_page.root.to_drop(@puffer_page, controller)
     }.stringify_keys
   end
 
