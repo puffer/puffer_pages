@@ -31,7 +31,7 @@ describe 'Drops' do
       @bar.page_parts.create(:name => 'sidebar', :body => "{{ 'hello!' }}")
       @layout = Fabricate :layout, :name => 'foo_layout', :body => "{{ self.sidebar }}"
 
-      render_page(@bar).should == "{{ 'hello!' }}"
+      render_page(@bar).should == "hello!"
     end
 
     it 'should render proper current?' do

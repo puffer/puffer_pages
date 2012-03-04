@@ -2,8 +2,8 @@ module PufferPages
   module Liquid
     class FileSystem < ::Liquid::BlankFileSystem
 
-      def read_template_file(template_path, context)
-        case template_type template_path
+      def read_template_file template_path, context
+        case template_type(template_path)
         when :snippet then
           template_path = template_path.gsub(/^snippets\//, '')
           snippet = ::Snippet.find_by_name(template_path)

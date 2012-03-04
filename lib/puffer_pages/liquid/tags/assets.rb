@@ -2,14 +2,15 @@ module PufferPages
   module Liquid
     module Tags
 
-      class Stylesheets < ::Liquid::Tag
+      class Assets < ::Liquid::Tag
         Syntax = /^(#{::Liquid::QuotedFragment}+)/
 
         def initialize(tag_name, markup, tokens)
+          @tag_name = tag_name
           if markup =~ Syntax
             @paths = variables_from_string(markup)
           else
-            raise SyntaxError.new("Syntax Error in 'stylesheets' - Valid syntax: stylesheets path [, path, path ...]")
+            raise SyntaxError.new("Syntax Error in '#{@tag_name}' - Valid syntax: #{@tag_name} path [, path, path ...]")
           end
 
           super
@@ -17,7 +18,13 @@ module PufferPages
 
         def render(context)
           paths = @paths.map {|path| "'#{context[path]}'" }.join(', ')
-          context.registers[:tracker].register "<%= stylesheet_link_tag #{paths} %>"
+          erb = case @tag_name
+          when 'javascripts'
+            "<%= javascript_include_tag #{paths} %>"
+          when 'stylesheets'
+            "<%= stylesheet_link_tag #{paths} %>"
+          end
+          context.registers[:tracker].register erb
         end
 
       private
@@ -35,4 +42,5 @@ module PufferPages
   end
 end
 
-Liquid::Template.register_tag('stylesheets', PufferPages::Liquid::Tags::Stylesheets)
+Liquid::Template.register_tag('javascripts', PufferPages::Liquid::Tags::Assets)
+Liquid::Template.register_tag('stylesheets', PufferPages::Liquid::Tags::Assets)

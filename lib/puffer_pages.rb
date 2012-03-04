@@ -40,5 +40,4 @@ require 'puffer_pages/extensions/renderer'
 require 'puffer_pages/extensions/controller'
 
 require 'puffer_pages/liquid/tags/yield'
-require 'puffer_pages/liquid/tags/stylesheets'
-require 'puffer_pages/liquid/tags/javascripts'
+require 'puffer_pages/liquid/tags/assets'

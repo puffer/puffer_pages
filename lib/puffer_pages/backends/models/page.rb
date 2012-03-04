@@ -73,7 +73,11 @@ class PufferPages::Page < ActiveRecord::Base
   def render(drops_or_context)
     if inherited_layout
       @template = Liquid::Template.parse(inherited_layout.body)
-      tracker.cleanup @template.render(drops_or_context, :registers => {:tracker => tracker, :page => self, :file_system => PufferPages::Liquid::FileSystem.new})
+      tracker.cleanup @template.render(drops_or_context, :registers => {
+        :tracker => tracker,
+        :page => self,
+        :file_system => PufferPages::Liquid::FileSystem.new
+      })
     else
       inherited_page_parts.reverse.map{|part| part.render(drops_or_context, self)}.join
     end
@@ -84,15 +88,15 @@ class PufferPages::Page < ActiveRecord::Base
   end
 
   def inherited_layout_page
-    @inherited_layout_page ||= layout_name? ? self : swallow_nil{parent.inherited_layout_page}
+    @inherited_layout_page ||= layout_name? ? self : parent.try(:inherited_layout_page)
   end
 
   def inherited_layout_name
-    @inherited_layout_name ||= swallow_nil{inherited_layout_page.layout_name}
+    @inherited_layout_name ||= inherited_layout_page.try(:layout_name)
   end
 
   def inherited_layout
-    @inherited_layout ||= swallow_nil{inherited_layout_page.layout}
+    @inherited_layout ||= inherited_layout_page.try(:layout)
   end
 
   def layout_for_render
@@ -105,10 +109,6 @@ class PufferPages::Page < ActiveRecord::Base
 
   def part name
     inherited_page_parts.detect {|part| part.name == name}
-  end
-
-  def is_layout?
-    self.location.include?('*')
   end
 
   def content_type

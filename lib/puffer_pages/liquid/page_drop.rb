@@ -15,11 +15,8 @@ module PufferPages
       %w(name title description keywords).each do |attribute|
         define_method attribute do
           value = page.send(attribute)
-          if @context
-            ::Liquid::Template.parse(value).render(@context)
-          else
-            value
-          end
+          value = ::Liquid::Template.parse(value).render(@context) if value.present? && @context
+          value
         end
       end
 
@@ -51,12 +48,13 @@ module PufferPages
         page.is_ancestor_of? current_page
       end
 
-      def == drop
-        id == drop.send(:page).id
+      def == other
+        page == other.send(:page)
       end
 
       def before_method method
-        swallow_nil{page.part(method).body}
+        value = swallow_nil{page.part(method).body}
+        ::Liquid::Template.parse(value).render(@context) if value.present? && @context
       end
 
     private
