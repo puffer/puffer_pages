@@ -20,15 +20,11 @@ module PufferPages
         end
       end
 
-      %w(parent root).each do |attribute|
+      %w(parent root ancestors self_and_ancestors children self_and_children siblings
+         self_and_siblings descendants, self_and_descendants).each do |attribute|
         define_method attribute do
-          instance_variable_get("@#{attribute}") || instance_variable_set("@#{attribute}", self.class.new(page.parent, current_page, controller))
-        end
-      end
-
-      %w(ancestors self_and_ancestors children self_and_children siblings self_and_siblings descendants, self_and_descendants).each do |attribute|
-        define_method attribute do
-          instance_variable_get("@#{attribute}") || instance_variable_set("@#{attribute}", page.send(attribute).map{ |ac| self.class.new(ac, current_page, controller)})
+          instance_variable_get("@#{attribute}") ||
+            instance_variable_set("@#{attribute}", page.send(attribute).to_drop(current_page, controller))
         end
       end
 

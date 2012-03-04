@@ -29,6 +29,10 @@ class PufferPages::Page < ActiveRecord::Base
     page
   end
 
+  def self.to_drop *args
+    map{|page| page.to_drop(*args)}
+  end
+
   has_many :page_parts, :order => "name = '#{PufferPages.primary_page_part_name}' desc, name", :dependent => :destroy, :class_name => '::PagePart', :validate => true
   accepts_nested_attributes_for :page_parts, :allow_destroy => true
   belongs_to :layout, :primary_key => :name, :foreign_key => :layout_name, :class_name => '::Layout'
@@ -70,17 +74,21 @@ class PufferPages::Page < ActiveRecord::Base
     PufferPages.single_section_page_path ? slug : location
   end
 
-  def render(drops_or_context)
+  def render drops_or_context = {}
     if inherited_layout
-      @template = Liquid::Template.parse(inherited_layout.body)
-      tracker.cleanup @template.render(drops_or_context, :registers => {
-        :tracker => tracker,
-        :page => self,
-        :file_system => PufferPages::Liquid::FileSystem.new
-      })
+      render_layout(inherited_layout.body, drops_or_context)
     else
       inherited_page_parts.reverse.map{|part| part.render(drops_or_context, self)}.join
     end
+  end
+
+  def render_layout layout, drops_or_context = {}
+    template = Liquid::Template.parse(layout)
+    tracker.cleanup template.render(drops_or_context, :registers => {
+      :tracker => tracker,
+      :page => self,
+      :file_system => PufferPages::Liquid::FileSystem.new
+    })
   end
 
   def tracker

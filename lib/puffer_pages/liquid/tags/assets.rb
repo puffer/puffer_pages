@@ -18,12 +18,14 @@ module PufferPages
 
         def render(context)
           paths = @paths.map {|path| "'#{context[path]}'" }.join(', ')
+
           erb = case @tag_name
           when 'javascripts'
             "<%= javascript_include_tag #{paths} %>"
           when 'stylesheets'
             "<%= stylesheet_link_tag #{paths} %>"
           end
+
           context.registers[:tracker].register erb
         end
 

@@ -1,55 +1,62 @@
 require 'spec_helper'
 
-describe 'Drops' do
+describe PufferPages::Liquid::PageDrop do
 
-  include RSpec::Rails::RequestExampleGroup
-
-  def render_page(current_page, page = nil)
-    get "/#{current_page.location}"
-    current_page.render 'self' => current_page.to_drop(current_page, controller),
+  def render(current_page, page = nil)
+    current_page.render({
+      'self' => current_page.to_drop(current_page, controller),
       'page' => (page.to_drop(current_page, controller) if page)
+    })
   end
 
-  describe 'page drop' do
+  def render_layout(layout, current_page, page = nil)
+    current_page.render_layout(layout, {
+      'self' => current_page.to_drop(current_page),
+      'page' => (page.to_drop(current_page) if page)
+    })
+  end
 
-    before :each do
-      @root = Fabricate :page, :layout_name => 'foo_layout'
-      @foo = Fabricate :page, :slug => 'hello', :parent => @root
-      @bar = Fabricate :page, :slug => 'world', :parent => @foo
-      @root.reload
-      @foo.reload
-      @bar.reload
+  context do
+    let!(:root){Fabricate :page, :layout_name => 'foo_layout', :name => 'root'}
+    let!(:foo){Fabricate :page, :slug => 'hello', :parent => root, :name => 'foo'}
+    let!(:bar) do
+      Fabricate :page, :slug => 'world', :parent => foo, :name => 'bar',
+        :page_parts => [Fabricate(:page_part, :name => 'sidebar', :body => "{{ 'hello!' }}")]
     end
 
-    it 'should render proper url and path' do
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{{ self.path }} {{ self.url }}"
-
-      render_page(@bar).should == '/hello/world http://www.example.com/hello/world'
+    before do
+      root.reload
+      foo.reload
+      bar.reload
     end
 
-    it 'should render page_part' do
-      @bar.page_parts.create(:name => 'sidebar', :body => "{{ 'hello!' }}")
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{{ self.sidebar }}"
+    specify{render_layout('{{ self.parent.name }}', bar).should == 'foo'}
+    specify{render_layout('{{ self.root.name }}', bar).should == 'root'}
 
-      render_page(@bar).should == "hello!"
+    specify{render_layout('{{ page.current? }}', foo, foo).should == 'true'}
+    specify{render_layout('{{ page.current? }}', foo, root).should == 'false'}
+    specify{render_layout('{{ page.current? }}', foo, bar).should == 'false'}
+
+    specify{render_layout('{{ page.ancestor? }}', foo, foo).should == 'false'}
+    specify{render_layout('{{ page.ancestor? }}', foo, root).should == 'true'}
+    specify{render_layout('{{ page.ancestor? }}', foo, bar).should == 'false'}
+
+    specify{render_layout('{% if self == page %}equal{% else %}not equal{% endif %}', foo, foo).should == 'equal'}
+    specify{render_layout('{% if self == page %}equal{% else %}not equal{% endif %}', foo, root).should == 'not equal'}
+    specify{render_layout('{% if self == page %}equal{% else %}not equal{% endif %}', foo, bar).should == 'not equal'}
+
+    specify{render_layout('{{ self.sidebar }}', bar).should == 'hello!'}
+
+    context 'url helpers' do
+      include RSpec::Rails::RequestExampleGroup
+
+      let!(:foo_layout){Fabricate :layout, :name => 'foo_layout', :body => '{{ self.path }} {{ self.url }}'}
+
+      specify do
+        get "/#{bar.location}"
+        render(bar).should == '/hello/world http://www.example.com/hello/world'
+      end
     end
-
-    it 'should render proper current?' do
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{{ page.current? }}"
-
-      render_page(@foo, @foo).should == 'true'
-      render_page(@foo, @root).should == 'false'
-      render_page(@foo, @bar).should ==  'false'
-    end
-
-    it 'should render proper ancestor?' do
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{{ page.ancestor? }}"
-
-      render_page(@foo, @foo).should == 'false'
-      render_page(@foo, @root).should == 'true'
-      render_page(@foo, @bar).should ==  'false'
-    end
-
   end
 
 end

@@ -1,5 +1,7 @@
 ## 0.1.2 \[ In Development \] \[ Branch: master \]
 
+### New features
+
 *   Ability to use render method to specify rendered page
 
     ```

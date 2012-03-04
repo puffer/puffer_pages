@@ -97,7 +97,7 @@ describe Page do
       root.page_parts.map(&:name).should == [PufferPages.primary_page_part_name]
       root.page_parts.map(&:body).should == ['haha']
     end
-    
+
   end
 
   describe 'layout' do
