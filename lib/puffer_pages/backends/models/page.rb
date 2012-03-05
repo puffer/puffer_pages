@@ -1,5 +1,6 @@
 # encoding: UTF-8
 class PufferPages::Page < ActiveRecord::Base
+  include PufferPages::Renderable
   self.abstract_class = true
 
   def self.inherited base
@@ -83,26 +84,7 @@ class PufferPages::Page < ActiveRecord::Base
   end
 
   def render_layout layout, drops_or_context = {}
-    template = Liquid::Template.parse(layout)
-
-    if drops_or_context.is_a?(Hash) && (drops_or_context.key?(:drops) || drops_or_context.key?(:registers))
-      drops = drops_or_context[:drops] || {}
-      registers = drops_or_context[:registers] || {}
-    else
-      drops = drops_or_context
-      registers = {}
-    end
-    drops.stringify_keys!
-
-    tracker.cleanup template.render!(drops, :registers => {
-      :tracker => tracker,
-      :page => self,
-      :file_system => PufferPages::Liquid::FileSystem.new
-    }.reverse_merge!(registers))
-  end
-
-  def tracker
-    @tracker ||= PufferPages::Liquid::Tracker.new
+    render_template(layout, self, drops_or_context)
   end
 
   def inherited_layout_page

@@ -1,6 +1,6 @@
 class ContextTestDrop < ::Liquid::Drop
   def registers_page
-    @context.registers[:page].name
+    @context.registers[:drops_page].name
   end
 end
 
@@ -26,11 +26,11 @@ class ArticlesController < ApplicationController
   end
 
   def drops
-    @page = Page.find_page 'drops'
+    @drops_page = Page.find_page 'drops'
     @first = 1
     @second = 'two'
     @drop = ContextTestDrop.new
-    render @page
+    render @drops_page
   end
 
 end
