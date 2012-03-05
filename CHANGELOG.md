@@ -29,6 +29,9 @@
     variable call. I.e. `{{ page.title }}` - title here will be rendered
     but not just inserted.
 
+*   All template assigns, not respondable to `to_liquid` are joined
+    to context registers, so can be used from drops.
+
 ## 0.1.1
 
 ### New features

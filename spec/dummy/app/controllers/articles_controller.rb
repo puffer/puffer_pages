@@ -1,3 +1,9 @@
+class ContextTestDrop < ::Liquid::Drop
+  def registers_page
+    @context.registers[:page].name
+  end
+end
+
 class ArticlesController < ApplicationController
 
   layout :puffer_pages
@@ -23,6 +29,7 @@ class ArticlesController < ApplicationController
     @page = Page.find_page 'drops'
     @first = 1
     @second = 'two'
+    @drop = ContextTestDrop.new
     render @page
   end
 

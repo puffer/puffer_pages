@@ -84,11 +84,21 @@ class PufferPages::Page < ActiveRecord::Base
 
   def render_layout layout, drops_or_context = {}
     template = Liquid::Template.parse(layout)
-    tracker.cleanup template.render(drops_or_context, :registers => {
+
+    if drops_or_context.is_a?(Hash) && (drops_or_context.key?(:drops) || drops_or_context.key?(:registers))
+      drops = drops_or_context[:drops] || {}
+      registers = drops_or_context[:registers] || {}
+    else
+      drops = drops_or_context
+      registers = {}
+    end
+    drops.stringify_keys!
+
+    tracker.cleanup template.render!(drops, :registers => {
       :tracker => tracker,
       :page => self,
       :file_system => PufferPages::Liquid::FileSystem.new
-    })
+    }.reverse_merge!(registers))
   end
 
   def tracker
@@ -112,7 +122,11 @@ class PufferPages::Page < ActiveRecord::Base
   end
 
   def inherited_page_parts
-    ::PagePart.where(:page_parts => {:page_id => self_and_ancestors.map(&:id)}).joins(:page).order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc").uniq_by &:name
+    @inherited_page_parts ||= all_inherited_page_parts.uniq_by(&:name)
+  end
+
+  def all_inherited_page_parts
+    @all_inherited_page_parts ||= ::PagePart.where(:page_parts => {:page_id => self_and_ancestors.map(&:id)}).joins(:page).order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc")
   end
 
   def part name

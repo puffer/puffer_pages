@@ -26,7 +26,7 @@ module PufferPages
             "<%= stylesheet_link_tag #{paths} %>"
           end
 
-          context.registers[:tracker].register erb
+          context.registers[:tracker].register(erb)
         end
 
       private

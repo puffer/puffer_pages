@@ -6,13 +6,23 @@ class PufferPages::PagePart < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :page_id
 
-  def render drops_or_context, page = page
+  def render drops_or_context, options = {}, page = page
     template = Liquid::Template.parse(body)
-    result = tracker.cleanup template.render(drops_or_context, :registers => {
+
+    if drops_or_context.is_a?(Hash) && (drops_or_context.key?(:drops) || drops_or_context.key?(:registers))
+      drops = drops_or_context[:drops] || {}
+      registers = drops_or_context[:registers] || {}
+    else
+      drops = drops_or_context
+      registers = {}
+    end
+    drops.stringify_keys!
+
+    result = tracker.cleanup template.render(drops, :registers => {
       :tracker => tracker,
       :page => page,
       :file_system => PufferPages::Liquid::FileSystem.new
-    })
+    }.reverse_merge!(registers))
     main? ? result : "<% content_for :'#{name}' do %>#{result}<% end %>"
   end
 

@@ -62,7 +62,6 @@ describe ArticlesController do
   end
 
   describe "GET foo" do
-    render_views
 
     before :each do
       @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include 'body' %}"
@@ -85,7 +84,6 @@ describe ArticlesController do
   end
 
   describe "GET bar" do
-    render_views
 
     before :each do
       @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include 'body' %}"
@@ -101,17 +99,15 @@ describe ArticlesController do
   end
 
   describe "Drops assign" do
-    render_views
-
     before :each do
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{{first}} {{second}} {{page}}"
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{{first}} {{second}} {{page}} {{drop.registers_page}}"
       @root = Fabricate :page, :layout_name => 'foo_layout'
-      @drops = Fabricate :page, :slug => 'drops', :parent => @root, :status => 'published'
+      @drops = Fabricate :page, :slug => 'drops', :name => 'drops_page', :parent => @root, :status => 'published'
     end
 
     it "assigns all" do
       get :drops
-      response.body.should == "1 two "
+      response.body.should == "1 two  drops_page"
     end
   end
 
