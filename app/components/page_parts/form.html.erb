@@ -1,5 +1,5 @@
 <%= fields_for @record do |f| %>
-  <ul id="<%= field.name %>" class="rui-tabs" data-tabs="{closable: true, Cookie: {}, onSelect: page_part_tab_select, onRemove: page_part_tab_remove, addButton: page_part_tab_add}">
+  <ul id="<%= field.name %>" class="rui-tabs" data-tabs="{closable: true, scrollTabs: true, Cookie: {}, onSelect: page_part_tab_select, onRemove: page_part_tab_remove, addButton: page_part_tab_add}">
     <ul class="rui-tabs-list">
       <% @record.send(field.name).each_with_index do |page_part, index| %>
         <li>
