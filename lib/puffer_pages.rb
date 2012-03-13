@@ -5,6 +5,10 @@ module PufferPages
   autoload :Page, 'puffer_pages/backends/models/page'
   autoload :PagePart, 'puffer_pages/backends/models/page_part'
 
+  autoload :SnippetsBase, 'puffer_pages/backends/controllers/snippets_base'
+  autoload :LayoutsBase, 'puffer_pages/backends/controllers/layouts_base'
+  autoload :PagesBase, 'puffer_pages/backends/controllers/pages_base'
+
   class PufferPagesError < StandardError
   end
 
