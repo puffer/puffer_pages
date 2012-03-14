@@ -18,6 +18,27 @@ Tabs.include({
       this.addButton = $E('a', {'class': 'rui-tabs-tab rui-tabs-add', 'html': '<a href="#">+</a>'}).insertTo(this.tabsList);
       this.addButton.onClick(this.options.addButton.bind(this));
     }
+  },
+
+  scrollTo: function(scroll) {
+    // checking the constraints
+    var available_width = this.scroller.size().x;
+    if (this.addButton) {
+      var addButtonWidth = this.addButton.dimensions().width;
+    } else {
+      var addButtonWidth = 0;
+    }
+    var overall_width   = this.tabs.map('width').sum() + addButtonWidth;
+
+    if (scroll < (available_width - overall_width)) {
+      scroll = available_width - overall_width;
+    }
+    if (scroll > 0) { scroll = 0; }
+
+    // applying the scroll
+    this.tabsList.morph({left: scroll+'px'}, {duration: this.options.scrollDuration});
+
+    this.checkScrollButtons(overall_width, available_width, scroll);
   }
 });
 
