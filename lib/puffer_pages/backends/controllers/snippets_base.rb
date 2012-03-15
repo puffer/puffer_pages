@@ -1,6 +1,4 @@
 class PufferPages::SnippetsBase < Puffer::Base
-  unloadable
-
   setup do
     group :pages
     model_name :snippet
@@ -14,5 +12,4 @@ class PufferPages::SnippetsBase < Puffer::Base
     field :name
     field :body, :type => :codemirror
   end
-
 end

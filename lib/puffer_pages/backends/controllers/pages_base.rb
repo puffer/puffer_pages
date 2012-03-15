@@ -1,6 +1,4 @@
 class PufferPages::PagesBase < Puffer::TreeBase
-  unloadable
-
   helper :puffer_pages
 
   setup do
@@ -34,5 +32,4 @@ class PufferPages::PagesBase < Puffer::TreeBase
     field :keywords
     field :parent_id, :type => :hidden
   end
-
 end
