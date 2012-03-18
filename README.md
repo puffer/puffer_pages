@@ -1,5 +1,11 @@
 [![Build Status](https://secure.travis-ci.org/puffer/puffer_pages.png)](http://travis-ci.org/puffer/puffer_pages)
 
+# Achtung!
+
+It's better to install PufferPages from the HEAD of ruby repo now.
+
+<pre>gem "puffer_pages", :git => "git://github.com/puffer/puffer_pages.git"</pre>
+
 # PufferPages is lightweight rails 3.1 CMS
 
 Interface of PufferPages based on [puffer](https://github.com/puffer/puffer)
