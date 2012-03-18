@@ -21,6 +21,7 @@ module PufferPages
 
         def render(context)
           page = context[@page]
+          page = context.registers[:page] unless page.is_a?(PufferPages::Liquid::PageDrop)
 
           context.stack do
             context['self'] = page
