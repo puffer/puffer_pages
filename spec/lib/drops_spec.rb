@@ -4,15 +4,15 @@ describe PufferPages::Liquid::PageDrop do
 
   def render current_page, page = nil
     current_page.render({
-      'self' => current_page.to_drop(current_page, controller),
-      'page' => (page.to_drop(current_page, controller) if page)
+      'self' => current_page.to_drop(controller),
+      'page' => (page.to_drop(controller) if page)
     })
   end
 
   def render_layout layout, current_page, page = nil
     current_page.render_layout(layout, {
-      'self' => current_page.to_drop(current_page),
-      'page' => (page.to_drop(current_page) if page)
+      'self' => current_page.to_drop,
+      'page' => (page.to_drop if page)
     })
   end
 

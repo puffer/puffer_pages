@@ -22,8 +22,8 @@
       end
     ```
 
-    If `hello/world` page body: '{{count}}'
-    This action will produce '42'
+    If `hello/world` page body: `{{count}}`
+    This action will produce `42`
 
 *   Removed attributes tags. Now attributes are rendered with standart
     variable call. I.e. `{{ page.title }}` - title here will be rendered
@@ -31,6 +31,8 @@
 
 *   All template assigns, not respondable to `to_liquid` are joined
     to context registers, so can be used from drops.
+
+*   Removed `root` page object from context.
 
 ## 0.1.1
 

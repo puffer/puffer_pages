@@ -5,5 +5,4 @@ class PagesController < ApplicationController
     page = Page.find_page(params[:path])
     render page, :content_type => page.content_type, :layout => true
   end
-
 end

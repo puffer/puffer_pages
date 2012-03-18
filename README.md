@@ -67,12 +67,10 @@ This variables accessible from every page:
 
 * self - current page reference.
 <pre>{{ self.name }}</pre>
-* root - root page reference.
-<pre>{{ root.name }}</pre>
-Both `self` and `root` are instances of page drop. View [this](https://github.com/puffer/puffer_pages/blob/master/lib/puffer_pages/liquid/page_drop.rb) to find list of possible page drop methods
+self is an instance of page drop. View [this](https://github.com/puffer/puffer_pages/blob/master/lib/puffer_pages/liquid/page_drop.rb) to find list of possible page drop methods
 
 ### include
-`include` is standart liquid tag with pudder data model 'file_system'
+`include` is standart liquid tag with puffer data model 'file_system'
 
 #### for page_parts
 Use include tag for current page page_parts inclusion:

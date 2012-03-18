@@ -8,8 +8,8 @@ module PufferPages
       delegate *(Page.statuses.map {|s| "#{s}?"} << {:to => :page})
       delegate :id, :created_at, :updated_at, :to => :page
 
-      def initialize page, current_page = nil, controller = nil
-        @page, @current_page, @controller = page, current_page, controller
+      def initialize page, controller = nil
+        @page, @controller = page, controller
       end
 
       %w(name title description keywords).each do |attribute|
@@ -24,7 +24,7 @@ module PufferPages
          self_and_siblings descendants, self_and_descendants).each do |attribute|
         define_method attribute do
           instance_variable_get("@#{attribute}") ||
-            instance_variable_set("@#{attribute}", page.send(attribute).to_drop(current_page, controller))
+            instance_variable_set("@#{attribute}", page.send(attribute).to_drop(controller))
         end
       end
 
@@ -37,11 +37,11 @@ module PufferPages
       end
 
       def current?
-        page == current_page
+        current_page && page == current_page
       end
 
       def ancestor?
-        page.is_ancestor_of? current_page
+        current_page && page.is_ancestor_of?(current_page)
       end
 
       def == other
@@ -50,12 +50,16 @@ module PufferPages
 
       def before_method method
         value = swallow_nil{page.part(method).body}
-        ::Liquid::Template.parse(value).render(@context) if value.present? && @context
+        ::Liquid::Template.parse(value).render(@context) if value && @context
       end
 
     private
 
-      attr_reader :page, :current_page, :controller
+      def current_page
+        @current_page ||= @context['self'].send(:page) if @context
+      end
+
+      attr_reader :page, :controller
       delegate :env, :request, :to => :controller, :allow_nil => true
 
     end

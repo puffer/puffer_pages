@@ -15,7 +15,7 @@ module PufferPages
       {:drops => drops.stringify_keys!, :registers => registers.symbolize_keys!}
     end
 
-    def render_template template, page, options = {}
+    def render_liquid template, page, options = {}
       template = ::Liquid::Template.parse(template)
       options = normalize_render_options(options)
 

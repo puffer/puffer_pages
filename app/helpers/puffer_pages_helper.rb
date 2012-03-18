@@ -1,5 +1,4 @@
 module PufferPagesHelper
-
   def possible_layouts
     inherited_layout + (application_layouts + puffer_layouts).uniq.sort
   end
@@ -23,15 +22,4 @@ module PufferPagesHelper
   def tree_page
     render :partial => 'tree_page', :object => record
   end
-
-  def default_drops
-    {
-      :self => @puffer_page.to_drop(@puffer_page, controller),
-      :root => @puffer_page.root.to_drop(@puffer_page, controller)
-    }.stringify_keys
-  end
-
-  def drops
-  end
-
 end

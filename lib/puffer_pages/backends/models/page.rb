@@ -84,7 +84,7 @@ class PufferPages::Page < ActiveRecord::Base
   end
 
   def render_layout layout, drops_or_context = {}
-    render_template(layout, self, drops_or_context)
+    render_liquid(layout, self, drops_or_context)
   end
 
   def inherited_layout_page

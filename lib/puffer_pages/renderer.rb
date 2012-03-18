@@ -5,7 +5,7 @@ module PufferPages
       puffer_page = puffer_pages_template(options[:action].presence || options[:file]) unless puffer_page
       @view.assign(@view.assigns.merge!(
         'puffer_page' => puffer_page,
-        'puffer_page_render_options' => puffer_page_render_options
+        'puffer_page_render_options' => puffer_page_render_options(puffer_page)
       ))
 
       super
@@ -15,7 +15,7 @@ module PufferPages
     end
 
     def find_layout(layout, keys)
-      layout = "<% @puffer_page_render_options[:drops].merge!(default_drops) %><%= render(
+      layout = "<%= render(
         :inline => @puffer_page.render(@puffer_page_render_options),
         :layout => @puffer_page.layout_for_render) %>"
 
@@ -27,7 +27,7 @@ module PufferPages
       ::Page.find_layout_page(suggest.presence || @view.request.path_info)
     end
 
-    def puffer_page_render_options
+    def puffer_page_render_options page
       drops, registers = {}, {}
       @view.assigns.each do |key, value|
         if value.respond_to?(:to_liquid)
@@ -36,6 +36,7 @@ module PufferPages
           registers[key] = value
         end
       end
+      drops[:self] = page.to_drop(@view.controller)
       {:drops => drops, :registers => registers}
     end
   end

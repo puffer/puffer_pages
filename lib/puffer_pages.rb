@@ -4,6 +4,7 @@ module PufferPages
   autoload :Layout, 'puffer_pages/backends/models/layout'
   autoload :Page, 'puffer_pages/backends/models/page'
   autoload :PagePart, 'puffer_pages/backends/models/page_part'
+  autoload :Renderable, 'puffer_pages/backends/models/renderable'
 
   autoload :SnippetsBase, 'puffer_pages/backends/controllers/snippets_base'
   autoload :LayoutsBase, 'puffer_pages/backends/controllers/layouts_base'
@@ -45,3 +46,4 @@ require 'puffer_pages/extensions/controller'
 
 require 'puffer_pages/liquid/tags/yield'
 require 'puffer_pages/liquid/tags/assets'
+require 'puffer_pages/liquid/tags/attribute'

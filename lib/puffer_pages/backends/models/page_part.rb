@@ -8,7 +8,7 @@ class PufferPages::PagePart < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :page_id
 
   def render drops_or_context, page = page
-    result = render_template(body, page, drops_or_context)
+    result = render_liquid(body, page, drops_or_context)
     main? ? result : "<% content_for :'#{name}' do %>#{result}<% end %>"
   end
 
