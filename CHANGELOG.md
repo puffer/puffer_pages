@@ -2,6 +2,16 @@
 
 ### New features
 
+*   Added new tags `snippet` and `layout`. They acts like
+    a short-cuts to `include`. I.e. `{% snippet 'hello' %}`
+    is the same is `{% include 'snippets/hello' %}`. Both
+    tags supports additional parameters as `include`
+
+*   Removed `root` page object from context.
+
+*   All template assigns, not respondable to `to_liquid` are joined
+    to context registers, so can be used from drops.
+
 *   Ability to use render method to specify rendered page
 
     ```
@@ -24,15 +34,6 @@
 
     If `hello/world` page body: `{{count}}`
     This action will produce `42`
-
-*   Removed attributes tags. Now attributes are rendered with standart
-    variable call. I.e. `{{ page.title }}` - title here will be rendered
-    but not just inserted.
-
-*   All template assigns, not respondable to `to_liquid` are joined
-    to context registers, so can be used from drops.
-
-*   Removed `root` page object from context.
 
 ## 0.1.1
 

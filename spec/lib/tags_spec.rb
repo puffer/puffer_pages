@@ -39,6 +39,11 @@ describe 'Tags' do
       render_page(@page).should == @snippet.body
     end
 
+    it 'should include snippet with string param' do
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% snippet 'snip' %}"
+      render_page(@page).should == @snippet.body
+    end
+
     it 'should include snippet with variable param' do
       @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% assign sn = 'snippets/snip' %}{% include sn %}"
       render_page(@page).should == @snippet.body
