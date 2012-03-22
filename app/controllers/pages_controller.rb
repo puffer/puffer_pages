@@ -1,8 +1,6 @@
 class PagesController < ApplicationController
-  layout :puffer_pages
-
   def index
     page = Page.find_page(params[:path])
-    render page, :content_type => page.content_type
+    render :puffer_page => page, :content_type => page.content_type
   end
 end
