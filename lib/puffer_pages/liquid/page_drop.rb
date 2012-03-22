@@ -49,14 +49,14 @@ module PufferPages
       end
 
       def before_method method
-        value = swallow_nil{page.part(method).body}
-        ::Liquid::Template.parse(value).render(@context) if value && @context
+        value = page.part(method)
+        value.render(@context) if value && @context
       end
 
     private
 
       def current_page
-        @current_page ||= @context['self'].send(:page) if @context
+        @current_page ||= @context.registers[:page] if @context
       end
 
       attr_reader :page, :controller

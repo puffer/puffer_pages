@@ -17,17 +17,19 @@ module PufferPages
 
     def render_liquid template, page, options = {}
       template = ::Liquid::Template.parse(template)
-      options = normalize_render_options(options)
 
-      tracker.cleanup template.render(options[:drops], :registers => {
-        :tracker => tracker,
-        :page => page,
-        :file_system => PufferPages::Liquid::FileSystem.new
-      }.reverse_merge!(options[:registers]))
-    end
+      if options.is_a?(::Liquid::Context)
+        template.render(options)
+      else
+        options = normalize_render_options(options)
+        tracker = PufferPages::Liquid::Tracker.new
+        tracker.cleanup template.render(options[:drops], :registers => {
+          :file_system => PufferPages::Liquid::FileSystem.new,
+          :tracker => tracker,
+          :page => page
+        }.reverse_merge!(options[:registers]))
+      end
 
-    def tracker
-      @tracker ||= PufferPages::Liquid::Tracker.new
     end
 
   end

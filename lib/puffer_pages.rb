@@ -46,5 +46,7 @@ require 'puffer_pages/extensions/controller'
 
 require 'puffer_pages/liquid/tags/yield'
 require 'puffer_pages/liquid/tags/assets'
+require 'puffer_pages/liquid/tags/super'
 require 'puffer_pages/liquid/tags/include'
+require 'puffer_pages/liquid/tags/partials'
 require 'puffer_pages/liquid/tags/attribute'

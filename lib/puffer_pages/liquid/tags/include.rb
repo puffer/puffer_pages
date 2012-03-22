@@ -3,18 +3,28 @@ module PufferPages
     module Tags
 
       class Include < ::Liquid::Include
-        def initialize(tag_name, markup, tokens)
-          @tag_name = tag_name
-          super
-        end
+        def render(context)
+          source = _read_template_from_file_system(context)
+          partial = ::Liquid::Template.parse(source)
+          variable = context[@variable_name || @template_name[1..-2]]
 
-      private
+          context.stack do
+            context[:page_part] = source if source.is_a?(::PagePart)
 
-        def _read_template_from_file_system(context)
-          file_system = context.registers[:file_system] || Liquid::Template.file_system
-          template_name = "#{@tag_name.pluralize}/#{context[@template_name]}"
+            @attributes.each do |key, value|
+              context[key] = context[value]
+            end
 
-          file_system.read_template_file(template_name, context)
+            if variable.is_a?(Array)
+              variable.collect do |variable|
+                context[@template_name[1..-2]] = variable
+                partial.render(context)
+              end
+            else
+              context[@template_name[1..-2]] = variable
+              partial.render(context)
+            end
+          end
         end
       end
 
@@ -22,5 +32,4 @@ module PufferPages
   end
 end
 
-Liquid::Template.register_tag('snippet', PufferPages::Liquid::Tags::Include)
-Liquid::Template.register_tag('layout', PufferPages::Liquid::Tags::Include)
+Liquid::Template.register_tag('include', PufferPages::Liquid::Tags::Include)

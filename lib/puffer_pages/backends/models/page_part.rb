@@ -2,18 +2,24 @@ class PufferPages::PagePart < ActiveRecord::Base
   include PufferPages::Renderable
   self.abstract_class = true
 
-  belongs_to :page, :class_name => '::Page'
+  belongs_to :page, :class_name => '::Page', :inverse_of => :page_parts
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :page_id
 
-  def render drops_or_context, page = page
-    result = render_liquid(body, page, drops_or_context)
-    main? ? result : "<% content_for :'#{name}' do %>#{result}<% end %>"
+  def render context = {}, page = page
+    render_liquid(body, page, context)
   end
 
   def main?
     name == PufferPages.primary_page_part_name
   end
 
+  def super_part
+    @super_part ||= page.super_inherited_page_parts.uniq_by(&:name).detect {|part| part.name == name}
+  end
+
+  def source
+    body
+  end
 end

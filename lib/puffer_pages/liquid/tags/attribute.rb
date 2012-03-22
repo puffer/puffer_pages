@@ -6,8 +6,6 @@ module PufferPages
         Syntax = /^(#{::Liquid::QuotedFragment})/
 
         def initialize(tag_name, markup, tokens)
-          @tag_name = tag_name
-
           if markup =~ Syntax
             @page = $1
           elsif markup.blank?

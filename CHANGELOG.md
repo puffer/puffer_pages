@@ -2,6 +2,9 @@
 
 ### New features
 
+*   Added `super` tag, which acts inside page parts and
+    renders content of parent page part like include.
+
 *   Added new tags `snippet` and `layout`. They acts like
     a short-cuts to `include`. I.e. `{% snippet 'hello' %}`
     is the same is `{% include 'snippets/hello' %}`. Both

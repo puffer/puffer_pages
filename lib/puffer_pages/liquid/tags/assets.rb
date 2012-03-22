@@ -6,11 +6,10 @@ module PufferPages
         Syntax = /^(#{::Liquid::QuotedFragment}+)/
 
         def initialize(tag_name, markup, tokens)
-          @tag_name = tag_name
           if markup =~ Syntax
             @paths = variables_from_string(markup)
           else
-            raise SyntaxError.new("Syntax Error in '#{@tag_name}' - Valid syntax: #{@tag_name} path [, path, path ...]")
+            raise SyntaxError.new("Syntax Error in '#{tag_name}' - Valid syntax: #{tag_name} path [, path, path ...]")
           end
 
           super

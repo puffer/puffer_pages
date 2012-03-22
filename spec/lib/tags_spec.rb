@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'Tags' do
 
   def render_page(page, drops = {})
-    page.render({'self' => PufferPages::Liquid::PageDrop.new(page)}.merge(drops))
+    page.render({'self' => page.to_drop}.merge(drops))
   end
 
   describe 'include page part' do
@@ -96,5 +96,26 @@ describe 'Tags' do
       render_page(@root, 'page' => PufferPages::Liquid::PageDrop.new(@page)).should == "world"
     end
 
+  end
+
+  describe 'super' do
+    let!(:root){
+      Fabricate :page, :layout_name => 'foo', :page_parts => [
+        Fabricate(:page_part, :name => 'sidebar', :body => "root sidebar {{var}}")
+      ]
+    }
+    let!(:page){
+      Fabricate :page, :slug => 'page', :parent => root, :page_parts => [
+        Fabricate(:page_part, :name => 'sidebar', :body => "wrap {% super var:'hello' %} sidebar")
+      ]
+    }
+    let!(:page2){
+      Fabricate :page, :slug => 'page2', :parent => page, :page_parts => [
+        Fabricate(:page_part, :name => 'sidebar', :body => "wrap2 {% super %} sidebar")
+      ]
+    }
+
+    specify{page.render_layout("{% include 'sidebar' %}").should == "wrap root sidebar hello sidebar"}
+    specify{page2.render_layout("{% include 'sidebar' %}").should == "wrap2 wrap root sidebar hello sidebar sidebar"}
   end
 end
