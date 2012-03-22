@@ -2,6 +2,10 @@
 
 ### New features
 
+*   The second way to declare puffer_page rendering
+    `render :puffer_page => Page.first` or
+    `render :puffer_page => 'some/path'`
+
 *   Current controller now available from context.registers[:controller]
     It is useful for using url helpers in drops.
 

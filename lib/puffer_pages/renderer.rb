@@ -1,8 +1,7 @@
 module PufferPages
   class Renderer < ActionView::TemplateRenderer
     def determine_template(options)
-      puffer_page = options.delete(:partial) if options[:partial].is_a?(PufferPages::Page)
-      puffer_page = puffer_pages_template(options[:action].presence || options[:file]) unless puffer_page
+      puffer_page = options[:puffer_page]
       @view.assign(@view.assigns.merge!(
         'puffer_page' => puffer_page,
         'puffer_page_render_options' => puffer_page_render_options(puffer_page)
@@ -21,10 +20,6 @@ module PufferPages
 
       handler = ActionView::Template.handler_for_extension("erb")
       ActionView::Template.new(layout, "puffer pages layout wrapper", handler, :locals => keys)
-    end
-
-    def puffer_pages_template(suggest)
-      ::Page.find_layout_page(suggest.presence || @view.request.path_info)
     end
 
     def puffer_page_render_options page

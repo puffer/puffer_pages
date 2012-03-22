@@ -9,7 +9,7 @@ module PufferPages
           variable = context[@variable_name || @template_name[1..-2]]
 
           context.stack do
-            context[:page_part] = source if source.is_a?(::PagePart)
+            context[:page_part] = source if source.is_a?(::PufferPages::PagePart)
 
             @attributes.each do |key, value|
               context[key] = context[value]
