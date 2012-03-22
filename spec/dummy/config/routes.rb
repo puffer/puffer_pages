@@ -16,6 +16,15 @@ Dummy::Application.routes.draw do
     end
   end
 
+  resources :posts, :only => [:show] do
+    collection do
+      get :foo
+      get :fooo
+      get :moo
+      get :bar
+    end
+  end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
