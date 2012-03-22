@@ -2,6 +2,9 @@
 
 ### New features
 
+*   Current controller now awaible from context.registers[:controller]
+    It is useful for using url helpers in drops.
+
 *   Added `super` tag, which acts inside page parts and
     renders content of parent page part like include.
 

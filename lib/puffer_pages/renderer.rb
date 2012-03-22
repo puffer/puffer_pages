@@ -36,7 +36,8 @@ module PufferPages
           registers[key] = value
         end
       end
-      drops[:self] = page.to_drop(@view.controller)
+      drops[:self] = page.to_drop
+      registers[:controller] = @view.controller
       {:drops => drops, :registers => registers}
     end
   end

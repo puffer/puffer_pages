@@ -8,8 +8,8 @@ module PufferPages
       delegate *(Page.statuses.map {|s| "#{s}?"} << {:to => :page})
       delegate :id, :created_at, :updated_at, :to => :page
 
-      def initialize page, controller = nil
-        @page, @controller = page, controller
+      def initialize page
+        @page = page
       end
 
       %w(name title description keywords).each do |attribute|
@@ -24,7 +24,7 @@ module PufferPages
          self_and_siblings descendants, self_and_descendants).each do |attribute|
         define_method attribute do
           instance_variable_get("@#{attribute}") ||
-            instance_variable_set("@#{attribute}", page.send(attribute).to_drop(controller))
+            instance_variable_set("@#{attribute}", page.send(attribute).to_drop)
         end
       end
 
@@ -54,14 +54,17 @@ module PufferPages
       end
 
     private
+      attr_reader :page
 
       def current_page
         @current_page ||= @context.registers[:page] if @context
       end
 
-      attr_reader :page, :controller
-      delegate :env, :request, :to => :controller, :allow_nil => true
+      def controller
+        @controller ||= @context.registers[:controller] if @context
+      end
 
+      delegate :env, :request, :to => :controller, :allow_nil => true
     end
   end
 end

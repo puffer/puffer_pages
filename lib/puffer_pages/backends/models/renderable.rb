@@ -23,7 +23,7 @@ module PufferPages
       else
         options = normalize_render_options(options)
         tracker = PufferPages::Liquid::Tracker.new
-        tracker.cleanup template.render(options[:drops], :registers => {
+        tracker.cleanup template.render!(options[:drops], :registers => {
           :file_system => PufferPages::Liquid::FileSystem.new,
           :tracker => tracker,
           :page => page

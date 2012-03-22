@@ -2,13 +2,6 @@ require 'spec_helper'
 
 describe PufferPages::Liquid::PageDrop do
 
-  def render current_page, page = nil
-    current_page.render({
-      'self' => current_page.to_drop(controller),
-      'page' => (page.to_drop(controller) if page)
-    })
-  end
-
   def render_layout layout, current_page, page = nil
     current_page.render_layout(layout, {
       'self' => current_page.to_drop,
@@ -54,7 +47,7 @@ describe PufferPages::Liquid::PageDrop do
 
       specify do
         get "/#{bar.location}"
-        render(bar).should == '/hello/world http://www.example.com/hello/world'
+        response.body.should == '/hello/world http://www.example.com/hello/world'
       end
     end
   end
