@@ -42,6 +42,10 @@ describe PostsController do
       get :bar
       response.body.should == "hello from @bar"
     end
+
+    it "render found page" do
+      expect{get(:baar)}.to raise_error(ActionView::MissingTemplate)
+    end
   end
 
 end

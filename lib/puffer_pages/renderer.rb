@@ -23,17 +23,11 @@ module PufferPages
     end
 
     def puffer_page_render_options page
-      drops, registers = {}, {}
-      @view.assigns.each do |key, value|
-        if value.respond_to?(:to_liquid)
-          drops[key] = value
-        else
-          registers[key] = value
-        end
-      end
-      drops[:self] = page.to_drop
-      registers[:controller] = @view.controller
-      {:drops => drops, :registers => registers}
+      drops, registers = *@view.assigns.partition {|k, v| v.respond_to?(:to_liquid)}.map{|v| Hash[v]}
+      {
+        :drops => drops.merge!(:self => page.to_drop),
+        :registers => registers.merge!(:controller => @view.controller)
+      }
     end
   end
 end

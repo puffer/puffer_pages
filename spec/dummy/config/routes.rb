@@ -22,6 +22,7 @@ Dummy::Application.routes.draw do
       get :fooo
       get :moo
       get :bar
+      get :baar
     end
   end
 

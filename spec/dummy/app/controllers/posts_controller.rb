@@ -17,4 +17,9 @@ class PostsController < ApplicationController
     render :puffer_page => @page
   end
 
+  def baar
+    @page = Page.find_page 'bar'
+    render @page
+  end
+
 end
