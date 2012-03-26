@@ -44,7 +44,7 @@ describe PostsController do
     end
 
     it "render found page" do
-      expect{get(:baar)}.to raise_error(ActionView::MissingTemplate)
+      expect{get(:baz)}.to raise_error(ActionView::MissingTemplate)
     end
   end
 

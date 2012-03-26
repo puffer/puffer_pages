@@ -14,7 +14,8 @@ module PufferPages
           layout_name = options.key?(:layout) ? options[:layout] : :default
           possible_layout = _layout_for_option(layout_name)
 
-          if (possible_layout.is_a?(Proc) ? possible_layout.call : possible_layout) =~ /puffer_pages$/
+          if options[:text].blank? && options[:inline].blank? &&
+             (possible_layout.is_a?(Proc) ? possible_layout.call : possible_layout) =~ /puffer_pages$/
             options[:puffer_page] = options.delete(:partial) if options[:partial].is_a?(::PufferPages::Page)
             options[:puffer_page] ||= _puffer_pages_template(options[:action].presence || options[:file])
             options[:layout] = possible_layout

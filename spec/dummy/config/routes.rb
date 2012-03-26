@@ -9,20 +9,13 @@ Dummy::Application.routes.draw do
 
   resources :articles, :only => [:show] do
     collection do
-      get :foo
-      get :moo
-      get :bar
-      get :drops
+      get :foo, :moo, :bar, :baz, :drops
     end
   end
 
   resources :posts, :only => [:show] do
     collection do
-      get :foo
-      get :fooo
-      get :moo
-      get :bar
-      get :baar
+      get :foo, :fooo, :moo, :bar, :baz
     end
   end
 

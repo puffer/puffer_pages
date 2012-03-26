@@ -98,6 +98,13 @@ describe ArticlesController do
     end
   end
 
+  describe "GET baz" do
+    it "render found page" do
+      get :baz
+      response.body.should == "rendered text"
+    end
+  end
+
   describe "Drops assign" do
     before :each do
       @layout = Fabricate :layout, :name => 'foo_layout', :body => "{{first}} {{second}} {{page}} {{drop.registers_page}}"

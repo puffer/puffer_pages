@@ -25,6 +25,10 @@ class ArticlesController < ApplicationController
     render @page
   end
 
+  def baz
+    render :text => 'rendered text'
+  end
+
   def drops
     @drops_page = Page.find_page 'drops'
     @first = 1
