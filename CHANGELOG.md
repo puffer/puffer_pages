@@ -2,6 +2,23 @@
 
 ### New features
 
+*   The new `puffer_pages` method for controller
+
+    ```
+      class SomeController < ActionController::Base
+        # takes `:only`, `:except` and `:scope` options
+        puffer_pages :only => :index
+
+        def index
+        end
+      end
+    ```
+
+    `:scope` option is a symbol - method name, or proc.
+    `:scope` adds a scope to Page query, which might be useful
+    for i.e. subdomains or locale scoping since Page model can
+    have more than one root page.
+
 *   The only way to declare puffer_page rendering
     `render :puffer_page => Page.first` or
     `render :puffer_page => 'some/path'`
@@ -19,8 +36,8 @@
 
 *   Removed `root` page object from context.
 
-*   All template assigns, not respondable to `to_liquid` are joined
-    to context registers, so can be used from drops.
+*   All template assigns are joined to context registers,
+    so can be used from drops.
 
 *   All controller instance variable assigns will be transferret
     to liquid as drops if they are respond to `to_liquid`

@@ -16,18 +16,17 @@ module PufferPages
 
           if options[:text].blank? && options[:inline].blank? &&
              (possible_layout.is_a?(Proc) ? possible_layout.call : possible_layout) =~ /puffer_pages$/
-            options[:puffer_page] = options.delete(:partial) if options[:partial].is_a?(::PufferPages::Page)
+
+            ActiveSupport::Deprecation.warn <<-DEPRECATE
+Layouts of type :puffer_pages or `puffer_pages` are deprecated.
+Please use `render :puffer_page => path_or_page_instance` or
+`puffer_pages` controller class method which acts similar to `layout`.
+            DEPRECATE
+
+            options[:puffer_page] = options[:partial] if options[:partial].is_a?(::PufferPages::Page)
             options[:puffer_page] ||= _puffer_pages_template(options[:action].presence || options[:file])
-            options[:layout] = possible_layout
+            options[:layout] = 'puffer_pages'
           end
-
-          options[:puffer_page] = _puffer_pages_template(options[:puffer_page]) if options[:puffer_page].present? && !options[:puffer_page].is_a?(::PufferPages::Page)
-        end
-
-      private
-
-        def _puffer_pages_template suggest
-          ::Page.find_layout_page(suggest.presence || request.path_info)
         end
       end
     end

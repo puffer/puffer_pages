@@ -6,3 +6,8 @@ Fabricator(:page) do
   keywords { Forgery::LoremIpsum.sentence }
   status {'published'}
 end
+
+Fabricator(:root, :from => :page) do
+  slug ''
+  layout_name 'foo_layout'
+end

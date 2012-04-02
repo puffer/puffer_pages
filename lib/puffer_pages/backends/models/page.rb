@@ -14,6 +14,10 @@ class PufferPages::Page < ActiveRecord::Base
     %w(draft hidden published)
   end
 
+  def self.controller_scope scope
+    where(scope)
+  end
+
   def self.find_page location
     page = PufferPages.single_section_page_path ?
       find_by_slug(location) : find_by_location(location)
@@ -24,7 +28,7 @@ class PufferPages::Page < ActiveRecord::Base
 
   def self.find_layout_page location
     location.gsub!(/^\/|\/$/, '')
-    page = location.blank? ? Page.roots.first :
+    page = location.blank? ? roots.first :
       where(['? like location', location]).where(['status not in (?)', 'draft']).order('lft desc').first
     raise PufferPages::LayoutMissed.new("PufferPages can`t render this page because layout page missed or draft") unless page
     page
@@ -44,10 +48,13 @@ class PufferPages::Page < ActiveRecord::Base
   belongs_to :layout, :primary_key => :name, :foreign_key => :layout_name, :class_name => '::Layout'
 
   validates_presence_of :name
-  validates_uniqueness_of :slug, :scope => (:parent_id unless PufferPages.single_section_page_path)
+  validates_uniqueness_of :slug,
+    :scope => (:parent_id unless PufferPages.single_section_page_path), :allow_nil => true
   validates_inclusion_of :status, :in => statuses
-  validates_format_of :slug, :with => /\A\s*\Z/, :message => :root_slug_format, :if => :root?
-  validates_format_of :slug, :with => /\A([\w]+[\w-]*(\.[\w]+)?|%)\Z/, :message => :slug_format, :unless => :root?
+  validates_format_of :slug,
+    :with => /\A\s*\Z/, :message => :root_slug_format, :if => :root?
+  validates_format_of :slug,
+    :with => /\A([\w]+[\w-]*(\.[\w]+)?|%)\Z/, :message => :slug_format, :unless => :root?
   validate do |page|
     page.errors.add(:layout_name, :blank) unless page.inherited_layout_name.present?
   end
