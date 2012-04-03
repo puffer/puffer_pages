@@ -2,6 +2,14 @@
 
 ### New features
 
+*   `javascript_tag` helper.
+
+    ```
+      {% javascript %}
+        var i = '';
+      {% endjavascript %}
+    ```
+
 *   `{% csrf_meta_tags %}` helper tag.
 
 *   The new `puffer_pages` method for controller

@@ -8,7 +8,7 @@ module PufferPages
 
       def register content
         @ids << Digest::MD5.hexdigest(SecureRandom.uuid)
-        content.gsub(/<%/, "<#{@ids.last}%").gsub(/%>/, "%#{@ids.last}>")
+        content.gsub(/\A<%/, "<#{@ids.last}%").gsub(/%>\Z/, "%#{@ids.last}>")
       end
 
       def cleanup text
