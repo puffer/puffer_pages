@@ -47,6 +47,7 @@ require 'puffer_pages/extensions/pagenator'
 
 require 'puffer_pages/liquid/tags/yield'
 require 'puffer_pages/liquid/tags/assets'
+require 'puffer_pages/liquid/tags/helper'
 require 'puffer_pages/liquid/tags/super'
 require 'puffer_pages/liquid/tags/include'
 require 'puffer_pages/liquid/tags/partials'
