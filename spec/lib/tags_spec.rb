@@ -77,6 +77,16 @@ describe 'Tags' do
 
   end
 
+  describe 'javascript' do
+
+    it 'should render javascript tag' do
+      @page = Fabricate :page, :layout_name => 'foo_layout'
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% javascript %}\nvar i = \"\";\ni = 2;\n{% endjavascript %}"
+      render_page(@page).should == "<%= javascript_tag do %>\nvar i = \"\";\ni = 2;\n<% end %>"
+    end
+
+  end
+
   describe 'attributes: name, title, keywords, description' do
 
     it 'should render self title without params' do

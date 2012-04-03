@@ -4,7 +4,7 @@ module PufferPages
 
       class Javascript < ::Liquid::Block
         def render(context)
-          context.registers[:tracker].register("<%= javascript_tag \"#{super}\" %>")
+          context.registers[:tracker].register("<%= javascript_tag do %>#{super}<% end %>")
         end
       end
 
