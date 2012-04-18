@@ -11,7 +11,7 @@ module PufferPages
       module ClassMethods
         def inherited(klass)
           super
-          klass._puffer_pages_options = {:pagenated => false}
+          klass._puffer_pages_options = _puffer_pages_options.dup
         end
 
         def puffer_pages options = {}

@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<nested_set>, [">= 0"])
 
   s.add_development_dependency(%q<bcrypt-ruby>, [">= 0"])
-  s.add_development_dependency(%q<sqlite3-ruby>, [">= 0"])
+  s.add_development_dependency(%q<sqlite3>, [">= 0"])
   s.add_development_dependency(%q<pg>, [">= 0"])
   s.add_development_dependency(%q<mysql>, [">= 0"])
   s.add_development_dependency(%q<rspec-rails>, [">= 0"])
