@@ -2,6 +2,14 @@
 
 ### New features
 
+*   `array` tag:
+
+    ```
+      {% array 'arr', 'one', 2, variable %}
+    ```
+
+    will create array named `arr` with 3 items = ['one', 2, 'variable_content']
+
 *   `javascript_tag` helper.
 
     ```

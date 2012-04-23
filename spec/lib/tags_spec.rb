@@ -128,4 +128,9 @@ describe 'Tags' do
     specify{page.render_layout("{% include 'sidebar' %}").should == "wrap root sidebar hello sidebar"}
     specify{page2.render_layout("{% include 'sidebar' %}").should == "wrap2 wrap root sidebar hello sidebar sidebar"}
   end
+
+  describe 'array' do
+    subject{Liquid::Template.parse("{% array 'arr', 'one', 2, var %}{{arr[0]}} {{arr[1]}} {{arr[2]}}")}
+    specify{subject.render('var' => 'three').should == 'one 2 three'}
+  end
 end
