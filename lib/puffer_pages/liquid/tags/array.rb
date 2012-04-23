@@ -3,21 +3,21 @@ module PufferPages
     module Tags
 
       class Array < ::Liquid::Tag
-        Syntax = /^(#{::Liquid::QuotedFragment}+)/
+        Syntax = /^(#{::Liquid::VariableSignature}+)\s*=\s*(.*)\s*/
 
         def initialize(tag_name, markup, tokens)
           if markup =~ Syntax
-            @items = variables_from_string(markup)
-            @variable_name = @items.shift
+            @variable_name = $1
+            @items = variables_from_string($2)
           else
-            raise SyntaxError.new("Syntax Error in 'array' - Valid syntax: array array_name [, item, item ...]")
+            raise SyntaxError.new("Syntax Error in 'array' - Valid syntax: array array_name = item[, item ...]")
           end
 
           super
         end
 
         def render(context)
-          context[context[@variable_name].to_s] = @items.map { |item| context[item] }
+          context[@variable_name] = @items.map { |item| context[item] }
           ''
         end
 

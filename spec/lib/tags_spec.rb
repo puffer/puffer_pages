@@ -130,7 +130,7 @@ describe 'Tags' do
   end
 
   describe 'array' do
-    subject{Liquid::Template.parse("{% array 'arr', 'one', 2, var %}{{arr[0]}} {{arr[1]}} {{arr[2]}}")}
+    subject{Liquid::Template.parse("{% array arr = 'one', 2, var %}{{arr[0]}} {{arr[1]}} {{arr[2]}}")}
     specify{subject.render('var' => 'three').should == 'one 2 three'}
   end
 end
