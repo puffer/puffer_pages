@@ -2,6 +2,8 @@
 
 ### New features
 
+*   `url` and `path` tags
+
 *   `array` tag:
 
     ```

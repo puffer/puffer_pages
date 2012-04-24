@@ -133,4 +133,22 @@ describe 'Tags' do
     subject{Liquid::Template.parse("{% array arr = 'one', 2, var %}{{arr[0]}} {{arr[1]}} {{arr[2]}}")}
     specify{subject.render('var' => 'three').should == 'one 2 three'}
   end
+
+  context 'url helpers' do
+    include RSpec::Rails::ControllerExampleGroup
+
+    controller{}
+
+    def render template, variables = {}
+      Liquid::Template.parse(template).render(variables.stringify_keys, {:registers => {:controller => controller}})
+    end
+
+    specify{render("{% url foo_posts %}").should == 'http://test.host/posts/foo'}
+    specify{render("{% path foo_posts %}").should == '/posts/foo'}
+    specify{render("{% path foo_posts key:'value' %}").should == '/posts/foo?key=value'}
+    specify{render("{% path article 10 %}").should == '/articles/10'}
+    specify{render("{% path article 'haha' %}").should == '/articles/haha'}
+    specify{render("{% path article var %}", {:var => 'foo'}).should == '/articles/foo'}
+    specify{render("{% path article 10, key:value %}", {:value => 'hello'}).should == '/articles/10?key=hello'}
+  end
 end
