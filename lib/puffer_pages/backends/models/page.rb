@@ -54,7 +54,7 @@ class PufferPages::Page < ActiveRecord::Base
   validates_format_of :slug,
     :with => /\A\s*\Z/, :message => :root_slug_format, :if => :root?
   validates_format_of :slug,
-    :with => /\A([\w]+[\w-]*(\.[\w]+)?|%)\Z/, :message => :slug_format, :unless => :root?
+    :with => /\A([^\/]+)\Z/, :message => :slug_format, :unless => :root?
   validate do |page|
     page.errors.add(:layout_name, :blank) unless page.inherited_layout_name.present?
   end
