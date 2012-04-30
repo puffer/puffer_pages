@@ -49,9 +49,21 @@ describe 'Tags' do
       render_page(@page).should == @snippet.body
     end
 
-    it 'should include snippet with proper object name' do
+    it 'parametrs tranferring include' do
       @snippet = Fabricate :snippet, :name => 'var', :body => '{{ var }}'
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% assign sn = 'snippets/var' %}{% include sn with var:'hello' %}"
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include 'snippets/var' var:'hello' %}"
+      render_page(@page).should == 'hello'
+    end
+
+    it 'parametrs tranferring snippet' do
+      @snippet = Fabricate :snippet, :name => 'var', :body => '{{ var }}'
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% snippet 'var' with 'hello' %}"
+      render_page(@page).should == 'hello'
+    end
+
+    it 'parametrs tranferring snippet' do
+      @snippet = Fabricate :snippet, :name => 'var', :body => '{{ world }}'
+      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% snippet 'var' world:'hello' %}"
       render_page(@page).should == 'hello'
     end
 
