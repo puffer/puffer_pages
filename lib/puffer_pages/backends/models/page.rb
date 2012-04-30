@@ -22,7 +22,7 @@ class PufferPages::Page < ActiveRecord::Base
     page = PufferPages.single_section_page_path ?
       find_by_slug(location) : find_by_location(location)
     raise ActiveRecord::RecordNotFound unless page
-    raise PufferPages::DraftPage.new("PufferPages can`t show this page because it is draft") if page.draft?
+    raise PufferPages::DraftPage.new("PufferPages can`t show page `#{page.location}` because it is draft") if page.draft?
     page
   end
 
@@ -30,7 +30,7 @@ class PufferPages::Page < ActiveRecord::Base
     location.gsub!(/^\/|\/$/, '')
     page = location.blank? ? roots.first :
       where(['? like location', location]).where(['status not in (?)', 'draft']).order('lft desc').first
-    raise PufferPages::LayoutMissed.new("PufferPages can`t render this page because layout page missed or draft") unless page
+    raise PufferPages::LayoutMissed.new("PufferPages can`t render page for `#{location}` because layout page missed or draft") unless page
     page
   end
 
