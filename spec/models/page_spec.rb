@@ -3,6 +3,15 @@ require 'spec_helper'
 
 describe Page do
 
+  describe '.normalize_path' do
+    specify{Page.normalize_path(nil).should == nil}
+    specify{Page.normalize_path('').should == nil}
+    specify{Page.normalize_path('/').should == nil}
+    specify{Page.normalize_path('hello').should == 'hello'}
+    specify{Page.normalize_path('hello/world').should == 'hello/world'}
+    specify{Page.normalize_path('/hello///world//').should == 'hello/world'}
+  end
+
   describe 'attributes' do
 
     before :each do

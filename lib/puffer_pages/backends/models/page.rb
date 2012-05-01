@@ -18,7 +18,12 @@ class PufferPages::Page < ActiveRecord::Base
     where(scope)
   end
 
+  def self.normalize_path path
+    path.to_s.split('/').delete_if(&:blank?).join('/').presence
+  end
+
   def self.find_page location
+    location = normalize_path(location)
     page = PufferPages.single_section_page_path ?
       find_by_slug(location) : find_by_location(location)
     raise ActiveRecord::RecordNotFound unless page
@@ -27,7 +32,7 @@ class PufferPages::Page < ActiveRecord::Base
   end
 
   def self.find_layout_page location
-    location.gsub!(/^\/|\/$/, '')
+    location = normalize_path(location)
     page = location.blank? ? roots.first :
       where(['? like location', location]).where(['status not in (?)', 'draft']).order('lft desc').first
     raise PufferPages::LayoutMissed.new("PufferPages can`t render page for `#{location}` because layout page missed or draft") unless page
