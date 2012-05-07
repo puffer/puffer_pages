@@ -18,7 +18,9 @@ module PufferPages
         end
 
         def render(context)
-          context.registers[:tracker].register(@name ? "<%= yield :'#{@name}' %>" : "<%= yield %>")
+          context.registers[:tracker].register(@name ?
+            "<%= yield :'#{@name}' %>" :
+            "<%= yield %>")
         end
       end
 

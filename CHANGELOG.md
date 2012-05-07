@@ -2,6 +2,8 @@
 
 ### New features
 
+*   `render` tag. Acts same as rails <%= render %>
+
 *   `url` and `path` tags
 
 *   `array` tag:

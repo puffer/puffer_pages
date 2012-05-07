@@ -50,6 +50,17 @@ describe PufferPages::Liquid::PageDrop do
         response.body.should == '/hello/world http://www.example.com/hello/world'
       end
     end
+
+    context 'render tag' do
+      include RSpec::Rails::RequestExampleGroup
+
+      let!(:foo_layout){Fabricate :layout, :name => 'foo_layout', :body => "{% render 'shared/foo' %}"}
+
+      specify do
+        get "/#{bar.location}"
+        response.body.should == 'shared/foo content'
+      end
+    end
   end
 
 end
