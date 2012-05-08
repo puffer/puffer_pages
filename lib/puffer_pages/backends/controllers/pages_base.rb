@@ -17,16 +17,16 @@ class PufferPages::PagesBase < Puffer::TreeBase
     field :status
   end
 
-  filter do
-    field :name
-    field :slug
-    field :layout_name
-    field :title
-    field :description
-    field :keywords
-    field :'page_parts.name'
-    field :'page_parts.body'
-  end
+  # filter do
+  #   field :name
+  #   field :slug
+  #   field :layout_name
+  #   field :title
+  #   field :description
+  #   field :keywords
+  #   field :'page_parts.name'
+  #   field :'page_parts.body'
+  # end
 
   form do
     field :name
