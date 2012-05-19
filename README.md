@@ -62,7 +62,7 @@ You can use layouts from database or rails applcation layouts for pages.
 
 ### Rails application layouts
 For application layout page_part body will be inserted instead of SUDDENLY! <%= yield %>
-For yield with no parans specified puffer will use page part with default page_part name.
+For yield with no params specified puffer will use page part with default page_part name.
 
 So, main page part is action view and other are partials. So easy.
 
