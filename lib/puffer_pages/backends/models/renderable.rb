@@ -17,13 +17,14 @@ module PufferPages
 
     def render_liquid template, page, options = {}
       template = ::Liquid::Template.parse(template)
+      render_method = Rails.application.config.puffer_pages.raise_errors ? 'render!' : 'render'
 
       if options.is_a?(::Liquid::Context)
-        template.render(options)
+        template.send(render_method, options)
       else
         options = normalize_render_options(options)
         tracker = PufferPages::Liquid::Tracker.new
-        tracker.cleanup template.render(options[:drops], :registers => {
+        tracker.cleanup template.send(render_method, options[:drops], :registers => {
           :file_system => PufferPages::Liquid::FileSystem.new,
           :tracker => tracker,
           :page => page

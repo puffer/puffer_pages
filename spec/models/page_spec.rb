@@ -200,7 +200,7 @@ describe Page do
 
   end
 
-  describe 'find_layout_page' do
+  describe 'find_view_page' do
 
     before :each do
       @root = Fabricate :page, :layout_name => 'foo_layout'
@@ -210,24 +210,24 @@ describe Page do
     end
 
     it 'root page' do
-      Page.find_layout_page('/').should == @root
+      Page.find_view_page('/').should == @root
     end
 
     it 'not root page' do
-      Page.find_layout_page('/foo').should == @foo
-      Page.find_layout_page('/foo/bar').should == @bar
-      Page.find_layout_page('/foo/baz').should == @bar
-      Page.find_layout_page('/foo/bar/baz').should == @baz
-      Page.find_layout_page('/foo/moo/baz').should == @baz
+      Page.find_view_page('/foo').should == @foo
+      Page.find_view_page('/foo/bar').should == @bar
+      Page.find_view_page('/foo/baz').should == @bar
+      Page.find_view_page('/foo/bar/baz').should == @baz
+      Page.find_view_page('/foo/moo/baz').should == @baz
     end
 
     it 'not existent page' do
-      expect {Page.find_layout_page('/bar')}.to raise_error(PufferPages::LayoutMissed)
+      expect {Page.find_view_page('/bar')}.to raise_error(PufferPages::LayoutMissed)
     end
 
     it 'draft page' do
       @bar.update_attributes(:status => 'draft')
-      expect {Page.find_layout_page('/foo/bar')}.to raise_error(PufferPages::LayoutMissed)
+      expect {Page.find_view_page('/foo/bar')}.to raise_error(PufferPages::LayoutMissed)
     end
 
   end

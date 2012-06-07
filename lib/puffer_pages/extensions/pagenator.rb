@@ -56,7 +56,10 @@ module PufferPages
           scope
         end
 
-        ::Page.controller_scope(scope).find_layout_page(suggest.presence || request.path_info)
+        ::Page.controller_scope(scope).find_view_page(
+          suggest.presence || request.path_info,
+          :formats => lookup_context.formats
+        )
       end
 
     end

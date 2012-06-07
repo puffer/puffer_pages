@@ -2,6 +2,9 @@
 
 ### New features
 
+*   `config.puffer_pages.raise_errors = true` in any environment config file makes
+    liquid templates errors raisable.
+
 *   `render` tag. Acts same as rails <%= render %>
 
 *   `url` and `path` tags
