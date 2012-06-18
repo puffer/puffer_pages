@@ -33,11 +33,12 @@ class PufferPages::Page < ActiveRecord::Base
 
   def self.find_view_page location, options = {}
     location = normalize_path(location)
+    formats = options[:formats].presence || [:html]
 
     page = if location.blank?
       roots.first
     else
-      (options[:formats].presence || [:html]).inject(nil) do |page, format|
+      formats.inject(nil) do |page, format|
         unless page
           loc = format == :html ? location : [location, format].join('.')
           page = where(['? like location', loc]).where(['status not in (?)', 'draft']).order('lft desc').first
@@ -46,7 +47,7 @@ class PufferPages::Page < ActiveRecord::Base
     end
 
     raise PufferPages::LayoutMissed.new(
-      "PufferPages can`t render page for `#{location}` because layout page missed or draft"
+      "PufferPages can`t render page for `#{location}` with formats `#{formats.join('`, `')}` because layout page missed or draft"
     ) unless page
     page
   end
