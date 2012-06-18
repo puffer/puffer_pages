@@ -207,6 +207,7 @@ describe Page do
       @foo = Fabricate :page, :slug => 'foo', :parent => @root
       @bar = Fabricate :page, :slug => '%', :parent => @foo
       @baz = Fabricate :page, :slug => 'baz', :parent => @bar
+      @bazjs = Fabricate :page, :slug => 'baz.js', :parent => @bar
     end
 
     it 'root page' do
@@ -229,6 +230,14 @@ describe Page do
       @bar.update_attributes(:status => 'draft')
       expect {Page.find_view_page('/foo/bar')}.to raise_error(PufferPages::LayoutMissed)
     end
+
+    specify {Page.find_view_page('/foo/moo/baz', :formats => [:html]).should == @baz}
+    specify {Page.find_view_page('/foo/moo/baz', :formats => [:html, :js]).should == @baz}
+    specify {Page.find_view_page('/foo/moo/baz', :formats => [:js]).should == @bazjs}
+    specify {Page.find_view_page('/foo/moo/baz', :formats => [:js, :html]).should == @bazjs}
+    specify {Page.find_view_page('/foo/moo/baz', :formats => [:xml, :html]).should == @baz}
+    specify {Page.find_view_page('/foo/moo/baz', :formats => [:xml, :js]).should == @bazjs}
+    specify {expect {Page.find_view_page('/foo/moo/baz', :formats => [:xml])}.to raise_error(PufferPages::LayoutMissed)}
 
   end
 

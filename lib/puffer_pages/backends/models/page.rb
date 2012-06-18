@@ -33,15 +33,16 @@ class PufferPages::Page < ActiveRecord::Base
 
   def self.find_view_page location, options = {}
     location = normalize_path(location)
+    depth = location.to_s.count('/') + 1
     formats = options[:formats].presence || [:html]
 
     page = if location.blank?
       roots.first
     else
       formats.inject(nil) do |page, format|
-        unless page
+        page ||= begin
           loc = format == :html ? location : [location, format].join('.')
-          page = where(['? like location', loc]).where(['status not in (?)', 'draft']).order('lft desc').first
+          where(['? like location', loc]).where(['status not in (?)', 'draft']).with_depth(depth).order('lft desc').first
         end
       end
     end
