@@ -42,7 +42,7 @@ class PufferPages::Page < ActiveRecord::Base
       formats.inject(nil) do |page, format|
         page ||= begin
           loc = format == :html ? location : [location, format].join('.')
-          where(['? like location', loc]).where(['status not in (?)', 'draft']).with_depth(depth).order('lft desc').first
+          where(['? like location', loc]).where(['status not in (?)', 'draft']).with_depth(depth).order('location desc').first
         end
       end
     end
