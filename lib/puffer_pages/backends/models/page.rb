@@ -41,10 +41,12 @@ class PufferPages::Page < ActiveRecord::Base
     else
       formats.inject(nil) do |page, format|
         page ||= begin
-          loc = format == :html ? location : [location, format].join('.')
-          where(['? like location', loc]).where(['status not in (?)', 'draft']).with_depth(depth).order('lft desc').to_a.sort do |x, y|
-            formats.index(x.format) <=> formats.index(y.format)
-          end.first
+          loc = if format == :html
+            where(['? like location', location])
+          else
+            where(['? like location', [location, format].join('.')]).where(['not ? like location', [location, format, ''].join('.')])
+          end
+          loc.where(['status not in (?)', 'draft']).where(:"#{depth_column_name}" => depth).order('lft desc').first
         end
       end
     end

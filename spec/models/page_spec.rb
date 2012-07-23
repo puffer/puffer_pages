@@ -206,6 +206,8 @@ describe Page do
       @root = Fabricate :page, :layout_name => 'foo_layout'
       @foo = Fabricate :page, :slug => 'foo', :parent => @root
       @bar = Fabricate :page, :slug => '%', :parent => @foo
+      @quux = Fabricate :page, :slug => 'quux', :parent => @bar
+      @qux = Fabricate :page, :slug => '%', :parent => @bar # Created before @baz and after @quux
       @baz = Fabricate :page, :slug => 'baz', :parent => @bar
       @bazjs = Fabricate :page, :slug => 'baz.js', :parent => @bar
     end
@@ -231,13 +233,21 @@ describe Page do
       expect {Page.find_view_page('/foo/bar')}.to raise_error(PufferPages::LayoutMissed)
     end
 
-    specify {Page.find_view_page('/foo/moo/baz', :formats => [:html]).should == @baz}
+    it "should choose the last created (with the most right tree location) page from those fitting the requested path and format" do
+      Page.find_view_page('/foo/moo/baz', :formats => [:html]).should == @baz
+    end
+    it "should use %-ending locations for html requests with the same priority as locations without % end
+        (so in this case the priority is regulated only by tree location)" do
+      Page.find_view_page('/foo/moo/quux', :formats => [:html]).should == @qux
+    end
     specify {Page.find_view_page('/foo/moo/baz', :formats => [:html, :js]).should == @baz}
     specify {Page.find_view_page('/foo/moo/baz', :formats => [:js]).should == @bazjs}
     specify {Page.find_view_page('/foo/moo/baz', :formats => [:js, :html]).should == @bazjs}
     specify {Page.find_view_page('/foo/moo/baz', :formats => [:xml, :html]).should == @baz}
     specify {Page.find_view_page('/foo/moo/baz', :formats => [:xml, :js]).should == @bazjs}
-    specify {expect {Page.find_view_page('/foo/moo/baz', :formats => [:xml])}.to raise_error(PufferPages::LayoutMissed)}
+    it "should not use %-ending locations for formats other than html, thus generating an error if format is different" do
+      expect {Page.find_view_page('/foo/moo/baz', :formats => [:xml])}.to raise_error(PufferPages::LayoutMissed)
+    end
 
   end
 
