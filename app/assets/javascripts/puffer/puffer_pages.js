@@ -1,6 +1,6 @@
 //= require puffer/right-tabs-src
 //= require puffer/codemirror
-//= require puffer/overlay
+//= require puffer/multiplex
 //= require puffer/codemirror/xml
 //= require puffer/codemirror/javascript
 //= require puffer/codemirror/css
@@ -81,15 +81,20 @@ var init_codemirror = function(textarea) {
       mode: 'liquid',
       lineNumbers: true,
       lineWrapping: true,
-      onCursorActivity: function(editor) {
-        if (editor.last_active_line != undefined) {
-          editor.setLineClass(editor.last_active_line, null);
-        }
-        editor.last_active_line = editor.getCursor().line;
-        editor.setLineClass(editor.last_active_line, "active_line");
-      },
+      matchBrackets: true,
+      tabSize: 2,
+      // onCursorActivity: function(editor) {
+      //   if (editor.last_active_line != undefined) {
+      //     editor.setLineClass(editor.last_active_line, null);
+      //   }
+      //   editor.last_active_line = editor.getCursor().line;
+      //   editor.setLineClass(editor.last_active_line, "active_line");
+      // },
       extraKeys: {
-        "Esc": codemirror_fullscreen
+        "Tab": "indentMore",
+        "Shift-Tab": "indentLess",
+        "Esc": codemirror_fullscreen,
+        "Alt-Enter": codemirror_fullscreen
       }
     });
 
@@ -109,7 +114,7 @@ $(document).onReady(function() {
 
 ".codemirror_buttons_fulscreen".onMouseenter('morph', {'top': '0px'});
 ".codemirror_buttons_fulscreen".onMouseleave('morph', {'top': '-20px'});
-  
+
 var codemirror_fullscreen = function(editor) {
   var scroll = $(editor.getWrapperElement()).children('.CodeMirror-scroll').first();
   var body = $$('body').first();
