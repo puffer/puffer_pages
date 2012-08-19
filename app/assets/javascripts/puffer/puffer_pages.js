@@ -78,7 +78,7 @@ var page_part_tab_add = function(event) {
 var init_codemirror = function(textarea) {
   if (!textarea.codemirror) {
     var codemirror = CodeMirror.fromTextArea(textarea._, {
-      mode: 'liquid',
+      mode: 'liquid-mixed',
       lineNumbers: true,
       lineWrapping: true,
       matchBrackets: true,
