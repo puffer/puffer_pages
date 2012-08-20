@@ -32,7 +32,8 @@ class PufferPages::PagesBase < Puffer::TreeBase
     field :name
     field :slug
     field :page_parts, :type => :page_parts do
-      field :body, :type => :codemirror, :input_only => true
+      field :locale, :type => :hidden
+      field :body, :type => :codemirror, :input_only => true, :buttons => I18n.available_locales
       field :name, :type => :hidden
       field :_destroy, :type => :hidden, :html => { :class => 'destroy_mark' }
     end

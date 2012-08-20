@@ -2,7 +2,7 @@
   <ul id="<%= field.name %>" class="rui-tabs" data-tabs="{closable: true, scrollTabs: true, Cookie: {}, onSelect: page_part_tab_select, onRemove: page_part_tab_remove, addButton: page_part_tab_add}">
     <ul class="rui-tabs-list">
       <% @record.send(field.name).each_with_index do |page_part, index| %>
-        <li>
+        <li data-locale='<%= page_part.locale %>'>
           <%= link_to "#page_part_tab_#{index}" do %>
             <%= page_part.name %>
             <% if page_part.errors[:name].present? %>

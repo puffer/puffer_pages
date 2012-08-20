@@ -808,7 +808,6 @@ Tabs.include({
 
 });
 
-
 /**
  * This module handles the current tab state saving/restoring processes
  *

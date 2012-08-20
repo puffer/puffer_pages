@@ -11,21 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111117081813) do
+ActiveRecord::Schema.define(:version => 20120817143224) do
 
   create_table "articles", :force => true do |t|
     t.string   "title"
     t.string   "slug"
     t.text     "body"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "layouts", :force => true do |t|
     t.string   "name"
     t.text     "body"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "layouts", ["name"], :name => "index_layouts_on_name"
@@ -34,8 +34,9 @@ ActiveRecord::Schema.define(:version => 20111117081813) do
     t.string   "name"
     t.text     "body"
     t.integer  "page_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "locale"
   end
 
   add_index "page_parts", ["name"], :name => "index_page_parts_on_name"
@@ -54,8 +55,8 @@ ActiveRecord::Schema.define(:version => 20111117081813) do
     t.integer  "lft"
     t.integer  "rgt"
     t.integer  "depth",       :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   add_index "pages", ["location"], :name => "index_pages_on_location"
@@ -64,8 +65,8 @@ ActiveRecord::Schema.define(:version => 20111117081813) do
   create_table "snippets", :force => true do |t|
     t.string   "name"
     t.text     "body"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "snippets", ["name"], :name => "index_snippets_on_name"
