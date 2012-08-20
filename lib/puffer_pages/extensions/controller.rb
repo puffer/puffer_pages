@@ -17,11 +17,11 @@ module PufferPages
           if options[:text].blank? && options[:inline].blank? &&
              (possible_layout.is_a?(Proc) ? possible_layout.call : possible_layout) =~ /puffer_pages$/
 
-#            ActiveSupport::Deprecation.warn <<-DEPRECATE
-#Layouts of type :puffer_pages or `puffer_pages` are deprecated.
-#Please use `render :puffer_page => path_or_page_instance` or
-#`puffer_pages` controller class method which acts similar to `layout`.
-#            DEPRECATE
+            ActiveSupport::Deprecation.warn <<-DEPRECATE
+Layouts of type :puffer_pages or `puffer_pages` are deprecated.
+Please use `render :puffer_page => path_or_page_instance` or
+`puffer_pages` controller class method which acts similar to `layout`.
+            DEPRECATE
 
             options[:puffer_page] = options[:partial] if options[:partial].is_a?(::PufferPages::Page)
             options[:puffer_page] ||= _puffer_pages_template(options[:action].presence || options[:file])
