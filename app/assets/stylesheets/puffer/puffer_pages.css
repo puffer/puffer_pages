@@ -56,10 +56,13 @@
 }
 
 
-.codemirror_buttons li.locales-group-item, .codemirror_buttons li.selected-locales-group-item {
+.codemirror_buttons li.locales-group-item,
+.codemirror_buttons li.selected-locales-group-item,
+.codemirror_buttons .unavailable-locales-group-item {
   border-radius: 3px;
   padding: 2px 8px;
-  margin: 2px 0;
+  margin: 2px 2px;
+  float: right;
 }
 
 .codemirror_buttons li.locales-group-item {
@@ -69,6 +72,13 @@
 .codemirror_buttons li.selected-locales-group-item {
   background: #3D576D;
   color: white;
+}
+
+.codemirror_buttons li.unavailable-locales-group-item {
+  background: white;
+  color: gray;
+  border: 1px solid #ccc;
+  margin: 1px 2px;
 }
 
 .codemirror_buttons li:hover.selected-locales-group-item {

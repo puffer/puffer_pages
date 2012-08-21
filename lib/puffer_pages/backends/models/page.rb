@@ -99,7 +99,11 @@ class PufferPages::Page < ActiveRecord::Base
   after_initialize :build_main_part, :if => :root?
   before_save :build_main_part, :if => :root?
   def build_main_part
-    page_parts.build(:name => PufferPages.primary_page_part_name) unless page_parts.map(&:name).include?(PufferPages.primary_page_part_name)
+    unless page_parts.map(&:name).include?(PufferPages.primary_page_part_name)
+      I18n.available_locales.each do |locale|
+        page_parts.build(:name => PufferPages.primary_page_part_name, :locale => locale)
+      end
+    end
   end
 
   statuses.each do |status_name|
@@ -150,11 +154,23 @@ class PufferPages::Page < ActiveRecord::Base
   end
 
   def all_inherited_page_parts
-    @all_inherited_page_parts ||= ::PagePart.where(:page_parts => {:page_id => self_and_ancestors.map(&:id)}).joins(:page).order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc")
+    condition = { :page_id => self_and_ancestors.map(&:id) }
+    condition.merge!({ :locale => I18n.default_locale })
+
+    @all_inherited_page_parts ||= ::PagePart
+      .where(:page_parts => condition)
+      .joins(:page)
+      .order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc")
   end
 
   def super_inherited_page_parts
-    @super_inherited_page_parts ||= ::PagePart.where(:page_parts => {:page_id => ancestors.map(&:id)}).joins(:page).order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc")
+    condition = { :page_id => ancestors.map(&:id) }
+    condition.merge!({ :locale => I18n.default_locale })
+
+    @super_inherited_page_parts ||= ::PagePart
+      .where(:page_parts => condition)
+      .joins(:page)
+      .order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc")
   end
 
   def part name
