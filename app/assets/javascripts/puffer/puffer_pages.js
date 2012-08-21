@@ -107,6 +107,17 @@ $(document).onReady(function() {
   $$('textarea[data-codemirror]').each(init_codemirror);
 });
 
+$(document).on('data:sending', function() {
+  $$('textarea[data-codemirror]').each(function(element) {
+    element.codemirror.save();
+  });
+});
+
+$(document).on('ajax:complete', function() {
+  Tabs.rescan();
+  $$('textarea[data-codemirror]').each(init_codemirror);
+});
+
 "*[data-codemirror-button]".onClick(function(event) {
   if (event.which != 1) return;
   window['codemirror_' + this.data('codemirror-button')](this.parent('ul').next('textarea').codemirror);

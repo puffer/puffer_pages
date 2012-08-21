@@ -136,7 +136,7 @@
         token = 'number';
       } else if (stream.match(/^(nil|null|true|false|empty|blank)/)) {
         token = 'builtin';
-      } else if (stream.match(/^(==|!=|<>|>|<|>=|<=|contains)/)) {
+      } else if (stream.match(/^(==|!=|<>|>|<|>=|<=|in|contains)/)) {
         token = 'operator';
       } else if (stream.match(/^\w+/)) {
         if (state.tagParsed) {
