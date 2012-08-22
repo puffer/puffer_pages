@@ -16,7 +16,10 @@ Tabs.include({
 
   buildAddButton: function() {
     if (isFunction(this.options.addButton)) {
-      this.addButton = $E('a', {'class': 'rui-tabs-tab rui-tabs-add', 'html': '<a href="#">+</a>'}).insertTo(this.tabsList);
+      this.addButton = $E('a', {
+        'class': 'rui-tabs-tab rui-tabs-add',
+        'html': '<a href="#">+</a>'}
+      ).insertTo(this.tabsList);
       this.addButton.onClick(this.options.addButton.bind(this));
     }
   },
@@ -75,7 +78,7 @@ Tabs.Panel.include({
     return result;
   },
   available_locales: function(){
-    var locales = [this.page_part_locale()];
+    var locales = [];
     this.same_part_tabs().each(function(tab){
       locales.push(tab.panel.page_part_locale());
     })
@@ -107,61 +110,151 @@ var LocalesManager = {
 
 var page_part_tab_select = function(event) {
   var panel = event.target.panel;
+  var panel_locale = panel.page_part_locale();
   var textarea = panel.first('textarea[data-codemirror]');
 
-  if (textarea.codemirror) {
-    textarea.codemirror.refresh();
+  if (textarea.codemirror) { textarea.codemirror.refresh(); }
+
+  var page_part_locales = panel.available_locales();
+  if (!page_part_locales.includes(LocalesManager.current_locale())){
+    LocalesManager.set_locale(LocalesManager.default_locale());
   }
 
-  var tab_locales = panel.available_locales();
-  var available_locales = LocalesManager.available_locales;
-  var current_locale = LocalesManager.current_locale();
-
-  var set_locale_button_style = function(li){
-    var button_locale = li.data('codemirror-button');
-
-    if (available_locales.includes(button_locale)) {
-      if (tab_locales.includes(button_locale)) {
-        li.setClass(button_locale == current_locale ? 'selected-locales-group-item' : 'locales-group-item');
+  var locale_to_button_style = function(locale, tab_locales, current_locale, available_locales){
+    if (available_locales.includes(locale)) {
+      if (tab_locales.includes(locale)) {
+        return (locale == current_locale
+          || tab_locales.length == 1
+          || (!tab_locales.includes(current_locale) && (tab_locales.indexOf(locale) == 0))
+        ) ? 'selected-locales-group-item' : 'locales-group-item';
       } else {
-        li.setClass('unavailable-locales-group-item');
+        return 'unavailable-locales-group-item';
       }
     }
+    return null;
   }
-  panel.find('ul.codemirror_buttons li').each(set_locale_button_style)
-}
 
-var page_part_tab_remove = function(event) {
-  var enque_page_part_for_removal = function(tab){
-    var destroy_mark = tab.panel.first('.destroy_mark');
-    var page_part_param = destroy_mark.next();
+  panel.find('ul.codemirror_buttons li').each(function(li){
+    var css_class = locale_to_button_style(li.data('codemirror-button'), page_part_locales,
+      panel_locale, LocalesManager.available_locales);
 
-    $('page_parts_marked_for_destroy').append(destroy_mark.value('1'))
-    if (page_part_param) {
-      $('page_parts_marked_for_destroy').append(page_part_param);
+    if (css_class != null) {
+      li.setClass(css_class);
+
+      if (css_class != 'unavailable-locales-group-item' && li.find('a.remove-locale').first() == null) {
+        add_remove_locale_link(li);
+      }
     }
-  }
-
-  enque_page_part_for_removal(event.target);
-
-  event.target.panel.same_part_tabs().each(function(tab){
-    enque_page_part_for_removal(tab);
-    tab.panel.remove();
-    $(tab._).replace(''); // Workaround to not trigger tab_remove event handler for removed tabs
   })
 }
 
-var apply_locale_to_tabs = function(locale){
-  var current_tab = page_part_tabs.find('li.rui-tabs-current.rui-tabs-panel').first();
-  var current_part_name = current_tab.page_part_name();
+var add_remove_locale_link = function(elem) {
+  elem.insert(new Element('a', { html: '×', class: 'remove-locale' }));
+  elem.find('a.remove-locale').first().onClick(remove_locale_click);
+}
+
+var remove_locale_click = function(event) {
+  event.stop();
+  var locale_button = event.target.parent('li');
+  var locale_to_remove = locale_button.data('codemirror-button');
+  var tab_to_remove = window.page_part_tabs.current().panel.same_part_tabs().first(function(tab){
+    return tab.panel.page_part_locale() == locale_to_remove;
+  });
+
+  var page_part_locales = tab_to_remove.panel.available_locales();
+
+  if (page_part_locales.length == 1) {
+    erase_tab(tab_to_remove);
+    var first_tab = tab_to_remove.main.tabs.first();
+    var first_tab_locales = first_tab.panel.available_locales();
+    var first_tab_page_part_tabs = first_tab.panel.same_part_tabs();
+
+    if (first_tab_locales.includes(locale_to_remove)){
+      LocalesManager.set_locale(locale_to_remove);
+    } else if (first_tab_locales.includes(LocalesManager.default_locale())) {
+      LocalesManager.set_locale(LocalesManager.default_locale());
+    } else {
+      LocalesManager.set_locale(first_tab_locales.first());
+    }
+
+    first_tab_page_part_tabs.each(function(elem) {
+      if (elem.panel.page_part_locale() == LocalesManager.current_locale()) {
+        elem.select();
+      }
+    })
+  } else {
+    var new_locale = page_part_locales.reject(function(elem, i){ return elem == locale_to_remove; }).first();
+    LocalesManager.set_locale(new_locale);
+
+    var tabs = tab_to_remove.panel.same_part_tabs().reject(function(elem, i) {
+      return elem.panel.page_part_locale() == locale_to_remove;
+    });
+    erase_tab(tab_to_remove);
+    var tab_to_select = tabs.first();
+
+    tab_to_select.show();
+    tab_to_select.select();
+
+    tabs.each(function(tab){
+      var li = tab.panel.find('li[data-codemirror-button=' + locale_to_remove + ']').first();
+      var a = li.find('a').first();
+      if (a != null) {
+        a.remove();
+        li.setClass('unavailable-locales-group-item');
+      }
+    })
+  }
+
+  apply_locale_to_tabs(LocalesManager.current_locale());
+}
+
+var enque_page_part_for_removal = function(tab){
+  var destroy_mark = tab.panel.first('.destroy_mark');
+  var page_part_param = destroy_mark.next();
+
+  $('page_parts_marked_for_destroy').append(destroy_mark.value('1'))
+  if (page_part_param) {
+    $('page_parts_marked_for_destroy').append(page_part_param);
+  }
+}
+
+var erase_tab = function(tab){
+  enque_page_part_for_removal(tab);
+  tab.main.tabs = tab.main.tabs.reject(function(t){return t == tab; })
+  tab.panel.remove();
+  $(tab._).replace(''); // Workaround not to trigger tab_remove event handler for removed tabs
+}
+
+var page_part_tab_remove = function(event) {
+  var tab_for_removal = event.target;
+  var tabs = tab_for_removal.main.tabs;
+  enque_page_part_for_removal(tab_for_removal);
+  tab_for_removal.panel.same_part_tabs().each(erase_tab)
+  tabs.first().select();
+}
+
+var apply_locale_to_tabs = function(locale) {
+  var current_tab_panel = page_part_tabs.current().panel;
+  var current_part_name = current_tab_panel.page_part_name();
+  var displayed_parts = [];
 
   page_part_tabs.tabs.each(function(tab, index){
     var tab_locale = tab.data('locale');
 
     if (LocalesManager.available_locales.includes(tab_locale)) {
-      if (tab_locale == locale) {
+      var tab_locales = tab.panel.available_locales()
+      var tab_page_part_name = tab.panel.page_part_name();
+
+      if (
+        tab_locale == locale
+        || (!displayed_parts.includes(tab_page_part_name) && !tab_locales.includes(locale))
+        || tab_locales.length == 1
+      ) {
         tab.show();
-        if (tab.panel.page_part_name() == current_part_name) tab.select();
+        displayed_parts.push(tab_page_part_name);
+        if (tab_page_part_name == current_part_name) {
+          tab.select();
+        }
       } else {
         tab.hide();
       }
@@ -170,29 +263,35 @@ var apply_locale_to_tabs = function(locale){
 }
 
 var add_page_part_tab = function(tabs, name, locale) {
-    var new_id = new Date().getTime();
-    tabs.add(name, new_page_part_tab_panel.replace(/new_page_part_tab_panel_index/g, new_id), {id: new_id});
-    tabs.tabs.last().data("locale", LocalesManager.default_locale());
-    tabs.tabs.last().panel.find('input[type=hidden]').each(function(elem, i){
-      if (elem.get('name').indexOf('name') != -1) elem.value(name);
-      if (elem.get('name').indexOf('locale') != -1) elem.value(locale);
-    })
+  var new_id = new Date().getTime();
+  var position = tabs.current().panel.page_part_name() == name ? tabs.current().index() : null;
+  tabs.add(name, new_page_part_tab_panel.replace(/new_page_part_tab_panel_index/g, new_id), {
+    id: new_id,
+    position: position
+  });
 
-    tabs.addButton.insertTo(tabs.tabsList);
-    $$('textarea[data-codemirror]').each(init_codemirror);
+  var new_tab = position != null ? tabs.tabs[tabs.current().index() - 1] : tabs.tabs.last();
+  new_tab.data("locale", locale);
+  new_tab.panel.find('input[type=hidden]').each(function(elem, i){
+    if (elem.get('name').indexOf('name') != -1)   elem.value(name);
+    if (elem.get('name').indexOf('locale') != -1) elem.value(locale);
+  })
 
-    LocalesManager.set_locale(LocalesManager.default_locale());
-    tabs.tabs.last().select();
+  tabs.addButton.insertTo(tabs.tabsList);
+  $$('textarea[data-codemirror]').each(init_codemirror);
+
+  LocalesManager.set_locale(locale);
+  new_tab.select();
 }
 
 var page_part_tab_add = function(event) {
   event.stop();
-  var _this = this;
+  var tabs = this;
 
   new Dialog.Prompt({label: 'Enter new page part name'}).onOk(function() {
     var value = this.input.value();
     if (!value.blank()) {
-      add_page_part_tab(_this, value, LocalesManager.default_locale());
+      add_page_part_tab(tabs, value, LocalesManager.default_locale());
       this.hide();
     }
   }).show();
@@ -233,15 +332,15 @@ $(document).onReady(function() {
   if (LocalesManager.available_locales.includes(button_code)) {
     LocalesManager.set_locale(button_code);
 
-    var current_tab = page_part_tabs.find('li.rui-tabs-current.rui-tabs-panel').first();
-    var current_part_name = current_tab.page_part_name();
+    var current_tab_panel = page_part_tabs.current().panel;
+    var current_part_name = current_tab_panel.page_part_name();
 
-    if (current_tab.available_locales().includes(button_code)) {
+    if (current_tab_panel.available_locales().includes(button_code)) {
       apply_locale_to_tabs(LocalesManager.current_locale());
     } else {
+      current_tab_panel.tab.hide();
       add_page_part_tab(page_part_tabs, current_part_name, button_code);
     }
-
   } else {
     window['codemirror_' + this.data('codemirror-button')](this.parent('ul').next('textarea').codemirror);
   }
