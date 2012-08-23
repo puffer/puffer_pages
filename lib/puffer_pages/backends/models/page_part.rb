@@ -4,11 +4,15 @@ class PufferPages::PagePart < ActiveRecord::Base
 
   belongs_to :page, :class_name => '::Page', :inverse_of => :page_parts
 
-  validates_presence_of :name
+  validates_presence_of [:name, :locale]
   validates_uniqueness_of :name, :scope => [:page_id, :locale]
 
   after_initialize do |page_part|
     page_part.locale = I18n.default_locale if page_part.locale.blank?
+  end
+
+  def locale=(value)
+    write_attribute :locale, value.present? ? value.to_s : nil
   end
 
   def render context = {}, page = page

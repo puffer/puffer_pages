@@ -100,9 +100,7 @@ class PufferPages::Page < ActiveRecord::Base
   before_save :build_main_part, :if => :root?
   def build_main_part
     unless page_parts.map(&:name).include?(PufferPages.primary_page_part_name)
-      I18n.available_locales.each do |locale|
-        page_parts.build(:name => PufferPages.primary_page_part_name, :locale => locale)
-      end
+      page_parts.build(:name => PufferPages.primary_page_part_name, :locale => I18n.default_locale)
     end
   end
 
@@ -122,10 +120,10 @@ class PufferPages::Page < ActiveRecord::Base
     if inherited_layout
       render_layout(inherited_layout.body, context)
     else
-      inherited_page_parts.reverse.map{|part|
+      inherited_page_parts.reverse.map do |part|
         result = part.render(context, self)
         part.main? ? result : "<% content_for :'#{part.name}' do %>#{result}<% end %>"
-      }.join
+      end.join
     end
   end
 
@@ -150,22 +148,40 @@ class PufferPages::Page < ActiveRecord::Base
   end
 
   def inherited_page_parts
-    @inherited_page_parts ||= all_inherited_page_parts.uniq_by(&:name)
+    @inherited_page_parts ||= all_inherited_page_parts
   end
 
   def all_inherited_page_parts
-    condition = { :page_id => self_and_ancestors.map(&:id) }
-    condition.merge!({ :locale => I18n.default_locale })
+    locales = PufferPages.localize? ? [I18n.default_locale, I18n.locale] : [I18n.default_locale]
 
-    @all_inherited_page_parts ||= ::PagePart
-      .where(:page_parts => condition)
-      .joins(:page)
-      .order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc")
+    @all_inherited_page_parts ||= begin
+      parts = ::PagePart
+        .where(:page_parts => { :page_id => self_and_ancestors.map(&:id), :locale => locales })
+        .joins(:page)
+        .order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc")
+
+      puts parts.count
+      dictionary = parts.inject({}) do |hash, part|
+        entry = hash[part.name] || {}
+        entry[part.locale] = part
+        hash[part.name] = entry
+
+
+        hash
+      end
+
+      puts dictionary
+      puts "\n11"
+      dictionary.values.each {|p| puts p.inspect}
+     # puts dictionary
+     puts I18n.locale
+
+      dictionary.values.map { |parts| parts[I18n.locale.to_s] || parts[I18n.default_locale.to_s] }
+    end
   end
 
   def super_inherited_page_parts
     condition = { :page_id => ancestors.map(&:id) }
-    condition.merge!({ :locale => I18n.default_locale })
 
     @super_inherited_page_parts ||= ::PagePart
       .where(:page_parts => condition)

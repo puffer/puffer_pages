@@ -28,6 +28,13 @@ module PufferPages
   mattr_accessor :codemirror_buttons
   self.codemirror_buttons = [:fullscreen]
 
+  mattr_accessor :localize
+  self.localize = false
+
+  def self.localize?
+    localize == true
+  end
+
   def self.setup
     yield self
   end
