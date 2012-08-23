@@ -148,7 +148,7 @@ class PufferPages::Page < ActiveRecord::Base
   end
 
   def inherited_page_parts
-    @inherited_page_parts ||= all_inherited_page_parts
+    @inherited_page_parts ||= all_inherited_page_parts.uniq_by(&:name)
   end
 
   def all_inherited_page_parts
@@ -160,23 +160,18 @@ class PufferPages::Page < ActiveRecord::Base
         .joins(:page)
         .order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc")
 
-      puts parts.count
       dictionary = parts.inject({}) do |hash, part|
         entry = hash[part.name] || {}
-        entry[part.locale] = part
+        if entry[part.page_id].nil?
+          entry[part.page_id] = part
+        else
+          entry[part.page_id] = part if part.locale == I18n.locale.to_s
+        end
         hash[part.name] = entry
-
-
         hash
       end
 
-      puts dictionary
-      puts "\n11"
-      dictionary.values.each {|p| puts p.inspect}
-     # puts dictionary
-     puts I18n.locale
-
-      dictionary.values.map { |parts| parts[I18n.locale.to_s] || parts[I18n.default_locale.to_s] }
+      dictionary.values.inject([]) { |ary, parts| ary << parts.values }.flatten
     end
   end
 
