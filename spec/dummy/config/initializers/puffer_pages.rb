@@ -1,1 +1,1 @@
-PufferPages.localize = true
+PufferPages.localize = false

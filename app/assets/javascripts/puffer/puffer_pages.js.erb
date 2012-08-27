@@ -88,7 +88,7 @@ Tabs.Panel.include({
 
 var LocalesManager = {
   /* Returns aray of available locale codes. */
-  available_locales: [<%= I18n.available_locales.map {|locale| "'#{locale}'"}.join(", ") %>],
+  available_locales: [<%= if (PufferPages.localize?) then I18n.available_locales.map {|locale| "'#{locale}'"}.join(", ") else I18n.default_locale end %>],
 
   current_locale: function() {
     var locale = Cookie.get('puffer_locale');
@@ -97,6 +97,10 @@ var LocalesManager = {
       Cookie.set('puffer_locale', locale);
     }
     return locale;
+  },
+
+  localization_enabled: function() {
+    return <%= PufferPages.localize? %>;
   },
 
   default_locale: function() {
