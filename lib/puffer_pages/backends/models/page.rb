@@ -66,7 +66,9 @@ class PufferPages::Page < ActiveRecord::Base
     :dependent => :destroy,
     :class_name => '::PagePart',
     :validate => true,
-    :inverse_of => :page
+    :inverse_of => :page,
+    :conditions => Proc.new { PufferPages.localize? ? {} : { :locale => I18n.locale } }
+
   accepts_nested_attributes_for :page_parts, :allow_destroy => true
   belongs_to :layout, :primary_key => :name, :foreign_key => :layout_name, :class_name => '::Layout'
 
@@ -162,11 +164,13 @@ class PufferPages::Page < ActiveRecord::Base
 
       dictionary = parts.inject({}) do |hash, part|
         entry = hash[part.name] || {}
+
         if entry[part.page_id].nil?
           entry[part.page_id] = part
         else
           entry[part.page_id] = part if part.locale == I18n.locale.to_s
         end
+
         hash[part.name] = entry
         hash
       end

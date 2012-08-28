@@ -33,7 +33,7 @@ class PufferPages::PagesBase < Puffer::TreeBase
     field :slug
     field :page_parts, :type => :page_parts do
       field :locale, :type => :hidden
-      field :body, :type => :codemirror, :input_only => true, :buttons => I18n.available_locales
+      field :body, :type => :codemirror, :input_only => true, :buttons => PufferPages.localize? ? I18n.available_locales : []
       field :name, :type => :hidden
       field :_destroy, :type => :hidden, :html => { :class => 'destroy_mark' }
     end

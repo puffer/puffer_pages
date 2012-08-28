@@ -87,8 +87,8 @@ Tabs.Panel.include({
 });
 
 var LocalesManager = {
-  /* Returns aray of available locale codes. */
-  available_locales: [<%= if (PufferPages.localize?) then I18n.available_locales.map {|locale| "'#{locale}'"}.join(", ") else I18n.default_locale end %>],
+  /* Returns aray of available locale codes.  */
+  available_locales: [<%= if (PufferPages.localize?) then I18n.available_locales.map {|locale| "'#{locale}'"}.join(", ") else "'#{I18n.default_locale}'" end %>],
 
   current_locale: function() {
     var locale = Cookie.get('puffer_locale');
