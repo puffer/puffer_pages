@@ -66,7 +66,18 @@ class PufferPages::Page < ActiveRecord::Base
     :dependent => :destroy,
     :class_name => '::PagePart',
     :validate => true,
-    :inverse_of => :page
+    :inverse_of => :page,
+    :conditions => Proc.new { PufferPages.localize? ? {} : { :locale => I18n.default_locale } }
+
+  def page_parts_translations
+    @page_parts_translations ||= page_parts.group_by(&:name).map do |name, page_parts|
+      page_parts.inject({}) do |result, page_part|
+        result[page_part.locale] = page_part
+        result
+      end.with_indifferent_access
+    end
+  end
+
   accepts_nested_attributes_for :page_parts, :allow_destroy => true
   belongs_to :layout, :primary_key => :name, :foreign_key => :layout_name, :class_name => '::Layout'
 
@@ -99,7 +110,9 @@ class PufferPages::Page < ActiveRecord::Base
   after_initialize :build_main_part, :if => :root?
   before_save :build_main_part, :if => :root?
   def build_main_part
-    page_parts.build(:name => PufferPages.primary_page_part_name) unless page_parts.map(&:name).include?(PufferPages.primary_page_part_name)
+    unless page_parts.map(&:name).include?(PufferPages.primary_page_part_name)
+      page_parts.build(:name => PufferPages.primary_page_part_name, :locale => I18n.default_locale)
+    end
   end
 
   statuses.each do |status_name|
@@ -118,10 +131,10 @@ class PufferPages::Page < ActiveRecord::Base
     if inherited_layout
       render_layout(inherited_layout.body, context)
     else
-      inherited_page_parts.reverse.map{|part|
+      inherited_page_parts.reverse.map do |part|
         result = part.render(context, self)
         part.main? ? result : "<% content_for :'#{part.name}' do %>#{result}<% end %>"
-      }.join
+      end.join
     end
   end
 
@@ -150,11 +163,39 @@ class PufferPages::Page < ActiveRecord::Base
   end
 
   def all_inherited_page_parts
-    @all_inherited_page_parts ||= ::PagePart.where(:page_parts => {:page_id => self_and_ancestors.map(&:id)}).joins(:page).order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc")
+    locales = PufferPages.localize? ?
+      (I18n.respond_to?(:fallbacks) ?
+        I18n.fallbacks[I18n.locale] :
+        [I18n.locale]) :
+      [I18n.default_locale]
+
+    @all_inherited_page_parts ||= begin
+      parts = ::PagePart
+        .where(:page_parts => { :page_id => self_and_ancestors.map(&:id), :locale => locales })
+        .joins(:page)
+        .order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc")
+
+      dictionary = parts.inject({}) do |hash, part|
+        entry = hash[part.name] || {}
+
+        if entry[part.page_id].nil?
+          entry[part.page_id] = part
+        else
+          entry[part.page_id] = part if part.locale == I18n.locale.to_s
+        end
+
+        hash[part.name] = entry
+        hash
+      end
+
+      dictionary.values.inject([]) { |ary, parts| ary << parts.values }.flatten
+    end
   end
 
   def super_inherited_page_parts
-    @super_inherited_page_parts ||= ::PagePart.where(:page_parts => {:page_id => ancestors.map(&:id)}).joins(:page).order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc")
+    @super_inherited_page_parts ||= ::PagePart
+      .where(:page_parts => { :page_id => ancestors.map(&:id) }).joins(:page)
+      .order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc")
   end
 
   def part name

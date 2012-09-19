@@ -14,9 +14,7 @@ describe Page do
 
   describe 'attributes' do
 
-    before :each do
-      @root = Fabricate :page, :layout_name => 'foo_layout'
-    end
+    before { @root = Fabricate :page, :layout_name => 'foo_layout' }
 
     it 'should have nil slug location if root' do
       @root.slug.should == nil
@@ -66,8 +64,15 @@ describe Page do
     before :each do
       @root = Fabricate :page, :layout_name => 'foo_layout'
       @foo = Fabricate :page, :slug => 'foo', :parent => @root
-      @bar = Fabricate :page, :slug => 'bar', :parent => @foo, :page_parts => [Fabricate(:page_part, :name => PufferPages.primary_page_part_name, :body => '4')]
-      @baz = Fabricate :page, :slug => 'baz', :parent => @bar, :page_parts => [Fabricate(:page_part, :name => 'sidebar', :body => '5'), Fabricate(:page_part, :name => 'additional', :body => '3')]
+
+      @bar = Fabricate :page, :slug => 'bar', :parent => @foo,
+        :page_parts => [Fabricate(:page_part, :name => PufferPages.primary_page_part_name, :body => '4')]
+
+      @baz = Fabricate :page, :slug => 'baz',
+        :parent => @bar, :page_parts => [
+          Fabricate(:page_part, :name => 'sidebar', :body => '5'),
+          Fabricate(:page_part, :name => 'additional', :body => '3')
+        ]
       @foo.page_parts = [Fabricate(:page_part, :name => 'sidebar', :body => '2')]
     end
 
@@ -127,29 +132,125 @@ describe Page do
   end
 
   describe 'rendering' do
+    let!(:main_part_name) { PufferPages.primary_page_part_name }
 
-    before :each do
-      @root = Fabricate :page, :layout_name => 'foo_layout'
-      @main = Fabricate :page_part, :name => PufferPages.primary_page_part_name, :body => '{{ self.title }}'
-      @sidebar = Fabricate :page_part, :name => 'sidebar', :body => '{{ self.name }}'
-      @root.page_parts = [@main, @sidebar]
+    context 'when localization is off' do
+      before { PufferPages.stub(:localize).and_return(false) }
+
+      let!(:main_part) { Fabricate :page_part, :name => main_part_name, :body => '{{ self.title }}' }
+      let!(:main_part_ru) { Fabricate :page_part, :name => main_part_name, :body => 'Ru-body', :locale => 'ru' }
+      let!(:sidebar_part) { Fabricate :page_part, :name => 'sidebar', :body => '{{ self.name }}' }
+      let!(:sidebar_part_ru) { Fabricate :page_part, :name => 'sidebar', :body => 'Ru-sidebar', :locale => 'ru' }
+      let!(:page) { Fabricate :page, :layout_name => 'foo_layout',
+        :page_parts => [main_part, main_part_ru, sidebar_part, sidebar_part_ru] }
+
+      context "default locale is English" do
+        before { I18n.stub(:default_locale).and_return(:en) }
+
+        it 'should render content_for blocks if rails layout used' do
+          result = page.render 'self' => PufferPages::Liquid::PageDrop.new(page)
+          result.should == "<% content_for :'sidebar' do %>#{page.name}<% end %>#{page.title}"
+        end
+
+        it 'should render layout' do
+          @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include 'body' %} {% include 'sidebar' %}"
+          result = page.render 'self' => PufferPages::Liquid::PageDrop.new(page)
+          result.should == "#{page.title} #{page.name}"
+        end
+
+        it 'should receive proper content type' do
+          page.content_type.should == 'text/html'
+          child_page = Fabricate :page, :slug => 'style.css', :parent => page
+          child_page.content_type.should == 'text/css'
+        end
+      end
+
+      context "default locale is Russian" do
+        before { I18n.stub(:default_locale).and_return(:ru) }
+
+        it 'should render content_for blocks if rails layout used' do
+          result = page.render 'self' => PufferPages::Liquid::PageDrop.new(page)
+          result.should == "<% content_for :'sidebar' do %>Ru-sidebar<% end %>Ru-body"
+        end
+
+        it 'should render layout' do
+          @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include 'body' %} {% include 'sidebar' %}"
+          result = page.render 'self' => PufferPages::Liquid::PageDrop.new(page)
+          result.should == "Ru-body Ru-sidebar"
+        end
+
+        it 'should receive proper content type' do
+          page.content_type.should == 'text/html'
+          child_page = Fabricate :page, :slug => 'style.css', :parent => page
+          child_page.content_type.should == 'text/css'
+        end
+      end
     end
 
-    it 'should render content_for blocks if rails layout used' do
-      result = @root.render 'self' => PufferPages::Liquid::PageDrop.new(@root)
-      result.should == "<% content_for :'sidebar' do %>#{@root.name}<% end %>#{@root.title}"
+    context 'when localization is on' do
+      before { I18n.stub(:default_locale).and_return(:en) }
+      before { PufferPages.stub(:localize).and_return(true) }
+
+      let!(:main_part_en) { Fabricate :page_part, :name => main_part_name, :body => 'En-body', :locale => 'en' }
+      let!(:main_part_ru) { Fabricate :page_part, :name => main_part_name, :body => 'Ru-body', :locale => 'ru' }
+      let!(:sidebar_part) { Fabricate :page_part, :name => 'sidebar', :body => 'En-sidebar' }
+      let!(:page) { Fabricate :page, :layout_name => 'foo_layout',
+        :page_parts => [main_part_en, main_part_ru, sidebar_part] }
+
+      describe '.page_parts_translations' do
+        specify { page.page_parts_translations.should == [{'en' => main_part_en, 'ru' => main_part_ru}, {'en' => sidebar_part}] }
+      end
+
+      context 'and current language is English' do
+        before { I18n.stub(:locale).and_return(:en) }
+
+        it 'should render content_for blocks if rails layout used' do
+          result = page.render 'self' => PufferPages::Liquid::PageDrop.new(page)
+          result.should == "<% content_for :'sidebar' do %>En-sidebar<% end %>En-body"
+        end
+
+        it 'should render layout' do
+          @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include 'body' %} {% include 'sidebar' %}"
+          result = page.render 'self' => PufferPages::Liquid::PageDrop.new(page)
+          result.should == "En-body En-sidebar"
+        end
+      end
+
+      context 'and current language is Russian' do
+        before { I18n.stub(:locale).and_return(:ru) }
+
+        it 'should render content_for blocks if rails layout used and fallback to the default locale for missing parts' do
+          result = page.render 'self' => PufferPages::Liquid::PageDrop.new(page)
+          result.should == "<% content_for :'sidebar' do %>En-sidebar<% end %>Ru-body"
+        end
+
+        it 'should render layout and fallback to the default locale for missing parts' do
+          @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include 'body' %} {% include 'sidebar' %}"
+          result = page.render 'self' => PufferPages::Liquid::PageDrop.new(page)
+          result.should == "Ru-body En-sidebar"
+        end
+      end
+    end
+  end
+
+  describe "page_parts" do
+
+    let!(:main_part) { Fabricate :page_part, :name => PufferPages.primary_page_part_name, :body => 'Lorem' }
+    let!(:main_part_ru) { Fabricate :page_part, :name => PufferPages.primary_page_part_name, :body => 'Ipsum', :locale => 'ru' }
+    let!(:page) { Fabricate :page, :layout_name => 'foo_layout', :page_parts => [main_part, main_part_ru] }
+
+    subject { page.page_parts(true) }
+
+    context 'when localization is on' do
+      before { PufferPages.stub(:localize?).and_return(true) }
+      it { should include(main_part) }
+      it { should include(main_part_ru) }
     end
 
-    it 'should render layout' do
-      @layout = Fabricate :layout, :name => 'foo_layout', :body => "{% include 'body' %} {% include 'sidebar' %}"
-      result = @root.render 'self' => PufferPages::Liquid::PageDrop.new(@root)
-      result.should == "#{@root.title} #{@root.name}"
-    end
-
-    it 'should receive proper content type' do
-      @root.content_type.should == 'text/html'
-      page = Fabricate :page, :slug => 'style.css', :parent => @root
-      page.content_type.should == 'text/css'
+    context 'when localization is off' do
+      before  { PufferPages.stub(:localize?).and_return(false) }
+      it { should include(main_part) }
+      it { should_not include(main_part_ru) }
     end
 
   end

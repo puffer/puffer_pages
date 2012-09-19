@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111117081813) do
+ActiveRecord::Schema.define(:version => 20120817143224) do
 
   create_table "articles", :force => true do |t|
     t.string   "title"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20111117081813) do
     t.integer  "page_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "locale"
   end
 
   add_index "page_parts", ["name"], :name => "index_page_parts_on_name"

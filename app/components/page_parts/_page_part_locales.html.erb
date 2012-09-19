@@ -1,0 +1,18 @@
+<ul class="rui-tabs localized-tabs" data-tabs="{disablable: true, onSelect: page_part_locale_select, onEnable: page_part_locale_enable, onDisable: page_part_locale_disable}" data-new-panel="<%= render('page_part', :form => form, :page_part => PagePart.new, :child_index => 'new_tab_panel_locale_index').gsub(/\n/, '').strip %>" data-new-panel-variable="new_tab_panel_locale_index">
+  <ul class="rui-tabs-list">
+    <% I18n.available_locales.each do |locale| %>
+      <li class="rui-tabs-tab<%= ' rui-tabs-disabled' unless page_parts[locale] || locale == I18n.default_locale %>" data-locale="<%= locale %>">
+        <%= link_to "#page_part_tab_#{index}_#{locale}" do %>
+          <%= locale.to_s.humanize %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <% I18n.available_locales.each do |locale| %>
+    <% if page_parts[locale] %>
+      <li id="<%= "page_part_tab_#{index}_#{locale}" %>" class="rui-tabs-panel">
+        <%= render 'page_part', :form => form, :page_part => page_parts[locale], :child_index => child_index %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>

@@ -1,8 +1,9 @@
-<%= fields_for @record do |f| %>
-  <ul id="<%= field.name %>" class="rui-tabs" data-tabs="{closable: true, scrollTabs: true, Cookie: {}, onSelect: page_part_tab_select, onRemove: page_part_tab_remove, addButton: page_part_tab_add}">
+<%= component_fields_for @record do |f| %>
+  <ul id="<%= field.name %>" class="rui-tabs" data-tabs="{closable: true, scrollTabs: true, Cookie: {}, onSelect: page_part_tab_select, onRemove: page_part_tab_remove, addButton: page_part_tab_add}" data-new-panel="<%= (localized? ? render('page_part_locales', :form => f, :page_parts => {}, :index => 'new_tab_panel_index') : render('page_part', :form => f, :page_part => PagePart.new, :child_index => 'new_tab_panel_index')).gsub(/\n/, '').strip %>" data-new-panel-variable="new_tab_panel_index">
     <ul class="rui-tabs-list">
-      <% @record.send(field.name).each_with_index do |page_part, index| %>
-        <li>
+      <% @record.send(localized? ? "#{field.name}_translations" : field.name).each_with_index do |page_part, index| %>
+        <% page_part = page_part.values.first if localized? %>
+        <li class="rui-tabs-tab">
           <%= link_to "#page_part_tab_#{index}" do %>
             <%= page_part.name %>
             <% if page_part.errors[:name].present? %>
@@ -14,29 +15,14 @@
         </li>
       <% end %>
     </ul>
-    <% @record.send(field.name).each_with_index do |page_part, index| -%>
-      <li id="<%= "page_part_tab_#{index}" %>" class="rui-tabs-panel">
-        <%= f.fields_for field.name, page_part do |page_part_builder| %>
-          <% field.children.each do |field| %>
-            <%= field.render :form, parent_controller, page_part_builder.object, :builder => page_part_builder %>
-          <% end %>
-          <%= page_part_builder.hidden_field :id unless page_part_builder.object.persisted? %>
+    <% @record.send(localized? ? "#{field.name}_translations" : field.name).each_with_index do |page_part, index| -%>
+      <li id="<%= "page_part_tab_#{index}" %>" class="rui-tabs-panel" data-name="<%= localized? ? page_part.values.first.name : page_part.name %>">
+        <% if localized? %>
+          <%= render 'page_part_locales', :form => f, :page_parts => page_part, :index => index, :child_index => nil %>
+        <% else %>
+          <%= render 'page_part', :form => f, :page_part => page_part, :child_index => nil %>
         <% end %>
       </li>
     <% end -%>
   </ul>
-  <div id="page_parts_marked_for_destroy">
-  </div>
-
-  <% new_page_part_tab_panel = capture do %>
-    <%= f.fields_for field.name, PagePart.new, :child_index => 'new_page_part_tab_panel_index' do |page_part_builder| %>
-      <% field.children.each do |field| %>
-        <%= field.render :form, parent_controller, page_part_builder.object, :builder => page_part_builder %>
-      <% end %>
-    <% end %>
-  <% end %>
-
-  <%= javascript_tag do %>
-    var new_page_part_tab_panel = '<%= j new_page_part_tab_panel.strip.html_safe %>'
-  <% end %>
 <% end %>

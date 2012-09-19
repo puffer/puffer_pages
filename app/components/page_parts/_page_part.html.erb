@@ -1,0 +1,6 @@
+<%= form.fields_for field.name, page_part, :child_index => child_index do |page_part_builder| %>
+  <% field.children.each do |field| %>
+    <%= field.render :form, parent_controller, page_part_builder.object, :builder => page_part_builder %>
+  <% end %>
+  <%= page_part_builder.hidden_field :id, :data => { :acts => 'id' } if page_part_builder.object.persisted? %>
+<% end %>

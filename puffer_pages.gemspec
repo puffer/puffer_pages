@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency(%q<pg>, [">= 0"])
   s.add_development_dependency(%q<mysql>, [">= 0"])
   s.add_development_dependency(%q<rspec-rails>, [">= 0"])
+  s.add_development_dependency(%q<shoulda>, [">= 0"])
   s.add_development_dependency(%q<capybara>, [">= 0.4.0"])
   s.add_development_dependency(%q<database_cleaner>, [">= 0"])
   s.add_development_dependency(%q<forgery>, [">= 0"])
@@ -36,6 +37,11 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency(%q<guard>, [">= 0"])
   s.add_development_dependency(%q<guard-rspec>, [">= 0"])
-  s.add_development_dependency(%q<libnotify>, [">= 0"])
-  s.add_development_dependency(%q<rb-inotify>, [">= 0"])
+
+  if RUBY_PLATFORM =~ /darwin/i
+    s.add_development_dependency(%q<rb-fsevent>, [">= 0"])
+  else
+    s.add_development_dependency(%q<libnotify>, [">= 0"])
+    s.add_development_dependency(%q<rb-inotify>, [">= 0"])
+  end
 end

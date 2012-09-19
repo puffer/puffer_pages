@@ -1,0 +1,1 @@
+PufferPages.localize = true

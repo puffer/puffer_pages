@@ -35,6 +35,26 @@ div.CodeMirror span.CodeMirror-matchingbracket
   min-height: 300px;
 }
 
+#page_parts .localized-tabs {
+  border: 0;
+}
+
+#page_parts .localized-tabs .rui-tabs-panel {
+  border: 0;
+}
+
+#page_parts .localized-tabs .rui-tabs-list {
+  border: 0;
+  z-index: 100;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#page_parts .localized-tabs .rui-tabs-tab a {
+  border: 0;
+}
+
 .active_line {
   background: #eee !important;
 }
@@ -62,6 +82,59 @@ div.CodeMirror span.CodeMirror-matchingbracket
   padding: 4px 10px;
   margin: 0;
   cursor: pointer;
+}
+
+.codemirror_buttons li.locales-group-item,
+.codemirror_buttons li.selected-locales-group-item,
+.codemirror_buttons .unavailable-locales-group-item {
+  border-radius: 3px;
+  padding: 2px 8px;
+  margin: 2px 2px;
+  float: right;
+}
+
+.codemirror_buttons li.locales-group-item {
+  background: #ddd;
+}
+
+.codemirror_buttons li.selected-locales-group-item {
+  background: #3D576D;
+  color: white;
+}
+
+ul.codemirror_buttons li.selected-locales-group-item a.remove-locale {
+  color: #ddd;
+  font-size: 12px;
+  text-decoration: none;
+  display: inline-block;;
+  margin-left: 4px;
+}
+
+ul.codemirror_buttons li.selected-locales-group-item a.remove-locale:hover {
+  color: #f44;
+}
+
+ul.codemirror_buttons li.locales-group-item a.remove-locale {
+  color: #333;
+  font-size: 12px;
+  text-decoration: none;
+  display: inline-block;;
+  margin-left: 4px;
+}
+
+ul.codemirror_buttons li.locales-group-item a.remove-locale:hover {
+  color: #c00;
+}
+
+.codemirror_buttons li.unavailable-locales-group-item {
+  background: white;
+  color: gray;
+  border: 1px solid #ccc;
+  margin: 1px 2px;
+}
+
+.codemirror_buttons li:hover.selected-locales-group-item {
+  color: #fff;
 }
 
 .codemirror_buttons li:hover {
