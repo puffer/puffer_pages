@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Puffer pages : Puffer CMS" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Puffer pages</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/puffer/puffer_pages">View on GitHub</a>
+
+          <h1 id="project_title">Puffer pages</h1>
+          <h2 id="project_tagline">Puffer CMS</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/puffer/puffer_pages/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/puffer/puffer_pages/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p><a href="http://travis-ci.org/puffer/puffer_pages"><img src="https://secure.travis-ci.org/puffer/puffer_pages.png" alt="Build Status"></a></p>
+
+<h1>Achtung!</h1>
+
+<p>It's better to install PufferPages from the HEAD of ruby repo now.</p>
+
+<pre>gem "puffer_pages", :git =&gt; "git://github.com/puffer/puffer_pages.git"</pre>
+
+<h1>PufferPages is lightweight rails 3.1 CMS</h1>
+
+<p>Interface of PufferPages based on <a href="https://github.com/puffer/puffer">puffer</a></p>
+
+<h2>Keyfeatures</h2>
+
+<ul>
+<li>Full rails integration. PufferPages is part of rails and you can different features related to pages in rails application directly</li>
+<li>Flexibility. Puffer designed to be as flexible as possible, so you can create your own functionality easily.</li>
+<li>Layouts. You can use rails layouts for pages and you can use pages as action layouts!</li>
+</ul><h2>Installation</h2>
+
+<p>You can instal puffer as a gem:</p>
+
+<pre>gem install puffer_pages</pre>
+
+<p>Or in Gemfile:</p>
+
+<pre>gem "puffer_pages"</pre>
+
+<p>Next step is:</p>
+
+<pre>rake puffer_pages_engine:install:migrations</pre>
+
+<p>This will install PufferPages config file in your initializers, some css/js, controllers and migrations</p>
+
+<pre>rake db:migrate</pre>
+
+<p>To start working with admin interface, you need to add some routes like:</p>
+
+<pre>
+namespace :admin do
+  resources :pages
+  resources :layouts
+  resources :snippets
+end
+</pre>
+
+<h2>Introduction</h2>
+
+<p>The first thing, you should do - setup routes if you want pages path different from /(*path).
+Just put in your routes.rb:</p>
+
+<pre>puffer_page "pages/(*path)" =&gt; 'whatever#show'</pre>
+
+<p>Default pages route you can see with rake routes.</p>
+
+<p>PufferPages is radiant-like cms, so it has layouts, snippets and pages.
+PufferPages use liquid as template language.</p>
+
+<h2>Pages</h2>
+
+<p>Pages - tree-based structure of site.
+Every page has one or more page parts.</p>
+
+<h2>PageParts</h2>
+
+<p>Page_parts are the same as content_for block content in rails. You can insert current page page_patrs at layout.
+Also, page_parts are inheritable. It means, that if root has page_part named <code>sidebar</code>, all its children will have the same page_part until this page_part will be redefined.
+Every page part must have main page part, named by default <code>body</code>. You can configure main page part name in config/initializers/puffer_pages.rb</p>
+
+<h2>Layouts</h2>
+
+<p>Layout is page canvas, so you can draw page parts on it.
+You can use layouts from database or rails applcation layouts for pages.</p>
+
+<h3>Rails application layouts</h3>
+
+<p>For application layout page_part body will be inserted instead of SUDDENLY! &lt;%= yield %&gt;
+For yield with no params specified puffer will use page part with default page_part name.</p>
+
+<p>So, main page part is action view and other are partials. So easy.</p>
+
+<h2><a href="http://github.com/tobi/liquid/">Liquid</a></h2>
+
+<h3>Variables</h3>
+
+<p>This variables accessible from every page:</p>
+
+<ul>
+<li>self - current page reference.
+<pre>{{ self.name }}</pre>
+self is an instance of page drop. View <a href="https://github.com/puffer/puffer_pages/blob/master/lib/puffer_pages/liquid/page_drop.rb">this</a> to find list of possible page drop methods</li>
+</ul><h3>include</h3>
+
+<p><code>include</code> is standart liquid tag with puffer data model 'file_system'</p>
+
+<h4>for page_parts</h4>
+
+<p>Use include tag for current page page_parts inclusion:</p>
+
+<pre>{% include 'page_part_name' %}</pre>
+
+<h4>for snippets</h4>
+
+<p>To include snippet use this path form:</p>
+
+<pre>{% include 'snippets/snippet_name' %}</pre>
+
+<p>Usage example:</p>
+
+<pre>
+  {% include 'sidebar' %} # this will render 'sidebar' page_part
+  {% assign navigation = 'snippets/navigation' %}
+  {% include navigation %} # this will render 'navigation' snippet
+</pre>
+
+<h3>stylesheets, javascripts</h3>
+
+<pre>{% stylesheets path [, path, path ...] %}</pre>
+
+<p>Both tags syntax is equal
+Tags renders rail`s stylesheet_link_tag or javascript_include_tag.</p>
+
+<p>Usage example:</p>
+
+<pre>
+  {% assign ctrl = 'controls' %}
+  {% javascripts 'prototype', ctrl %}
+</pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Puffer pages maintained by <a href="https://github.com/puffer">puffer</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
