@@ -1,2 +1,3 @@
-<strong><%= tree_page.id %></strong> — <%= tree_page.name %>
-(<%= tree_page.status %>, <%= link_to t('.view'), puffer_page_path(tree_page.to_location), :target => '_blank' %>)
+<%= tree_page.name %> — <strong><%= "/" + tree_page.location.to_s %></strong>
+<%= tree_page.status %>
+<%= link_to t('.view'), puffer_pages.puffer_page_path(tree_page.to_location), :target => '_blank' if tree_page.status.published? %>

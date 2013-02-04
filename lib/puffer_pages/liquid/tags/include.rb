@@ -5,12 +5,9 @@ module PufferPages
       class Include < ::Liquid::Include
         def render(context)
           source = _read_template_from_file_system(context)
-          partial = ::Liquid::Template.parse(source)
           variable = context[@variable_name || @template_name[1..-2]]
 
           context.stack do
-            context[:page_part] = source if source.is_a?(::PufferPages::PagePart)
-
             @attributes.each do |key, value|
               context[key] = context[value]
             end
@@ -18,11 +15,11 @@ module PufferPages
             if variable.is_a?(Array)
               variable.collect do |variable|
                 context[@template_name[1..-2]] = variable
-                partial.render(context)
+                source.render(context)
               end
             else
               context[@template_name[1..-2]] = variable
-              partial.render(context)
+              source.render(context)
             end
           end
         end

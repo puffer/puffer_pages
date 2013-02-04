@@ -2,7 +2,7 @@ module PufferPages
   module Liquid
     module Tags
 
-      class Partials < ::Liquid::Include
+      class Partials < Include
 
       private
 

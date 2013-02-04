@@ -1,0 +1,8 @@
+<%= component_fields_for @record do |f| %>
+  <div class="label handler">
+    <%= f.label field %><%= f.select field, @options, { include_blank: false }, field.input_options %>
+    <div class="field_error">
+      <%= @record.errors[field.name.to_sym].first %>
+    </div>
+  </div>
+<% end %>

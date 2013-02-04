@@ -13,13 +13,13 @@ ActionMailer::Base.default_url_options[:host] = "test.com"
 
 Rails.backtrace_cleaner.remove_silencers!
 
-# Configure capybara for integration testing
-require "capybara/rails"
-Capybara.default_driver   = :rack_test
-Capybara.default_selector = :css
-
+# ActiveRecord::Base.logger = Logger.new(STDOUT)
 # Run any available migration
 ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
+
+if ActiveRecord::Base.connection.respond_to? :schema_cache
+  ActiveRecord::Base.connection.schema_cache.clear!
+end
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
@@ -30,6 +30,7 @@ RSpec.configure do |config|
   # methods or matchers
   require 'rspec/expectations'
   config.include RSpec::Matchers
+  config.include PufferPages::Rspec::Matchers
 
   # == Mock Framework
   config.mock_with :rspec

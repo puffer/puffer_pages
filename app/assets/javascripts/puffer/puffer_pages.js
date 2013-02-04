@@ -1,6 +1,7 @@
 //= require puffer/right-tabs-src
 //= require puffer/codemirror
 //= require puffer/multiplex
+//= require puffer/matchbrackets
 //= require puffer/codemirror/xml
 //= require puffer/codemirror/javascript
 //= require puffer/codemirror/css
@@ -103,29 +104,6 @@ var page_part_tab_remove = function(event) {
   save_destroy_marks(event.target.panel);
 }
 
-var page_part_locale_select = function(event) {
-  if (!event.target.enabled())
-    event.target.enable();
-  if (!event.target.current())
-    event.target.select();
-
-  if (event.target.panel.html().blank())
-    fill_new_tab(event.target);
-
-  var textarea = event.target.panel.first('textarea[data-codemirror]');
-  if (textarea && textarea.codemirror) {
-    textarea.codemirror.refresh();
-  }
-}
-
-var page_part_locale_enable = function(event) {
-  fill_new_tab(event.target);
-}
-
-var page_part_locale_disable = function(event) {
-  save_destroy_marks(event.target.panel);
-  event.target.panel.update();
-}
 
 var fill_new_tab = function(tab) {
   var new_id = new Date().getTime();
@@ -138,12 +116,6 @@ var fill_new_tab = function(tab) {
     name_input.value(name_panel.data('name'));
   }
 
-  var locale_input = tab.panel.first('[data-acts="locale"]');
-  var locale = tab.data('locale');
-  if (locale_input && locale) {
-    locale_input.value(locale);
-  }
-
   init_codemirrors();
 }
 
@@ -152,8 +124,8 @@ var save_destroy_marks = function(scope) {
   scope.find('[data-acts="destroy"]').each(function(destroy_mark) {
     var page_part_param = destroy_mark.siblings('[data-acts="id"]').first();
     if (page_part_param) {
-      form.append(destroy_mark.value('true'));
-      form.append(page_part_param);
+      form.insert(destroy_mark.value('true'), 'top');
+      form.insert(page_part_param, 'top');
     }
   });
 }
@@ -161,10 +133,9 @@ var save_destroy_marks = function(scope) {
 var init_codemirror = function(textarea) {
   if (!textarea.codemirror) {
     var codemirror = CodeMirror.fromTextArea(textarea._, {
-      mode: 'liquid-mixed',
+      mode: textarea.data('codemirror').mode || 'text/html',
       lineNumbers: true,
       lineWrapping: true,
-      matchBrackets: true,
       tabSize: 2,
       extraKeys: {
         "Tab": "indentMore",
@@ -175,7 +146,6 @@ var init_codemirror = function(textarea) {
     });
 
     textarea.codemirror = codemirror;
-    codemirror.buttons = textarea.prev('.codemirror_buttons');
   }
 }
 
@@ -183,8 +153,26 @@ var init_codemirrors = function() {
   $$('textarea[data-codemirror]').each(init_codemirror);
 }
 
+var set_codemirror_mode = function(select) {
+  var editors = select.parent('.rui-tabs-panel').find('textarea[data-codemirror]');
+  var selected = $(select._.selectedOptions[0]);
+  var mode = selected.data('codemirror-mode');
+  if (!mode.blank()) {
+    editors.each(function(editor) {
+      editor.codemirror.setOption("mode", mode);
+    });
+  }
+}
+
+var set_codemirrors_modes = function() {
+  $$("select[data-codemirror-mode-select]").each(set_codemirror_mode);
+}
+
+"select[data-codemirror-mode-select]".on('change', function() { set_codemirror_mode(this) });
+
 $(document).onReady(function() {
   init_codemirrors();
+  set_codemirrors_modes();
 });
 
 $(document).on('data:sending', function() {
@@ -196,27 +184,18 @@ $(document).on('data:sending', function() {
 $(document).on('ajax:complete', function() {
   Tabs.rescan();
   init_codemirrors();
+  set_codemirrors_modes();
 });
-
-"*[data-codemirror-button]".onClick(function(event) {
-  if (event.which != 1) return;
-  window['codemirror_' + this.data('codemirror-button')](this.parent('ul').next('textarea').codemirror);
-});
-
-".codemirror_buttons_fulscreen".onMouseenter('morph', {'top': '0px'});
-".codemirror_buttons_fulscreen".onMouseleave('morph', {'top': '-20px'});
 
 var codemirror_fullscreen = function(editor) {
-  var scroll = $(editor.getWrapperElement()).children('.CodeMirror-scroll').first();
+  var scroll = $(editor.getTextArea()).parents('*[data-fullscreen]').last();
   var body = $$('body').first();
 
-  if (scroll.hasClass('fullscreen')) {
-    scroll.removeClass('fullscreen');
-    editor.buttons.removeClass('codemirror_buttons_fulscreen');
+  if (scroll.data('fullscreen')) {
+    scroll.data('fullscreen', false)
     body.setStyle('overflow', 'auto');
   } else {
-    scroll.addClass('fullscreen');
-    editor.buttons.addClass('codemirror_buttons_fulscreen');
+    scroll.data('fullscreen', true)
     body.setStyle('overflow', 'hidden');
   }
 

@@ -1,0 +1,55 @@
+{
+	"layouts": [
+    {
+      "body":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
+      "created_at":"2012-10-10T12:30:09Z",
+      "id":"2822BCAA21D24B3187C76C6C41E685F2",
+      "name":"layout",
+      "updated_at":"2012-10-10T12:30:09Z"
+    },
+    {
+      "body":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
+      "created_at":"2012-10-10T12:30:09Z","id":"520ACC91563B4F75816770C99038D67D",
+      "name":"layout1","updated_at":"2012-10-10T12:30:09Z"
+    }
+  ],
+  "snippets": [
+    {
+      "body":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
+      "created_at":"2012-10-10T12:30:09Z",
+      "id":"64AE0A360FD14E70AA0F9FB33C66D75B",
+      "name":"lorem",
+      "updated_at":"2012-10-10T12:30:09Z"
+    }
+  ],
+  "pages": [
+    {
+      "created_at":"2012-10-10T12:30:09Z",
+      "id":"A080B50AF20B4F59B7008977201F1C1F",
+      "layout_name":"layout",
+      "name":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
+      "parent_id":null,
+      "slug":null,
+      "status":"published",
+      "updated_at":"2012-10-10T12:30:09Z",
+      "page_parts":[
+        {
+          "body":null,
+          "created_at":"2012-10-10T12:30:09Z",
+          "id":"4B3086FFEBD4491F9D2401F324D49CBF",
+          "name":"body",
+          "page_id":"A080B50AF20B4F59B7008977201F1C1F",
+          "updated_at":"2012-10-10T12:30:09Z"
+        },
+        {
+          "body":null,
+          "created_at":"2012-10-10T12:30:09Z",
+          "id":"F6423DC0AD074C9B979F6E90293817E4",
+          "name":"main",
+          "page_id":"A080B50AF20B4F59B7008977201F1C1F",
+          "updated_at":"2012-10-10T12:30:09Z"
+        }
+      ]
+    }
+  ]
+}

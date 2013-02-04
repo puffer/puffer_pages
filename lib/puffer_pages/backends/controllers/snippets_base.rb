@@ -1,7 +1,7 @@
 class PufferPages::SnippetsBase < Puffer::Base
   setup do
     group :pages
-    model_name :snippet
+    model_name :'puffer_pages/snippet'
   end
 
   index do
@@ -10,6 +10,6 @@ class PufferPages::SnippetsBase < Puffer::Base
 
   form do
     field :name
-    field :body, :type => :codemirror
+    field :body, type: :codemirror, mode: 'text/x-liquid-html'
   end
 end

@@ -1,12 +1,6 @@
 [![Build Status](https://secure.travis-ci.org/puffer/puffer_pages.png)](http://travis-ci.org/puffer/puffer_pages)
 
-# Achtung!
-
-It's better to install PufferPages from the HEAD of ruby repo now.
-
-<pre>gem "puffer_pages", :git => "git://github.com/puffer/puffer_pages.git"</pre>
-
-# PufferPages is lightweight rails 3.1 CMS
+# PufferPages is lightweight but powerful rails >= 3.1 CMS
 
 Interface of PufferPages based on [puffer](https://github.com/puffer/puffer)
 
@@ -24,9 +18,14 @@ Or in Gemfile:
 <pre>gem "puffer_pages"</pre>
 
 Next step is:
-<pre>rake puffer_pages_engine:install:migrations</pre>
+<pre>rake puffer_pages:install:migrations</pre>
 This will install PufferPages config file in your initializers, some css/js, controllers and migrations
 <pre>rake db:migrate</pre>
+
+Nex step - adding routes:
+<pre>
+  mount PufferPages::Engine => '/'
+</pre>
 
 To start working with admin interface, you need to add some routes like:
 <pre>
@@ -34,16 +33,11 @@ namespace :admin do
   resources :pages
   resources :layouts
   resources :snippets
+  resources :origins
 end
 </pre>
 
 ## Introduction
-
-The first thing, you should do - setup routes if you want pages path different from /(*path).
-Just put in your routes.rb:
-<pre>puffer_page "pages/(*path)" => 'whatever#show'</pre>
-Default pages route you can see with rake routes.
-
 PufferPages is radiant-like cms, so it has layouts, snippets and pages.
 PufferPages use liquid as template language.
 

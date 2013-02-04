@@ -19,29 +19,23 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # specify any dependencies here; for example:
-  s.add_runtime_dependency(%q<rails>, [">= 3.1"])
-  s.add_runtime_dependency(%q<puffer>, [">= 0"])
-  s.add_runtime_dependency(%q<liquid>, [">= 0"])
-  s.add_runtime_dependency(%q<nested_set>, [">= 0"])
+  s.add_runtime_dependency "rails", ">= 3.1"
+  s.add_runtime_dependency "puffer"
+  s.add_runtime_dependency "liquid"
+  s.add_runtime_dependency "nested_set"
+  s.add_runtime_dependency "activeuuid"
+  s.add_runtime_dependency "contextuality"
 
-  s.add_development_dependency(%q<bcrypt-ruby>, [">= 0"])
-  s.add_development_dependency(%q<sqlite3>, [">= 0"])
-  s.add_development_dependency(%q<pg>, [">= 0"])
-  s.add_development_dependency(%q<mysql>, [">= 0"])
-  s.add_development_dependency(%q<rspec-rails>, [">= 0"])
-  s.add_development_dependency(%q<shoulda>, [">= 0"])
-  s.add_development_dependency(%q<capybara>, [">= 0.4.0"])
-  s.add_development_dependency(%q<database_cleaner>, [">= 0"])
-  s.add_development_dependency(%q<forgery>, [">= 0"])
-  s.add_development_dependency(%q<fabrication>, [">= 0"])
-
-  s.add_development_dependency(%q<guard>, [">= 0"])
-  s.add_development_dependency(%q<guard-rspec>, [">= 0"])
-
-  if RUBY_PLATFORM =~ /darwin/i
-    s.add_development_dependency(%q<rb-fsevent>, [">= 0"])
-  else
-    s.add_development_dependency(%q<libnotify>, [">= 0"])
-    s.add_development_dependency(%q<rb-inotify>, [">= 0"])
-  end
+  s.add_development_dependency "bcrypt-ruby"
+  s.add_development_dependency "sqlite3"
+  s.add_development_dependency "pg"
+  s.add_development_dependency "mysql2"
+  s.add_development_dependency "globalize3"
+  s.add_development_dependency "rspec-rails"
+  s.add_development_dependency "shoulda"
+  s.add_development_dependency "database_cleaner"
+  s.add_development_dependency "forgery"
+  s.add_development_dependency "fabrication"
+  s.add_development_dependency "fakeweb"
+  s.add_development_dependency "timecop"
 end

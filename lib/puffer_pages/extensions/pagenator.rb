@@ -28,7 +28,7 @@ module PufferPages
           scope = options[:puffer_scope].presence || _puffer_pages_options[:scope].presence
           page = options.values_at(:puffer_page, :partial, :action, :file).delete_if(&:blank?).first
           options[:puffer_page] = _puffer_pages_template(page, scope)
-          options[:layout] = 'puffer_pages'
+          options[:layout] = 'puffer_page'
         end
       end
 
@@ -45,7 +45,7 @@ module PufferPages
       end
 
       def _puffer_pages_template suggest, scope = nil
-        return suggest if suggest.is_a?(::PufferPages::Page)
+        return suggest if suggest.is_a?(PufferPages::Page)
 
         scope = case scope
         when Proc
@@ -56,7 +56,7 @@ module PufferPages
           scope
         end
 
-        ::Page.controller_scope(scope).find_view_page(
+        PufferPages::Page.controller_scope(scope).find_view_page(
           suggest.presence || request.path_info,
           :formats => lookup_context.formats
         )

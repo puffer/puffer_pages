@@ -1,6 +1,35 @@
-## 0.1.2 \[ In Development \] \[ Branch: master \]
+## 0.5.0 \[ In Development \] \[ Branch: master \]
 
 ### New features
+
+*   `scope` tag. Just creates variables scope inside its block.
+
+*   Origins - full import-export system. Just add your remote server and syncronize all the pages.
+
+*   PagePart handlers - now page part can be a hash.
+
+*   First rspec matcher - `render_page`.
+
+*   `title`, `description`, and `keywords` fields are remove, use page_parts.
+
+*   Move from usual ids to uuids with `activeuuid` gem.
+
+*   Templates localization with `globalize3` gem.
+
+*   `locales` to store page locales + I18n backend. Locales are inheritable.
+
+*   `t` or `translate` tag. Works similar to `t` ActionView helper. Translation keys
+    started with `.` (i.e `{% t '.hello' %}`) are scoped. For layouts it will be
+    `layouts.layout_name.hello`, for snippets - `snippets.snippet_name.hello` and for
+    pages - `puffer_pages.full.page.location.page_parts.page_part_name.hello`
+    but for pages it looks for default values:
+    - `puffer_pages.full.page.location.hello`
+    - `puffer_pages.full.page.page_parts.page_part_name.hello`
+    - `puffer_pages.full.page.hello`
+    - `puffer_pages.full.page_parts.page_part_name.hello`
+    - `puffer_pages.full.hello`
+    - `puffer_pages.page_parts.page_part_name.hello`
+    - `puffer_pages.hello`
 
 *   `config.puffer_pages.raise_errors = true` in any environment config file makes
     liquid templates errors raisable.
@@ -45,8 +74,8 @@
     have more than one root page.
 
 *   The only way to declare puffer_page rendering
-    `render :puffer_page => Page.first` or
-    `render :puffer_page => 'some/path'`.
+    `render puffer_page: PufferPages::Page.first` or
+    `render puffer_page: 'some/path'`.
 
 *   Current controller now available from context.registers[:controller]
     It is useful for using url helpers in drops.
@@ -70,7 +99,7 @@
     ```
       def index
         @answer = 42
-        render :puffer_page => 'hello/world'
+        render puffer_page: 'hello/world'
       end
     ```
 
@@ -81,7 +110,7 @@
 
     ```
       def index
-        render :puffer_page => 'hello/world'
+        render puffer_page: 'hello/world'
       end
     ```
 

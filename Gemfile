@@ -2,17 +2,14 @@ source "http://rubygems.org"
 
 gemspec
 
-gem 'puffer', :git => 'git://github.com/puffer/puffer.git'
+gem 'puffer', github: 'puffer/puffer'
+gem 'activeuuid', github: 'jashmenn/activeuuid'
+gem 'rails'
 
-case version = ENV['RAILS_VERSION'] || '~> 3.1'
-when /master/
-  gem "rails", :git => "git://github.com/rails/rails.git"
-  gem "arel", :git => "git://github.com/rails/arel.git"
-  gem "journey", :git => "git://github.com/rails/journey.git"
-when /3-1-stable/
-  gem "rails", :git => "git://github.com/rails/rails.git", :branch => "3-1-stable"
-when /3-2-stable/
-  gem "rails", :git => "git://github.com/rails/rails.git", :branch => "3-2-stable"
-else
-  gem "rails", version
+group :test do
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'rb-inotify', require: false
+  gem 'rb-fsevent', require: false
+  gem 'rb-fchange', require: false
 end

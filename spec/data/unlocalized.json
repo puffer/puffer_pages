@@ -1,0 +1,82 @@
+{
+    "layouts": [{
+        "created_at": "2013-12-23T16:23:00Z",
+        "id": "404DF5860F01492EB470711FE3BE4535",
+        "name": "application",
+        "updated_at": "2013-12-23T16:23:00Z",
+        "body": "Nulla suscipit ligula in lacus."
+    }],
+    "snippets": [{
+        "created_at": "2013-12-23T16:23:00Z",
+        "id": "C647D698E0D64A99BC8AA0C0A0F0BAEF",
+        "name": "lacus",
+        "updated_at": "2013-12-23T16:23:00Z",
+        "body": "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est."
+    }],
+    "pages": [{
+        "created_at": "2013-12-23T16:23:00Z",
+        "id": "55E458FCA2BB4BA0B95AE99ACDDAF094",
+        "layout_name": "application",
+        "locales": {},
+        "name": "Nunc nisl.",
+        "parent_id": null,
+        "slug": null,
+        "status": "published",
+        "updated_at": "2013-12-23T16:23:00Z",
+        "page_parts": [{
+            "created_at": "2013-12-23T16:23:00Z",
+            "handler": "html",
+            "id": "A0C54DBB446D4727903A2B6FA5D4C9E2",
+            "name": "body",
+            "page_id": "55E458FCA2BB4BA0B95AE99ACDDAF094",
+            "updated_at": "2013-12-23T16:23:00Z",
+            "body": "PagePart: `body`, Page: ``"
+        }, {
+            "created_at": "2013-12-23T16:23:00Z",
+            "handler": "html",
+            "id": "EA1DE54674D1430894134AA9FDB603F3",
+            "name": "sidebar",
+            "page_id": "55E458FCA2BB4BA0B95AE99ACDDAF094",
+            "updated_at": "2013-12-23T16:23:00Z",
+            "body": "PagePart: `sidebar`, Page: ``"
+        }]
+    }, {
+        "created_at": "2013-12-23T16:23:00Z",
+        "id": "58C3B16335C242E8B231E2B634D1B7EA",
+        "layout_name": null,
+        "locales": {},
+        "name": "Morbi non quam nec dui luctus rutrum.",
+        "parent_id": "55E458FCA2BB4BA0B95AE99ACDDAF094",
+        "slug": "first",
+        "status": "published",
+        "updated_at": "2013-12-23T16:23:00Z",
+        "page_parts": [{
+            "created_at": "2013-12-23T16:23:00Z",
+            "handler": "html",
+            "id": "A0BC46E472FC45CB8C57F068685DEA3D",
+            "name": "body",
+            "page_id": "58C3B16335C242E8B231E2B634D1B7EA",
+            "updated_at": "2013-12-23T16:23:00Z",
+            "body": "PagePart: `body`, Page: `first`"
+        }]
+    }, {
+        "created_at": "2013-12-23T16:23:00Z",
+        "id": "C8D5E74CE293403DAB5FBB5A89BDE6C5",
+        "layout_name": null,
+        "locales": {},
+        "name": "Donec dapibus.",
+        "parent_id": "58C3B16335C242E8B231E2B634D1B7EA",
+        "slug": "second",
+        "status": "published",
+        "updated_at": "2013-12-23T16:23:00Z",
+        "page_parts": [{
+            "created_at": "2013-12-23T16:23:00Z",
+            "handler": "html",
+            "id": "504F931E6E8C495699BA5D4C9D1FAD06",
+            "name": "sidebar",
+            "page_id": "C8D5E74CE293403DAB5FBB5A89BDE6C5",
+            "updated_at": "2013-12-23T16:23:00Z",
+            "body": "PagePart: `sidebar`, Page: `first/second`"
+        }]
+    }]
+}

@@ -1,12 +1,20 @@
 module PufferPages
   class Engine < Rails::Engine
+    engine_name :puffer_pages
+
     config.autoload_paths << File.join(root, 'lib')
 
     config.puffer_pages = ActiveSupport::OrderedOptions.new
     config.puffer_pages.raise_errors = false
 
-    initializer 'puffer_pages.add_puffer_pages_route', :after => :add_builtin_route do |app|
-      app.routes_reloader.paths << File.join(root, 'config/puffer_routes.rb')
+    config.after_initialize do
+      if PufferPages.install_i18n_backend
+        I18n.backend = I18n::Backend::Chain.new(PufferPages.i18n_backend, I18n.backend)
+      end
+    end
+
+    ActiveSupport.on_load(:action_view) do
+      ActionView::Base.send :include, PufferPages::Helpers
     end
   end
 end

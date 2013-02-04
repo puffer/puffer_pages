@@ -4,20 +4,11 @@ Dummy::Application.routes.draw do
     resources :pages
     resources :layouts
     resources :snippets
+    resources :origins
     resources :articles
   end
 
-  resources :articles, :only => [:show] do
-    collection do
-      get :foo, :moo, :bar, :baz, :drops
-    end
-  end
-
-  resources :posts, :only => [:show] do
-    collection do
-      get :foo, :fooo, :moo, :bar, :baz
-    end
-  end
+  mount PufferPages::Engine => '/'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

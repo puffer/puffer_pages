@@ -93,18 +93,18 @@
       var token = null;
 
       if (stream.peek() == '\'' || stream.peek() == '"') {
-        state.filterParsing = false;
         token = inString(stream, state);
-      } else if (stream.match(/^-?\d+(:?\.(\d+))?/)) {
         state.filterParsing = false;
+      } else if (stream.match(/^-?\d+(:?\.(\d+))?/)) {
         token = 'number';
+        state.filterParsing = false;
       } else if (stream.peek() == '|') {
         stream.next();
         state.filterParsing = true;
       } else if (stream.match(/^\w+/)) {
         if (state.filterParsing) {
-          state.filterParsing = false;
           token = 'attribute';
+          state.filterParsing = false;
         } else {
           token = 'variable';
         }
@@ -132,18 +132,34 @@
 
       if (stream.peek() == '\'' || stream.peek() == '"') {
         token = inString(stream, state);
+        if (state.translationTagParsed && !state.translationStringParsed) {
+          token = 'translation';
+        }
+        state.translationStringParsed = true;
       } else if (stream.match(/^-?\d+(:?\.(\d+))?/)) {
         token = 'number';
-      } else if (stream.match(/^(nil|null|true|false|empty|blank)/)) {
+        state.translationStringParsed = true;
+      } else if (stream.match(/^(nil|null|true|false|empty|blank)\s/)) {
         token = 'builtin';
-      } else if (stream.match(/^(==|!=|<>|>|<|>=|<=|in|contains)/)) {
+        stream.backUp(1);
+        state.translationStringParsed = true;
+      } else if (stream.match(/^(==|!=|<>|>|<|>=|<=)/)) {
         token = 'operator';
-      } else if (stream.match(/^\w+/)) {
+        state.translationStringParsed = true;
+      } else if (stream.match(/^(in|contains)\s/)) {
+        token = 'operator';
+        stream.backUp(1);
+        state.translationStringParsed = true;
+      } else if (tag = stream.match(/^\w+/)) {
         if (state.tagParsed) {
           token = 'variable';
+          state.translationStringParsed = true;
         } else {
-          state.tagParsed = true;
           token = 'keyword';
+          state.tagParsed = true;
+          if (tag == 't' || tag == 'translate') {
+            state.translationTagParsed = true;
+          }
         }
       } else {
         stream.next();
@@ -154,7 +170,7 @@
 
     return {
       startState: function() {
-        return {tokenizer: tokenize, tagParsed: false};
+        return {tokenizer: tokenize, tagParsed: false, translationTagParsed: false, translationStringParsed: false};
       },
       token: function(stream, state) {
         return state.tokenizer(stream, state);

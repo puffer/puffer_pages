@@ -1,4 +1,6 @@
 module PufferPagesHelper
+  unloadable
+
   def possible_layouts
     inherited_layout + (application_layouts + puffer_layouts).uniq.sort
   end
@@ -8,7 +10,7 @@ module PufferPagesHelper
   end
 
   def puffer_layouts
-    Layout.order(:name).all.map(&:name)
+    PufferPages::Layout.order(:name).all.map(&:name)
   end
 
   def inherited_layout
@@ -16,7 +18,7 @@ module PufferPagesHelper
   end
 
   def possible_statuses
-    Page.statuses
+    PufferPages::Page.statuses
   end
 
   def tree_page

@@ -1,7 +1,7 @@
 class PufferPages::LayoutsBase < Puffer::Base
   setup do
     group :pages
-    model_name :layout
+    model_name :'puffer_pages/layout'
   end
 
   index do
@@ -10,6 +10,6 @@ class PufferPages::LayoutsBase < Puffer::Base
 
   form do
     field :name
-    field :body, :type => :codemirror
+    field :body, type: :codemirror, mode: 'text/x-liquid-html'
   end
 end

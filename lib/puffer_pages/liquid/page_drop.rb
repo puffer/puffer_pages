@@ -2,38 +2,31 @@ module PufferPages
   module Liquid
     class PageDrop < ::Liquid::Drop
 
-      include ActionController::UrlFor
-      include Rails.application.routes.url_helpers
-
-      delegate *(Page.statuses.map {|s| "#{s}?"} << {:to => :page})
+      delegate *(PufferPages::Page.statuses.map {|s| "#{s}?"} << {:to => :page})
       delegate :id, :slug, :created_at, :updated_at, :to => :page
 
       def initialize page
         @page = page
       end
 
-      %w(name title description keywords).each do |attribute|
-        define_method attribute do
-          value = page.send(attribute)
-          value = ::Liquid::Template.parse(value).render(@context) if value.present? && @context
-          value
-        end
+      def name
+        @context ? page.render(page.name, @context) : page.name
       end
 
       %w(parent root ancestors self_and_ancestors children self_and_children siblings
          self_and_siblings descendants, self_and_descendants).each do |attribute|
         define_method attribute do
           instance_variable_get("@#{attribute}") ||
-            instance_variable_set("@#{attribute}", page.send(attribute).to_drop)
+            instance_variable_set("@#{attribute}", page.send(attribute))
         end
       end
 
       def path
-        puffer_page_path page.to_location
+        controller.puffer_pages.puffer_page_path page.to_location
       end
 
       def url
-        puffer_page_url page.to_location
+        controller.puffer_pages.puffer_page_url page.to_location
       end
 
       def current?
@@ -48,9 +41,9 @@ module PufferPages
         page == other.send(:page)
       end
 
-      def before_method method
-        value = page.part(method)
-        value.render(@context) if value && @context
+      def before_method name
+        page_part = page.inherited_page_part(name)
+        page_part.handle(@context) if page_part && @context
       end
 
     private
@@ -63,8 +56,6 @@ module PufferPages
       def controller
         @controller ||= @context.registers[:controller] if @context
       end
-
-      delegate :env, :request, :to => :controller, :allow_nil => true
     end
   end
 end

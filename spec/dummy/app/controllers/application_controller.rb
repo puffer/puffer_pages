@@ -1,10 +1,10 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  before_filter :setup_locale
+  around_filter :locale_context
 
-  def setup_locale
-    I18n.locale = params[:locale].presence || I18n.default_locale
+  def locale_context &block
+    params[:locale].present? ? I18n.with_locale(params[:locale], &block) : block.call
   end
 
   def has_puffer_access? namespace

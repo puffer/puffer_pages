@@ -3,44 +3,49 @@ module PufferPages
     module Tags
 
       class Translate < ::Liquid::Tag
-        Syntax = /(#{QuotedFragment})\s+(#{QuotedFragment}+))?/
+        Syntax = /^(#{::Liquid::QuotedFragment})/
 
         def initialize(tag_name, markup, tokens)
           if markup =~ Syntax
             @key = $1
-            @attributes    = {}
-
-            markup.scan(TagAttributes) do |key, value|
-              @attributes[key] = value
-            end
           else
-            raise SyntaxError.new("Error in tag 'include' - Valid syntax: translate key [option:value, option:value...]")
+            raise SyntaxError.new("Syntax Error in 'translate' - Valid syntax: translate key")
+          end
+
+          @options = {}
+          markup.scan(::Liquid::TagAttributes) do |key, value|
+            @options[key.to_sym] = value
           end
 
           super
         end
 
-        def parse(tokens)
-        end
-
         def render(context)
           key = context[@key]
-          attributes = {}
-          @attributes.each do |key, value|
-            attributes[key] = context[value]
+          options = @options.each_with_object({}) do |(name, value), result|
+            result[name] = context[value] unless I18n::RESERVED_KEYS.include?(name)
           end
+          processed = context[:processed]
 
-          if variable.is_a?(Array)
-            variable.collect do |variable|
-              context[@template_name[1..-2]] = variable
-              partial.render(context)
-            end
+          if processed && key.first == '.'
+            I18n.translate i18n_key(processed, key.last(-1)),
+              options.merge!(:default => i18n_defaults(processed, key.last(-1)))
           else
-            context[@template_name[1..-2]] = variable
-            partial.render(context)
+            I18n.translate key, options
           end
         end
 
+        def i18n_key(processed, key)
+          array_to_key processed.i18n_scope, key
+        end
+
+        def i18n_defaults(processed, key)
+          processed.i18n_defaults.map { |default| array_to_key default, key }
+        end
+
+        def array_to_key *array
+          array.flatten.map { |segment| segment.to_s.gsub(?., ?/) }.join(?.).to_sym
+        end
       end
 
     end

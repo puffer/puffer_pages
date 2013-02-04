@@ -8,7 +8,7 @@ module PufferPages
       end
 
       def render_with_puffer_pages(context, options)
-        if options[:puffer_page].present? && options[:puffer_page].is_a?(::PufferPages::Page)
+        if options.key?(:puffer_page) && options[:puffer_page].is_a?(PufferPages::Page)
           render_puffer_page(context, options)
         else
           render_without_puffer_pages(context, options)

@@ -3,62 +3,61 @@ require 'spec_helper'
 describe PufferPages::Liquid::PageDrop do
 
   def render_layout layout, current_page, page = nil
-    current_page.render_layout(layout, {
-      'self' => current_page.to_drop,
-      'page' => (page.to_drop if page)
-    })
+    current_page.render(layout, other: page)
   end
 
   context do
-    let!(:root){Fabricate :page, :layout_name => 'foo_layout', :name => 'root'}
-    let!(:foo){Fabricate :page, :slug => 'hello', :parent => root, :name => 'foo'}
-    let!(:bar) do
-      Fabricate :page, :slug => 'world', :parent => foo, :name => 'bar',
-        :page_parts => [Fabricate(:page_part, :name => 'sidebar', :body => "{{ 'hello!' }}")]
-    end
+    let(:hash) { { 'hello' => '{{ self.name }}' } }
+
+    let!(:root) { Fabricate :root, name: 'root' }
+    let!(:first) { Fabricate :page, slug: 'first', parent: root }
+    let!(:second) { Fabricate :page, slug: 'second', parent: first, page_parts: [main, sidebar] }
+    let!(:main) { Fabricate(:main) }
+    let!(:sidebar) { Fabricate(:sidebar, handler: 'yaml', body: YAML.dump(hash)) }
 
     before do
       root.reload
-      foo.reload
-      bar.reload
+      first.reload
+      second.reload
     end
 
-    specify{render_layout('{{ self.parent.name }}', bar).should == 'foo'}
-    specify{render_layout('{{ self.root.name }}', bar).should == 'root'}
+    specify { render_layout('{{ self.parent.name }}', second).should == first.name }
+    specify { render_layout('{{ self.root.name }}', second).should == 'root' }
 
-    specify{render_layout('{{ page.current? }}', foo, foo).should == 'true'}
-    specify{render_layout('{{ page.current? }}', foo, root).should == 'false'}
-    specify{render_layout('{{ page.current? }}', foo, bar).should == 'false'}
+    specify { render_layout('{{ other.current? }}', first, first).should == 'true' }
+    specify { render_layout('{{ other.current? }}', first, root).should == 'false' }
+    specify { render_layout('{{ other.current? }}', first, second).should == 'false' }
 
-    specify{render_layout('{{ page.ancestor? }}', foo, foo).should == 'false'}
-    specify{render_layout('{{ page.ancestor? }}', foo, root).should == 'true'}
-    specify{render_layout('{{ page.ancestor? }}', foo, bar).should == 'false'}
+    specify { render_layout('{{ other.ancestor? }}', first, first).should == 'false' }
+    specify { render_layout('{{ other.ancestor? }}', first, root).should == 'true' }
+    specify { render_layout('{{ other.ancestor? }}', first, second).should == 'false' }
 
-    specify{render_layout('{% if self == page %}equal{% else %}not equal{% endif %}', foo, foo).should == 'equal'}
-    specify{render_layout('{% if self == page %}equal{% else %}not equal{% endif %}', foo, root).should == 'not equal'}
-    specify{render_layout('{% if self == page %}equal{% else %}not equal{% endif %}', foo, bar).should == 'not equal'}
+    specify { render_layout('{% if self == other %}equal{% else %}not equal{% endif %}', first, first).should == 'equal' }
+    specify { render_layout('{% if self == other %}equal{% else %}not equal{% endif %}', first, root).should == 'not equal' }
+    specify { render_layout('{% if self == other %}equal{% else %}not equal{% endif %}', first, second).should == 'not equal' }
 
-    specify{render_layout('{{ self.sidebar }}', bar).should == 'hello!'}
+    specify { render_layout('{{ self.body }}', second).should == main.body }
+    specify { render_layout('{{ self.sidebar.hello }}', second).should == second.name }
 
-    context 'url helpers' do
+    context do
       include RSpec::Rails::RequestExampleGroup
 
-      let!(:foo_layout){Fabricate :layout, :name => 'foo_layout', :body => '{{ self.path }} {{ self.url }}'}
+      context 'url helpers' do
+        let!(:application) { Fabricate :application, :body => '{{ self.path }} {{ self.url }}' }
 
-      specify do
-        get "/#{bar.location}"
-        response.body.should == '/hello/world http://www.example.com/hello/world'
+        specify do
+          get "/#{second.location}"
+          response.body.should == '/first/second http://www.example.com/first/second'
+        end
       end
-    end
 
-    context 'render tag' do
-      include RSpec::Rails::RequestExampleGroup
+      context 'render tag' do
+        let!(:application) { Fabricate :application, :body => "{% render 'shared/first' %}" }
 
-      let!(:foo_layout){Fabricate :layout, :name => 'foo_layout', :body => "{% render 'shared/foo' %}"}
-
-      specify do
-        get "/#{bar.location}"
-        response.body.should == 'shared/foo content'
+        specify do
+          get "/#{second.location}"
+          response.body.should == 'shared/first content'
+        end
       end
     end
   end

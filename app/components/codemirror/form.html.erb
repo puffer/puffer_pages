@@ -7,10 +7,26 @@
       </div>
     </div>
   <% end %>
-  <ul class="codemirror_buttons">
-    <% buttons.each do |button| %>
-      <li data-codemirror-button="<%= button %>"><%= t(".#{button}") %></li>
-    <% end %>
-  </ul>
-  <%= f.text_area field, field.input_options.merge(:data => {:codemirror => true}) %>
+  <% if @record.respond_to? "#{field}_translations" %>
+    <ul class="rui-tabs locales" data-tabs="{Cookie: {}}" data-fullscreen="false">
+      <ul class="rui-tabs-list">
+        <% I18n.available_locales.sort_by { |locale| locale == I18n.default_locale ? 0 : 1 }.each do |locale| %>
+          <li class="rui-tabs-tab">
+            <%= link_to locale, "##{@record.class.to_s.underscore}_#{@record.new_record? ? 'new_tab_panel_index' : @record.id}_#{field}_translations_#{locale}" %>
+          </li>
+        <% end %>
+      </ul>
+      <%= f.fields_for "#{field}_translations" do |fields| %>
+        <% I18n.available_locales.sort_by { |locale| locale == I18n.default_locale ? 0 : 1 }.each do |locale| %>
+          <li id="<%= "#{@record.class.to_s.underscore}_#{@record.new_record? ? 'new_tab_panel_index' : @record.id}_#{field}_translations_#{locale}" %>" class="rui-tabs-panel">
+            <%= fields.text_area locale, field.input_options.merge(data: { codemirror: { mode: field.options[:mode] || 'text/html' } }, value: @record.send("#{field}_translations")[locale]) %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="codemirror_wrapper" data-fullscreen="false">
+      <%= f.text_area field, field.input_options.merge(data: { codemirror: { mode: field.options[:mode] || 'text/html' } }) %>
+    </div>
+  <% end %>
 <% end %>

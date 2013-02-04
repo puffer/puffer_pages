@@ -8,9 +8,7 @@ module PufferPages
         def initialize(tag_name, markup, tokens)
           if markup =~ Syntax
 
-            @helper_name = $1
-            @arguments = []
-            @attributes = {}
+            @helper_name, @arguments, @attributes = $1, [], {}
 
             @arguments = $2.split(',')
             attributes = @arguments.pop if @arguments.last && @arguments.last.strip =~ /(#{::Liquid::TagAttributes})/
@@ -37,9 +35,8 @@ module PufferPages
             argument.to_param if argument.is_a?(::Liquid::Drop)
             argument
           end
-          attributes = @attributes.inject({}) do |result, (key, value)|
-            result[key.to_sym] = context[value]
-            result
+          attributes = @attributes.each_with_object({}) do |(name, value), result|
+            result[name.to_sym] = context[value]
           end
           attributes.merge(:path_only => true) if @tag_name == 'path'
 

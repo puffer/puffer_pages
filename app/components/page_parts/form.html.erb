@@ -1,10 +1,9 @@
 <%= component_fields_for @record do |f| %>
-  <ul id="<%= field.name %>" class="rui-tabs" data-tabs="{closable: true, scrollTabs: true, Cookie: {}, onSelect: page_part_tab_select, onRemove: page_part_tab_remove, addButton: page_part_tab_add}" data-new-panel="<%= (localized? ? render('page_part_locales', :form => f, :page_parts => {}, :index => 'new_tab_panel_index') : render('page_part', :form => f, :page_part => PagePart.new, :child_index => 'new_tab_panel_index')).gsub(/\n/, '').strip %>" data-new-panel-variable="new_tab_panel_index">
+  <ul id="<%= field.name %>" class="rui-tabs" data-fullscreen="false" data-tabs="{closable: true, scrollTabs: true, Cookie: {}, onSelect: page_part_tab_select, onRemove: page_part_tab_remove, addButton: page_part_tab_add}" data-new-panel="<%= render('page_part', :form => f, :page_part => PufferPages::PagePart.new, :child_index => 'new_tab_panel_index').gsub(/\n/, '').strip %>" data-new-panel-variable="new_tab_panel_index">
     <ul class="rui-tabs-list">
-      <% @record.send(localized? ? "#{field.name}_translations" : field.name).each_with_index do |page_part, index| %>
-        <% page_part = page_part.values.first if localized? %>
+      <% @record.send(field.name).each_with_index do |page_part| %>
         <li class="rui-tabs-tab">
-          <%= link_to "#page_part_tab_#{index}" do %>
+          <%= link_to "##{page_part.class.to_s.underscore}_#{page_part.id}" do %>
             <%= page_part.name %>
             <% if page_part.errors[:name].present? %>
               <span class="field_error">
@@ -15,13 +14,9 @@
         </li>
       <% end %>
     </ul>
-    <% @record.send(localized? ? "#{field.name}_translations" : field.name).each_with_index do |page_part, index| -%>
-      <li id="<%= "page_part_tab_#{index}" %>" class="rui-tabs-panel" data-name="<%= localized? ? page_part.values.first.name : page_part.name %>">
-        <% if localized? %>
-          <%= render 'page_part_locales', :form => f, :page_parts => page_part, :index => index, :child_index => nil %>
-        <% else %>
-          <%= render 'page_part', :form => f, :page_part => page_part, :child_index => nil %>
-        <% end %>
+    <% @record.send(field.name).each do |page_part| -%>
+      <li id="<%= "#{page_part.class.to_s.underscore}_#{page_part.id}" %>" class="rui-tabs-panel" data-name="<%= page_part.name %>" data-entity-model="<%= page_part.class.model_name.underscore %>" data-entity-id="<%= page_part.id if page_part.persisted? %>">
+        <%= render 'page_part', :form => f, :page_part => page_part, :child_index => nil %>
       </li>
     <% end -%>
   </ul>

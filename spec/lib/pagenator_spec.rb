@@ -4,13 +4,13 @@ describe PufferPages::Extensions::Pagenator do
   context 'controller' do
     include RSpec::Rails::ControllerExampleGroup
     let!(:foo_layout){Fabricate :foo_layout}
-    let!(:root){Fabricate :root}
+    let!(:root){Fabricate :foo_root}
     let!(:anonymous){Fabricate :page, :slug => 'anonymous', :name => 'foo', :parent => root}
     let!(:foo){Fabricate :page, :slug => 'foo', :parent => root}
     let!(:bar){Fabricate :page, :slug => 'bar', :parent => foo}
 
     let!(:bar_layout){Fabricate :bar_layout}
-    let!(:root2){Fabricate :root, :layout_name => 'bar_layout'}
+    let!(:root2){Fabricate :foo_root, :layout_name => 'bar_layout'}
 
     let!(:named){Fabricate :page, :slug => 'named', :name => 'foo', :parent => root}
     let!(:named2){Fabricate :page, :slug => 'named', :name => 'bar', :parent => root2}
@@ -87,7 +87,7 @@ describe PufferPages::Extensions::Pagenator do
       controller do
         puffer_pages
         def index
-          render Page.where(:slug => 'foo').first
+          render PufferPages::Page.where(:slug => 'foo').first
         end
       end
 

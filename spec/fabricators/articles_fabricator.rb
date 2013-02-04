@@ -1,4 +1,4 @@
 Fabricator(:article) do
-  title { Forgery::LoremIpsum.word }
-  body { Forgery::LoremIpsum.sentence }
+  title { Forgery::LoremIpsum.word(random: true) }
+  body { Forgery::LoremIpsum.sentence(random: true) }
 end

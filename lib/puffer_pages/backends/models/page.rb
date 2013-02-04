@@ -1,7 +1,13 @@
 # encoding: UTF-8
-class PufferPages::Page < ActiveRecord::Base
-  include PufferPages::Renderable
+class PufferPages::Backends::Page < ActiveRecord::Base
+  include ActiveUUID::UUID
+  include PufferPages::Backends::Mixins::Renderable
+  include PufferPages::Backends::Mixins::Importable
+  include PufferPages::Backends::Mixins::Localable
   self.abstract_class = true
+  self.table_name = :pages
+
+  attr_protected :location
 
   def self.inherited base
     base.acts_as_nested_set
@@ -15,7 +21,7 @@ class PufferPages::Page < ActiveRecord::Base
   end
 
   def self.controller_scope scope
-    where(scope)
+    where scope
   end
 
   def self.normalize_path path
@@ -57,29 +63,29 @@ class PufferPages::Page < ActiveRecord::Base
     page
   end
 
-  def self.to_drop *args
-    map{|page| page.to_drop(*args)}
+  def self.export_json
+    includes(:page_parts).order(:lft).as_json(
+      include: :page_parts, except: [:lft, :rgt, :depth, :location]
+    )
   end
 
-  has_many :page_parts,
-    :order => "name = '#{PufferPages.primary_page_part_name}' desc, name",
-    :dependent => :destroy,
-    :class_name => '::PagePart',
-    :validate => true,
-    :inverse_of => :page,
-    :conditions => Proc.new { PufferPages.localize? ? {} : { :locale => I18n.default_locale } }
-
-  def page_parts_translations
-    @page_parts_translations ||= page_parts.group_by(&:name).map do |name, page_parts|
-      page_parts.inject({}) do |result, page_part|
-        result[page_part.locale] = page_part
-        result
-      end.with_indifferent_access
-    end
+  def self.import_destroy
+    roots.destroy_all
   end
+
+  has_many_page_parts_options = {
+    order: "name = '#{PufferPages.primary_page_part_name}' desc, name",
+    dependent: :destroy,
+    class_name: '::PufferPages::PagePart',
+    validate: true,
+    inverse_of: :page
+  }
+  has_many_page_parts_options.merge!(include: :translations) if PufferPages.localize
+
+  has_many :page_parts, has_many_page_parts_options
 
   accepts_nested_attributes_for :page_parts, :allow_destroy => true
-  belongs_to :layout, :primary_key => :name, :foreign_key => :layout_name, :class_name => '::Layout'
+  belongs_to :layout, :primary_key => :name, :foreign_key => :layout_name, :class_name => 'PufferPages::Layout'
 
   validates_presence_of :name
   validates_uniqueness_of :slug,
@@ -90,16 +96,18 @@ class PufferPages::Page < ActiveRecord::Base
   validates_format_of :slug,
     :with => /\A([^\/]+)\Z/, :message => :slug_format, :unless => :root?
   validate do |page|
-    page.errors.add(:layout_name, :blank) unless page.inherited_layout_name.present?
+    page.errors.add(:layout_name, :blank) if page.inherited_layout_name.nil?
   end
-
-  attr_protected :location
 
   before_validation :defaultize_attributes
   def defaultize_attributes
     self.status ||= 'draft'
     self.slug = slug.presence
-    self.location = [swallow_nil{parent.location}, slug].compact.join('/').presence
+    self.location = [parent.try(:location), slug].compact.join('/').presence
+  end
+
+  def location
+    read_attribute(:location) || [parent.try(:location), slug].compact.join('/').presence
   end
 
   before_update :update_locations, :if => :location_changed?
@@ -107,16 +115,16 @@ class PufferPages::Page < ActiveRecord::Base
     self.class.update_all "location = replace(location, '#{location_was}', '#{location}')", ["location like ?", location_was + '%']
   end
 
-  after_initialize :build_main_part, :if => :root?
-  before_save :build_main_part, :if => :root?
-  def build_main_part
-    unless page_parts.map(&:name).include?(PufferPages.primary_page_part_name)
-      page_parts.build(:name => PufferPages.primary_page_part_name, :locale => I18n.default_locale)
-    end
-  end
-
   statuses.each do |status_name|
     define_method "#{status_name}?" do status == status_name end
+  end
+
+  def status
+    ActiveSupport::StringInquirer.new(read_attribute(:status)) if status?
+  end
+
+  def segments
+    location.to_s.split ?/
   end
 
   def to_location
@@ -127,19 +135,60 @@ class PufferPages::Page < ActiveRecord::Base
     File.extname(slug)[1..-1].to_s.to_sym.presence || :html
   end
 
-  def render context = {}
-    if inherited_layout
-      render_layout(inherited_layout.body, context)
-    else
-      inherited_page_parts.reverse.map do |part|
-        result = part.render(context, self)
-        part.main? ? result : "<% content_for :'#{part.name}' do %>#{result}<% end %>"
-      end.join
+  def ancestors_page_parts
+    self_and_ancestors_page_parts.where('pages.id != ?', id)
+  end
+
+  def self_and_ancestors_page_parts
+    PufferPages::PagePart
+      .where("#{q_left} <= ? AND #{q_right} >= ?", left, right)
+      .joins(:page).order('name, pages.lft desc')
+  end
+
+  def inherited_page_parts
+    @inherited_page_parts ||= self_and_ancestors_page_parts.group_by(&:name).map { |(_, group)| group.first }
+  end
+
+  def inherited_page_part name
+    inherited_page_parts.detect { |part| part.name == name }
+  end
+
+  def render *args
+    source, context = normalize_render_options *args
+    context = merge_context context, additional_render_options
+    source ||= inherited_layout
+
+    contextualize page_translations: page_translations do
+      if source
+        if source.respond_to?(:render)
+          instrument_render! context do
+            source.render context
+          end
+        else
+          render_template source, context
+        end
+      else
+        instrument_render! context do
+          inherited_page_parts.map do |part|
+            result = part.render context
+            part.main? ? result : "<% content_for :'#{part.name}' do %>#{result}<% end %>"
+          end.join
+        end
+      end
     end
   end
 
-  def render_layout layout, context = {}
-    render_liquid(layout, self, context)
+  def locales_translations; locales; end
+  def locales_translations=(value); self.locales = value; end
+
+  def page_translations
+    self_and_ancestors.each_with_object({}) do |page, result|
+      result.deep_merge! page.locales.translations
+    end
+  end
+
+  def additional_render_options
+    { registers: { page: self }, drops: { page: self, self: self } }
   end
 
   def inherited_layout_page
@@ -150,63 +199,23 @@ class PufferPages::Page < ActiveRecord::Base
     @inherited_layout_name ||= inherited_layout_page.try(:layout_name)
   end
 
+  def current_layout
+    @current_layout ||= inherited_layout_page.try(:layout)
+  end
+
   def inherited_layout
-    @inherited_layout ||= inherited_layout_page.try(:layout)
+    @inherited_layout ||= PufferPages::Layout.find_layout(current_layout.name) if current_layout
   end
 
   def layout_for_render
     "layouts/#{inherited_layout_name}" unless inherited_layout
   end
 
-  def inherited_page_parts
-    @inherited_page_parts ||= all_inherited_page_parts.uniq_by(&:name)
-  end
-
-  def all_inherited_page_parts
-    locales = PufferPages.localize? ?
-      (I18n.respond_to?(:fallbacks) ?
-        I18n.fallbacks[I18n.locale] :
-        [I18n.locale]) :
-      [I18n.default_locale]
-
-    @all_inherited_page_parts ||= begin
-      parts = ::PagePart
-        .where(:page_parts => { :page_id => self_and_ancestors.map(&:id), :locale => locales })
-        .joins(:page)
-        .order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc")
-
-      dictionary = parts.inject({}) do |hash, part|
-        entry = hash[part.name] || {}
-
-        if entry[part.page_id].nil?
-          entry[part.page_id] = part
-        else
-          entry[part.page_id] = part if part.locale == I18n.locale.to_s
-        end
-
-        hash[part.name] = entry
-        hash
-      end
-
-      dictionary.values.inject([]) { |ary, parts| ary << parts.values }.flatten
-    end
-  end
-
-  def super_inherited_page_parts
-    @super_inherited_page_parts ||= ::PagePart
-      .where(:page_parts => { :page_id => ancestors.map(&:id) }).joins(:page)
-      .order("page_parts.name = '#{PufferPages.primary_page_part_name}' desc, page_parts.name, pages.lft desc")
-  end
-
-  def part name
-    inherited_page_parts.detect {|part| part.name == name}
-  end
-
   def content_type
     Rack::Mime.mime_type(File.extname(slug.to_s), 'text/html')
   end
 
-  def to_drop *args
-    ::PufferPages::Liquid::PageDrop.new(self, *args)
+  def to_liquid
+    @to_liquid ||= ::PufferPages::Liquid::PageDrop.new(self)
   end
 end
