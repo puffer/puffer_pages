@@ -3,7 +3,6 @@ source "http://rubygems.org"
 gemspec
 
 gem 'puffer', github: 'puffer/puffer'
-gem 'activeuuid', github: 'jashmenn/activeuuid'
 gem 'rails'
 
 group :test do

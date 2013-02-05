@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "puffer"
   s.add_runtime_dependency "liquid"
   s.add_runtime_dependency "nested_set"
-  s.add_runtime_dependency "activeuuid"
+  s.add_runtime_dependency "activeuuid", ">= 0.4.0"
   s.add_runtime_dependency "contextuality"
 
   s.add_development_dependency "bcrypt-ruby"
