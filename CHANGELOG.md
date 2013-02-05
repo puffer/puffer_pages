@@ -1,4 +1,6 @@
-## 0.5.0 \[ In Development \] \[ Branch: master \]
+## 0.6.0 \[ In Development \] \[ Branch: master \]
+
+## 0.5.0
 
 ### New features
 
