@@ -17,4 +17,16 @@ describe PufferPages::Liquid::Backend do
       backend.translate(:en, 'hello')
     end.should == 'PufferPages world'
   end
+
+  context 'backend installation' do
+    context 'fallbacks' do
+      specify do
+        contextualize(page_translations: translations) do
+          I18n.with_locale :ru do
+            I18n.translate('hello')
+          end
+        end.should == 'PufferPages world'
+      end
+    end
+  end
 end

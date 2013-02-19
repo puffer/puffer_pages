@@ -7,7 +7,7 @@ module PufferPages
     config.puffer_pages = ActiveSupport::OrderedOptions.new
     config.puffer_pages.raise_errors = false
 
-    config.after_initialize do
+    initializer 'puffer_pages.install_i18n_backend', after: 'build_middleware_stack' do
       if PufferPages.install_i18n_backend
         I18n.backend = I18n::Backend::Chain.new(PufferPages.i18n_backend, I18n.backend)
       end
