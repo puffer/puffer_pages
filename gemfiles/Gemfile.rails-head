@@ -4,4 +4,5 @@ gemspec path: '../'
 
 gem 'puffer', github: 'puffer/puffer'
 gem 'rails', github: 'rails/rails'
+gem 'activerecord-deprecated_finders', github: 'rails/activerecord-deprecated_finders'
 gem 'activeuuid'
