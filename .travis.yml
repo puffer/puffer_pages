@@ -7,8 +7,12 @@ gemfile:
   - Gemfile
   - gemfiles/Gemfile.rails-3-1
   - gemfiles/Gemfile.rails-3-2
-  # - gemfiles/Gemfile.rails-head
+  - gemfiles/Gemfile.rails-head
 
 env:
   - LOCALIZE=true
   - LOCALIZE=false
+
+matrix:
+  allow_failures:
+    - gemfile: gemfiles/Gemfile.rails-head

@@ -3,5 +3,5 @@ source "http://rubygems.org"
 gemspec path: '../'
 
 gem 'puffer', github: 'puffer/puffer'
-gem 'activeuuid', github: 'jashmenn/activeuuid'
 gem 'rails', github: 'rails/rails'
+gem 'activeuuid'
