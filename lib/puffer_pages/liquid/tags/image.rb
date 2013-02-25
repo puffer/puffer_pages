@@ -26,7 +26,7 @@ module PufferPages
             attributes[key] = context[value]
           end
 
-          context.registers[:tracker].register("<%= image_tag #{@path}, #{attributes.to_s} %>")
+          context.registers[:tracker].register("<%= image_tag #{@path}, #{attributes} %>")
         end
       end
 
