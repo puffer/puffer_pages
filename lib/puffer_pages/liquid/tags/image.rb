@@ -8,8 +8,6 @@ module PufferPages
         def initialize(tag_name, markup, tokens)
           if markup =~ Syntax
             @path = $1
-          elsif markup.blank?
-            @path = nil
           else
             raise SyntaxError.new("Syntax Error in 'image' - Valid syntax: image '/path/to/image'")
           end
@@ -28,9 +26,7 @@ module PufferPages
             attributes[key] = context[value]
           end
 
-          erb = "<%= image_tag #{@path}, #{attributes.inspect} %>"
-
-          context.registers[:tracker].register(erb)
+          context.registers[:tracker].register("<%= image_tag #{@path}, #{attributes.to_s} %>")
         end
       end
 
