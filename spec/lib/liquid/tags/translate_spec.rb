@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe PufferPages::Liquid::Tags::Translate do
 
-  def render_page(page, drops = {})
-    page.render({ self: page }.merge(drops))
-  end
-
   before do
     @backend = I18n.backend
     I18n.backend = I18n::Backend::Simple.new
@@ -104,4 +100,31 @@ describe PufferPages::Liquid::Tags::Translate do
     specify { root.render.should == 'some params hello' }
   end
 
+  context 'count in options' do
+    let!(:root) { Fabricate :root }
+    before do
+      I18n.backend.store_translations(:en, layouts:
+        { application: { hello: {one: 'one %{count}', other: 'many %{count}'} } })
+    end
+
+    context 'with integer count' do
+      let!(:layout) { Fabricate :application, body: "{% t '.hello' count: 1 %}" }
+      specify { root.render.should == 'one 1' }
+    end
+
+    context 'with float count' do
+      let!(:layout) { Fabricate :application, body: "{% t '.hello' count: 1.0 %}" }
+      specify { root.render.should == 'one 1.0' }
+    end
+
+    context 'with integer as string count' do
+      let!(:layout) { Fabricate :application, body: "{% t '.hello' count: '1' %}" }
+      specify { root.render.should == 'one 1' }
+    end
+
+    context 'with float as string count' do
+      let!(:layout) { Fabricate :application, body: "{% t '.hello' count: '1.0' %}" }
+      specify { root.render.should == 'one 1.0' }
+    end
+  end
 end
