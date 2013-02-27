@@ -24,7 +24,7 @@ module PufferPages
 
       def _normalize_options options
         super
-        if options[:puffer_page] || _puffer_pages_action?
+        if options[:puffer_page] || (options[:puffer_page] != false && _puffer_pages_action?)
           scope = options[:puffer_scope].presence || _puffer_pages_options[:scope].presence
           page = options.values_at(:puffer_page, :partial, :action, :file).delete_if(&:blank?).first
           options[:puffer_page] = _puffer_pages_template(page, scope)

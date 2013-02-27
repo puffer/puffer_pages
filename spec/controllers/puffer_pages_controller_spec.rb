@@ -134,6 +134,18 @@ describe 'PufferPagesController' do
         puffer_pages
 
         def index
+          render nothing: true, puffer_page: false
+        end
+      end
+
+      it { should_not render_page }
+    end
+
+    context do
+      controller do
+        puffer_pages
+
+        def index
           render puffer_page: 'first'
         end
       end

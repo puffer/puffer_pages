@@ -1,5 +1,15 @@
 ## 0.6.0 \[ In Development \] \[ Branch: master \]
 
+### New features
+
+*   Added abulity to cancel puffer_page rendering with `render puffer_page: false` option.
+
+*   Added pluralization support to liquid backend (Exoth).
+
+*   Added `image` liquid tag - alias to image_path helper (andrewgr).
+
+### Bugfixes
+
 ## 0.5.0
 
 ### New features
