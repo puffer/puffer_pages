@@ -27,6 +27,13 @@ module PufferPages
           end
           processed = context[:processed]
 
+          if options[:count].is_a?(String)
+            begin
+              options[:count] = (options[:count] =~ /\./ ? Float(options[:count]) : Integer(options[:count]))
+            rescue ArgumentError
+            end
+          end
+
           if processed && key.first == '.'
             I18n.translate i18n_key(processed, key.last(-1)),
               options.merge!(:default => i18n_defaults(processed, key.last(-1)))
