@@ -14,6 +14,8 @@
 
 ### New features
 
+*   PufferPages is mountable engine now, so `mount PufferPages::Engine => '/'`
+
 *   `scope` tag. Just creates variables scope inside its block.
 
 *   Origins - full import-export system. Just add your remote server and syncronize all the pages.
