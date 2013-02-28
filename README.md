@@ -1,3 +1,4 @@
+[![Code Climate](https://codeclimate.com/github/puffer/puffer_pages.png)](https://codeclimate.com/github/puffer/puffer_pages)
 [![Build Status](https://secure.travis-ci.org/puffer/puffer_pages.png)](http://travis-ci.org/puffer/puffer_pages)
 
 # PufferPages is lightweight but powerful rails >= 3.1 CMS
