@@ -2,6 +2,10 @@
 
 ### New features
 
+## 0.5.1
+
+### New features
+
 *   Added abulity to cancel puffer_page rendering with `render puffer_page: false` option.
 
 *   Added pluralization support to liquid backend (Exoth).
