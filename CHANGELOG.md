@@ -2,6 +2,20 @@
 
 ### New features
 
+*   Added `PufferPages::Rspec` module. Just `require 'puffer_pages/rspec'` in your
+    `spec_helper` and get all of the puffer_pages rspec features.
+
+*   PufferPages actions now respects RSpec's `render_views` in `ControllerExampleGroup`.
+    Renderer renders mock page and compairing only locations of rendered and specified pages,
+    so you will not get `PufferPages::MissedPage` even if page does not exist in database,
+    but can be shure that proper page renders with `should render_page`.
+
+### Infrastructure changes
+
+*   `PufferPages::MissedPage` instead of `PufferPages::LayoutMissing`.
+
+*   Now PufferPages rendering errors raises on a controller level instead of model methods.
+
 ## 0.5.1
 
 ### New features
@@ -11,8 +25,6 @@
 *   Added pluralization support to liquid backend (Exoth).
 
 *   Added `image` liquid tag - alias to image_path helper (andrewgr).
-
-### Bugfixes
 
 ## 0.5.0
 

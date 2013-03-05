@@ -202,11 +202,7 @@ describe PufferPages::Page do
     end
 
     it 'not existent page' do
-      expect {PufferPages::Page.find_page('foo/baz') }.to raise_error(ActiveRecord::RecordNotFound)
-    end
-
-    it 'draft page' do
-      expect {PufferPages::Page.find_page('foo/bar/baz') }.to raise_error(PufferPages::DraftPage)
+      PufferPages::Page.find_page('foo/baz').should be_nil
     end
 
     it 'single section root page' do
@@ -248,15 +244,6 @@ describe PufferPages::Page do
       PufferPages::Page.find_view_page('/foo/moo/baz').should == @baz
     end
 
-    it 'not existent page' do
-      expect {PufferPages::Page.find_view_page('/bar')}.to raise_error(PufferPages::LayoutMissed)
-    end
-
-    it 'draft page' do
-      @bar.update_attributes(:status => 'draft')
-      expect {PufferPages::Page.find_view_page('/foo/bar')}.to raise_error(PufferPages::LayoutMissed)
-    end
-
     it "should choose the last created (with the most right tree location) page from those fitting the requested path and format" do
       PufferPages::Page.find_view_page('/foo/moo/baz', :formats => [:html]).should == @baz
     end
@@ -270,7 +257,7 @@ describe PufferPages::Page do
     specify {PufferPages::Page.find_view_page('/foo/moo/baz', :formats => [:xml, :html]).should == @baz}
     specify {PufferPages::Page.find_view_page('/foo/moo/baz', :formats => [:xml, :js]).should == @bazjs}
     it "should not use %-ending locations for formats other than html, thus generating an error if format is different" do
-      expect {PufferPages::Page.find_view_page('/foo/moo/baz', :formats => [:xml])}.to raise_error(PufferPages::LayoutMissed)
+      PufferPages::Page.find_view_page('/foo/moo/baz', :formats => [:xml]).should be_nil
     end
 
   end

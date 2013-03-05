@@ -24,7 +24,7 @@ module PufferPages
 
       def _normalize_options options
         super
-        if options[:puffer_page] || (options[:puffer_page] != false && _puffer_pages_action?)
+        if (options.key?(:puffer_page) || _puffer_pages_action?) && options[:puffer_page] != false
           scope = options[:puffer_scope].presence || _puffer_pages_options[:scope].presence
           page = options.values_at(:puffer_page, :partial, :action, :file).delete_if(&:blank?).first
           options[:puffer_page] = _puffer_pages_template(page, scope)
@@ -56,10 +56,17 @@ module PufferPages
           scope
         end
 
-        PufferPages::Page.controller_scope(scope).find_view_page(
-          suggest.presence || request.path_info,
+        _puffer_page_for suggest, scope
+      end
+
+      def _puffer_page_for location, scope = nil
+        page = PufferPages::Page.controller_scope(scope).find_view_page(
+          location.presence || request.path_info,
           :formats => lookup_context.formats
         )
+        raise PufferPages::MissedPage unless page
+        raise PufferPages::DraftPage if page.draft?
+        page
       end
 
     end

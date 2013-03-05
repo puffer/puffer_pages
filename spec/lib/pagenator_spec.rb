@@ -3,6 +3,8 @@ require 'spec_helper'
 describe PufferPages::Extensions::Pagenator do
   context 'controller' do
     include RSpec::Rails::ControllerExampleGroup
+    render_views
+
     let!(:foo_layout){Fabricate :foo_layout}
     let!(:root){Fabricate :foo_root}
     let!(:anonymous){Fabricate :page, :slug => 'anonymous', :name => 'foo', :parent => root}
@@ -157,13 +159,13 @@ describe PufferPages::Extensions::Pagenator do
 
     context do
       controller do
-        puffer_pages :scope => :puffer_scope
+        puffer_pages scope: :puffer_scope
         def index
           render 'named'
         end
 
         def puffer_scope
-          {:name => 'bar'}
+          {name: 'bar'}
         end
       end
 

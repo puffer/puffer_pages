@@ -7,10 +7,37 @@ module PufferPages
   class PufferPagesError < StandardError
   end
 
-  class DraftPage < PufferPagesError
+  class RenderError < PufferPagesError
+    def inititialize location, formats = []
+      @location, @formats = location, formats
+    end
+
+    def with_formats
+      if @formats.present?
+        "with formats `#{@formats.join('`, `')}`"
+      else
+        "with any format"
+      end
+    end
+
+    def reason
+    end
+
+    def message
+      "PufferPages can`t render page `#{@location}` #{with_formats} #{reason}"
+    end
   end
 
-  class LayoutMissed < PufferPagesError
+  class DraftPage < RenderError
+    def reason
+      "because it`s draft"
+    end
+  end
+
+  class MissedPage < RenderError
+    def reason
+      "because it`s missed"
+    end
   end
 
   class ImportFailed < PufferPagesError

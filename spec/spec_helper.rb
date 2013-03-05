@@ -4,6 +4,7 @@ ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require "rails/test_help"
 require "rspec/rails"
+require "puffer_pages/rspec"
 
 Bundler.require :development
 
@@ -30,7 +31,6 @@ RSpec.configure do |config|
   # methods or matchers
   require 'rspec/expectations'
   config.include RSpec::Matchers
-  config.include PufferPages::Rspec::Matchers
 
   # == Mock Framework
   config.mock_with :rspec

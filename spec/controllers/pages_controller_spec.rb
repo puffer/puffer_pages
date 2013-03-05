@@ -5,6 +5,8 @@ describe PagesController do
   before { @routes = PufferPages::Engine.routes }
 
   describe "GET index" do
+    render_views
+
     let!(:layout) { Fabricate :application }
     let!(:root) { Fabricate :root }
     let!(:first) { Fabricate :page, slug: 'first', parent: root }
@@ -24,7 +26,7 @@ describe PagesController do
         response.should be_ok
       end
       specify do
-        expect { get :index, path: 'first/second' }.to raise_error ActiveRecord::RecordNotFound
+        expect { get :index, path: 'first/second' }.to raise_error PufferPages::MissedPage
         response.should_not render_page
         response.should_not be_not_found
       end

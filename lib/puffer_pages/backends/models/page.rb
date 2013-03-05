@@ -30,11 +30,8 @@ class PufferPages::Backends::Page < ActiveRecord::Base
 
   def self.find_page location
     location = normalize_path(location)
-    page = PufferPages.single_section_page_path ?
+    PufferPages.single_section_page_path ?
       find_by_slug(location) : find_by_location(location)
-    raise ActiveRecord::RecordNotFound unless page
-    raise PufferPages::DraftPage.new("PufferPages can`t show page `#{page.location}` because it is draft") if page.draft?
-    page
   end
 
   def self.find_view_page location, options = {}
@@ -42,7 +39,7 @@ class PufferPages::Backends::Page < ActiveRecord::Base
     depth = location.to_s.count('/').next
     formats = options[:formats].presence || [:html]
 
-    page = if location.blank?
+    if location.blank?
       roots.first
     else
       formats.inject(nil) do |page, format|
@@ -52,15 +49,10 @@ class PufferPages::Backends::Page < ActiveRecord::Base
           else
             where(['? like location', [location, format].join('.')]).where(['not ? like location', [location, format, ''].join('.')])
           end
-          loc.where(['status not in (?)', 'draft']).where(:"#{depth_column_name}" => depth).order('lft desc').first
+          loc.where(:"#{depth_column_name}" => depth).order('lft desc').first
         end
       end
     end
-
-    raise PufferPages::LayoutMissed.new(
-      "PufferPages can`t render page for `#{location}` with formats `#{formats.join('`, `')}` because layout page missed or draft"
-    ) unless page
-    page
   end
 
   def self.export_json

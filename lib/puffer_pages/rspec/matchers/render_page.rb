@@ -66,7 +66,15 @@ module PufferPages
         def page_conformity
           scope.puffer_pages_render[rendered_page] &&
           scope.puffer_pages_render[rendered_page].count == 1 &&
-          rendered_page == page
+          proper_page_rendered
+        end
+
+        def proper_page_rendered
+          if rendered_page.respond_to?(:dummy_page?) && rendered_page.dummy_page?
+            rendered_page.location == page.location
+          else
+            rendered_page == page
+          end
         end
 
         def with_drops?

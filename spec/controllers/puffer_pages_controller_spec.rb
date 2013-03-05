@@ -6,6 +6,7 @@ describe 'PufferPagesController' do
   let!(:anonymous) { Fabricate :page, slug: 'anonymous', parent: root }
   let!(:first) { Fabricate :page, slug: 'first', parent: root }
   let!(:second) { Fabricate :page, slug: 'second', parent: first }
+  let!(:third) { Fabricate :page, slug: 'third', parent: root, status: 'draft' }
 
   context '`:puffer_page` render option' do
     context do
@@ -14,8 +15,8 @@ describe 'PufferPagesController' do
           render puffer_page: ''
         end
       end
-      # aaaammmm wooot? should be root
-      it { should render_page anonymous }
+
+      it { should render_page root }
     end
 
     context do
@@ -90,7 +91,7 @@ describe 'PufferPagesController' do
         end
       end
 
-      it { should render_page anonymous }
+      it { should render_page root }
     end
 
     context do
@@ -102,7 +103,7 @@ describe 'PufferPagesController' do
         end
       end
 
-      it { should render_page anonymous }
+      it { should render_page root }
     end
 
     context do
@@ -176,6 +177,42 @@ describe 'PufferPagesController' do
       end
 
       it { should render_page first }
+    end
+  end
+
+  context 'not existing pages' do
+    context do
+      controller do
+        def index
+          render puffer_page: 'third'
+        end
+      end
+
+      context do
+        render_views
+        specify { expect { get :index }.to raise_error(PufferPages::DraftPage) }
+      end
+
+      context do
+        it { should render_page 'third' }
+      end
+    end
+
+    context do
+      controller do
+        def index
+          render puffer_page: 'fourth'
+        end
+      end
+
+      context do
+        render_views
+        specify { expect { get :index }.to raise_error(PufferPages::MissedPage) }
+      end
+
+      context do
+        it { should render_page 'fourth' }
+      end
     end
   end
 
