@@ -60,12 +60,11 @@ module PufferPages
       end
 
       def _puffer_page_for location, scope = nil
-        page = PufferPages::Page.controller_scope(scope).find_view_page(
-          location.presence || request.path_info,
-          :formats => lookup_context.formats
-        )
-        raise PufferPages::MissedPage unless page
-        raise PufferPages::DraftPage if page.draft?
+        location = location.presence || request.path_info
+        formats = lookup_context.formats
+        page = PufferPages::Page.controller_scope(scope).find_view_page(location, formats: formats)
+        raise PufferPages::MissedPage.new(location, formats) unless page
+        raise PufferPages::DraftPage.new(location, formats) if page.draft?
         page
       end
 

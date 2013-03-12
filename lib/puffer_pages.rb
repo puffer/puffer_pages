@@ -8,7 +8,7 @@ module PufferPages
   end
 
   class RenderError < PufferPagesError
-    def inititialize location, formats = []
+    def initialize location, formats = []
       @location, @formats = location, formats
     end
 
