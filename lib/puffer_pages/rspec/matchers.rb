@@ -13,7 +13,7 @@ RSpec::Rails::ControllerExampleGroup.class_eval do
     @puffer_pages_render
   end
 
-  def self.included base
+  def self.included_with_puffer_pages base
     base.class_eval do
       around(:each) do |example|
         @puffer_pages_render = {}
@@ -25,6 +25,8 @@ RSpec::Rails::ControllerExampleGroup.class_eval do
         ActiveSupport::Notifications.unsubscribe('render_page.puffer_pages')
       end
     end
-    super
+    included_without_puffer_pages base
   end
+
+  singleton_class.alias_method_chain :included, :puffer_pages
 end

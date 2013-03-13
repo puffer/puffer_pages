@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe PufferPages::Handlers do
-  before(:all) { @handlers = subject.handlers }
-  after(:all) { subject.instance_variable_set(:@handlers, @handlers) }
+  before(:all) { @handlers = described_class.handlers }
+  after(:all) { described_class.instance_variable_set(:@handlers, @handlers) }
 
   before { subject.instance_variable_set(:@handlers, nil) }
 
