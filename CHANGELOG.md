@@ -2,6 +2,28 @@
 
 ### New features
 
+*   New `cache` tag. Fragment caching for puffer pages.
+
+    Options:
+    - `config.puffer_pages.perform_caching` - enable or disable caching at all,
+    takes `config.action_controller.perform_caching` value by default
+    - `config.puffer_pages.cache_store`. Acts the same way as rails
+    `config.cache_store`. Takes it's value by default.
+
+    Usage:
+
+    `cache ['additional_key1', 'additional_key2', ...][, expires_in: expiration]`
+    where `expiration` is a string with format:
+    - `10`, `10s` - 10 seconds
+    - `7m` - 7 minutes
+    - `5h` - 5 hours
+    - `3d` - 3 days
+    - `3d 4h 19m` - combination
+
+    Examples:
+    - `{% cache %}Hello!{% endcache %}`.
+    - `{% cache 'some_key', expires_in: '1h' %}Hello!{% endcache %}`.
+
 *   Added `PufferPages::Rspec` module. Just `require 'puffer_pages/rspec'` in your
     `spec_helper` and get all of the puffer_pages rspec features.
 

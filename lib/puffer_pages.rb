@@ -1,4 +1,6 @@
 module PufferPages
+  include ActiveSupport::Configurable
+
   autoload :SnippetsBase, 'puffer_pages/backends/controllers/snippets_base'
   autoload :LayoutsBase, 'puffer_pages/backends/controllers/layouts_base'
   autoload :PagesBase, 'puffer_pages/backends/controllers/pages_base'
@@ -61,13 +63,27 @@ module PufferPages
   mattr_accessor :install_i18n_backend
   self.install_i18n_backend = true
 
-  def self.setup
-    yield self
+  config.raise_errors = false
+
+  module ConfigMethods
+    def setup
+      yield self
+    end
+
+    def i18n_backend
+      @i18n_backend ||= PufferPages::Liquid::Backend.new
+    end
+
+    def cache_store
+      config.cache_store
+    end
+
+    def cache_store= store
+      config.cache_store = ActiveSupport::Cache.lookup_store(store)
+    end
   end
 
-  def self.i18n_backend
-    @i18n_backend ||= PufferPages::Liquid::Backend.new
-  end
+  extend ConfigMethods
 end
 
 require 'puffer'

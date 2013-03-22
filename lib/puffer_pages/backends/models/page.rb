@@ -180,7 +180,7 @@ class PufferPages::Backends::Page < ActiveRecord::Base
   end
 
   def additional_render_options
-    { registers: { page: self }, drops: { page: self, self: self } }
+    { registers: { page: self }, drops: { page: self, self: self }, environment: { processed: self } }
   end
 
   def inherited_layout_page

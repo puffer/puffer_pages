@@ -145,7 +145,7 @@ module PufferPages
         end
 
         def render_method
-          Rails.application.config.puffer_pages.raise_errors ? 'render!' : 'render'
+          PufferPages.config.raise_errors ? 'render!' : 'render'
         end
       end
     end
