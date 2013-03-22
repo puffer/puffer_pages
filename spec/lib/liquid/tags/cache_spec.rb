@@ -32,13 +32,15 @@ describe PufferPages::Liquid::Tags::Cache do
 
       specify do
         PufferPages.cache_store.should_receive(:write).with(
-          ActiveSupport::Cache.expand_cache_key(root), 'Hello', {}
+          ActiveSupport::Cache.expand_cache_key([root]), 'Hello', {}
         ).and_call_original
         root.render("{% cache %}Hello{% endcache %}").should == 'Hello'
       end
 
       specify do
-        PufferPages.cache_store.stub(:read_entry).with(root.cache_key, {}) { entry }
+        PufferPages.cache_store.stub(:read_entry).with(
+          ActiveSupport::Cache.expand_cache_key([root]), {}
+        ) { entry }
         root.render("{% cache %}Hello{% endcache %}").should == entry.value
       end
     end
@@ -46,7 +48,7 @@ describe PufferPages::Liquid::Tags::Cache do
     context 'additional params' do
       specify do
         PufferPages.cache_store.should_receive(:write).with(
-          ActiveSupport::Cache.expand_cache_key(root), 'Hello', { expires_in: 60 }
+          ActiveSupport::Cache.expand_cache_key([root]), 'Hello', { expires_in: 60 }
         ).and_call_original
         root.render("{% cache expires_in: '1m' %}Hello{% endcache %}")
       end
@@ -81,7 +83,7 @@ describe PufferPages::Liquid::Tags::Cache do
 
       specify do
         PufferPages.cache_store.should_receive(:write).with(
-          ActiveSupport::Cache.expand_cache_key(custom), 'Hello', {}
+          ActiveSupport::Cache.expand_cache_key([custom]), 'Hello', {}
         ).and_call_original
         root.render("{% snippet 'custom' %}")
       end
