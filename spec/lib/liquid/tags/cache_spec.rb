@@ -16,6 +16,11 @@ describe PufferPages::Liquid::Tags::Cache do
   end
 
   describe '#render' do
+
+    def cache_key *args
+      ActiveSupport::Cache.expand_cache_key args.unshift('puffer_pages_cache')
+    end
+
     let!(:root) { Fabricate :root }
     before { PufferPages.cache_store = :memory_store }
     before { PufferPages.config.stub(:perform_caching) { true } }
@@ -32,14 +37,14 @@ describe PufferPages::Liquid::Tags::Cache do
 
       specify do
         PufferPages.cache_store.should_receive(:write).with(
-          ActiveSupport::Cache.expand_cache_key([root]), 'Hello', {}
+          cache_key(root), 'Hello', {}
         ).and_call_original
         root.render("{% cache %}Hello{% endcache %}").should == 'Hello'
       end
 
       specify do
         PufferPages.cache_store.stub(:read_entry).with(
-          ActiveSupport::Cache.expand_cache_key([root]), {}
+          cache_key(root), {}
         ) { entry }
         root.render("{% cache %}Hello{% endcache %}").should == entry.value
       end
@@ -48,28 +53,28 @@ describe PufferPages::Liquid::Tags::Cache do
     context 'additional params' do
       specify do
         PufferPages.cache_store.should_receive(:write).with(
-          ActiveSupport::Cache.expand_cache_key([root]), 'Hello', { expires_in: 60 }
+          cache_key(root), 'Hello', { expires_in: 60 }
         ).and_call_original
         root.render("{% cache expires_in: '1m' %}Hello{% endcache %}")
       end
 
       specify do
         PufferPages.cache_store.should_receive(:write).with(
-          ActiveSupport::Cache.expand_cache_key([root, 'additional_key']), 'Hello', { expires_in: 60 }
+          cache_key(root, 'additional_key'), 'Hello', { expires_in: 60 }
         ).and_call_original
         root.render("{% cache 'additional_key', expires_in: '1m' %}Hello{% endcache %}")
       end
 
       specify do
         PufferPages.cache_store.should_receive(:write).with(
-          ActiveSupport::Cache.expand_cache_key([root, 'key1', 'key2']), 'Hello', {}
+          cache_key(root, 'key1', 'key2'), 'Hello', {}
         ).and_call_original
         root.render("{% cache 'key1', 'key2', expires_in: '' %}Hello{% endcache %}")
       end
 
       specify do
         PufferPages.cache_store.should_receive(:write).with(
-          ActiveSupport::Cache.expand_cache_key([root, 'additional_key']), 'Hello', { expires_in: 3600 }
+          cache_key(root, 'additional_key'), 'Hello', { expires_in: 3600 }
         ).and_call_original
         root.render(
           "{% cache key, expires_in: expire %}Hello{% endcache %}",
@@ -83,7 +88,7 @@ describe PufferPages::Liquid::Tags::Cache do
 
       specify do
         PufferPages.cache_store.should_receive(:write).with(
-          ActiveSupport::Cache.expand_cache_key([custom]), 'Hello', {}
+          cache_key(custom), 'Hello', {}
         ).and_call_original
         root.render("{% snippet 'custom' %}")
       end
