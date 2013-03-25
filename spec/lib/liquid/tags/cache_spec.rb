@@ -93,5 +93,12 @@ describe PufferPages::Liquid::Tags::Cache do
         root.render("{% snippet 'custom' %}")
       end
     end
+
+    context 'erb tracker cleanup' do
+      specify do
+        root.render("{% cache %}{% yield %}{% endcache %}").should == '<%= yield %>' # write
+        root.render("{% cache %}{% yield %}{% endcache %}").should == '<%= yield %>' # read
+      end
+    end
   end
 end

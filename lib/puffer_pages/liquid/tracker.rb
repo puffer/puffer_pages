@@ -11,11 +11,10 @@ module PufferPages
         content.gsub(/<%/, "<#{@ids.last}%").gsub(/%>/, "%#{@ids.last}>")
       end
 
-      def cleanup text
+      def cleanup content
         ids = @ids.join('|')
-        @ids = []
-        text = text.gsub(/<%/, "&lt;%").gsub(/%>/, "%&gt;")# unless PufferPages.config[:allow_erb]
-        text.gsub(/<(#{ids})%/, "<%").gsub(/%(#{ids})>/, "%>")
+        content = content.gsub(/<%/, "&lt;%").gsub(/%>/, "%&gt;")# unless PufferPages.allow_erb
+        content.gsub(/<(#{ids})%/, "<%").gsub(/%(#{ids})>/, "%>")
       end
 
     end

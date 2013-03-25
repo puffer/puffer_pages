@@ -40,9 +40,9 @@ module PufferPages
           key = cache_key arguments.unshift(context[:processed])
 
           if cache?
-            cache_store.fetch(key, options) do
-              super
-            end
+            context.registers[:tracker].register(cache_store.fetch(key, options) do
+              context.registers[:tracker].cleanup super
+            end)
           else
             super
           end
