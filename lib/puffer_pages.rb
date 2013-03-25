@@ -105,6 +105,7 @@ require 'puffer_pages/extensions/renderer'
 require 'puffer_pages/extensions/pagenator'
 
 require 'puffer_pages/liquid/tags/url'
+require 'puffer_pages/liquid/tags/cache'
 require 'puffer_pages/liquid/tags/yield'
 require 'puffer_pages/liquid/tags/array'
 require 'puffer_pages/liquid/tags/assets'
