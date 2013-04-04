@@ -26,13 +26,14 @@ class PufferPages::PagesBase < Puffer::TreeBase
     field :status
   end
 
-  # filter do
-  #   field :name
-  #   field :slug
-  #   field :layout_name
-  #   field :'page_parts.name'
-  #   field :'page_parts.body'
-  # end
+  filter do
+    field :name
+    field :slug
+    field :layout_name
+    field :locales
+    field 'page_parts.name'
+    field 'page_parts.body'
+  end
 
   form do
     field :parent_id, type: :hidden
