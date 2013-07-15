@@ -12,6 +12,7 @@ describe PufferPages::Liquid::PageDrop do
     let!(:root) { Fabricate :root, name: 'root' }
     let!(:first) { Fabricate :page, slug: 'first', parent: root }
     let!(:second) { Fabricate :page, slug: 'second', parent: first, page_parts: [main, sidebar] }
+    let!(:css) { Fabricate :page, slug: 'page.css', parent: first }
     let!(:main) { Fabricate(:main) }
     let!(:sidebar) { Fabricate(:sidebar, handler: 'yaml', body: YAML.dump(hash)) }
 
@@ -56,6 +57,15 @@ describe PufferPages::Liquid::PageDrop do
 
         specify do
           get "/#{second.location}"
+          response.body.should == 'shared/first content'
+        end
+      end
+
+      context 'render tag with other format' do
+        let!(:application) { Fabricate :application, :body => "{% render 'shared/first' %}" }
+
+        specify do
+          get "/#{css.location}"
           response.body.should == 'shared/first content'
         end
       end

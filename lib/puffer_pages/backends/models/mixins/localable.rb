@@ -32,15 +32,14 @@ module PufferPages
           rescue ::SyntaxError => e
             e.message
           else
-            false
+            nil
           end
 
           def translations
             @translations ||= Hash[map do |(locale, yaml)|
               load_arguments = [yaml]
               load_arguments.push "<#{locale}>" if YAML.method(:load).arity == -2
-              result = YAML.load yaml
-              result = result.presence || {}
+              result = YAML.load(*load_arguments).presence || {}
               raise ::SyntaxError.new("(<#{locale}>): Locale should be a hash") unless result.is_a?(Hash)
               [locale.to_sym, result.deep_symbolize_keys]
             end]

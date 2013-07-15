@@ -17,7 +17,15 @@ module PufferPages
 
         def render(context)
           path = context[@path]
-          context.registers[:tracker].register("<%= render '#{path}' %>")
+          context.registers[:tracker].register("<%=
+            old_formats = formats
+            begin
+              self.formats = old_formats | [:html]
+              render '#{path}'
+            ensure
+              self.formats = old_formats
+            end
+          %>")
         end
       end
 
