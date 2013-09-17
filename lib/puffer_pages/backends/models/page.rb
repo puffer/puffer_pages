@@ -138,11 +138,22 @@ class PufferPages::Backends::Page < ActiveRecord::Base
   end
 
   def inherited_page_parts
-    @inherited_page_parts ||= self_and_ancestors_page_parts.group_by(&:name).map { |(_, group)| group.first }
+    @inherited_page_parts ||= begin
+      page_parts = self_and_ancestors_page_parts.group_by(&:name)
+      if PufferPages.localize
+        translation_cached = page_parts.values.map { |group| group.first.handler == 'yaml' ? group : group.first }.
+          flatten.index_by(&:id)
+        PufferPages::PagePart::Translation.where(page_part_id: translation_cached.keys).
+          with_locale(Globalize.fallbacks).each do |translation|
+          translation_cached[translation.page_part_id].translation_caches[translation.locale.to_sym] = translation
+        end
+      end
+      page_parts
+    end
   end
 
   def inherited_page_part name
-    inherited_page_parts.detect { |part| part.name == name }
+    inherited_page_parts[name].first
   end
 
   def render *args
@@ -161,7 +172,7 @@ class PufferPages::Backends::Page < ActiveRecord::Base
         end
       else
         instrument_render! context do
-          inherited_page_parts.map do |part|
+          inherited_page_parts.values.map(&:first).map do |part|
             result = part.render context
             part.main? ? result : "<% content_for :'#{part.name}' do %>#{result}<% end %>"
           end.join

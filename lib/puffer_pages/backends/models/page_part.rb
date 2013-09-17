@@ -8,8 +8,6 @@ class PufferPages::Backends::PagePart < ActiveRecord::Base
 
   attr_protected
 
-  default_scope ->{ includes :translations } if PufferPages.localize
-
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :page_id
 
@@ -50,12 +48,16 @@ class PufferPages::Backends::PagePart < ActiveRecord::Base
     { environment: { processed: self } }
   end
 
+  def page_segments
+    @page_segments ||= page.segments
+  end
+
   def i18n_scope
-    i18n_scope_for page.segments, :page_parts, name
+    i18n_scope_for page_segments, :page_parts, name
   end
 
   def i18n_defaults
-    page.segments.inject([]) do |memo, element|
+    page_segments.inject([]) do |memo, element|
       memo.push (memo.last || []).dup.push(element)
     end.unshift([]).inject([]) do |memo, segments|
       memo.unshift i18n_scope_for(segments)

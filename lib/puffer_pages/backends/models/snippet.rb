@@ -12,7 +12,9 @@ class PufferPages::Backends::Snippet < ActiveRecord::Base
   validates_uniqueness_of :name
 
   def self.find_snippet(name)
-    where(:name => name).first
+    snippet = where(:name => name).first
+    snippet.cache_translations if PufferPages.localize
+    snippet
   end
 
   def render *args

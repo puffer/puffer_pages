@@ -22,6 +22,10 @@ module PufferPages
             "<%= yield :'#{@name}' %>" :
             "<%= yield %>")
         end
+
+        def blank?
+          false
+        end
       end
 
     end

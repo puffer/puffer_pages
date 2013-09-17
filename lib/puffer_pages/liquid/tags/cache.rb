@@ -71,6 +71,10 @@ module PufferPages
         def cache?
           PufferPages.config.perform_caching && cache_store
         end
+
+        def blank?
+          false
+        end
       end
 
     end

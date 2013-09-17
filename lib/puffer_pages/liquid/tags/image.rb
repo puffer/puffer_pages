@@ -28,6 +28,10 @@ module PufferPages
 
           context.registers[:tracker].register("<%= image_tag #{@path}, #{attributes} %>")
         end
+
+        def blank?
+          false
+        end
       end
 
     end

@@ -43,6 +43,10 @@ module PufferPages
           context.registers[:controller].send("#{@helper_name}_#{@tag_name}", *arguments, attributes)
         end
 
+        def blank?
+          false
+        end
+
       end
 
     end

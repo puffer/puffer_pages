@@ -21,6 +21,10 @@ module PufferPages
             super
           end
         end
+
+        def blank?
+          false
+        end
       end
 
     end
