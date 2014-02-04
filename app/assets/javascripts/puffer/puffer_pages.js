@@ -170,7 +170,7 @@ var set_codemirrors_modes = function() {
 
 "select[data-codemirror-mode-select]".on('change', function() { set_codemirror_mode(this) });
 
-$(document).onReady(function() {
+$(function() {
   init_codemirrors();
   set_codemirrors_modes();
 });
