@@ -3,12 +3,13 @@ module PufferPages
     module Mixins
       module Renderable
         extend ActiveSupport::Concern
+        extend ::NewRelic::Agent::MethodTracer
 
         def template
           @template ||= ::Liquid::Template.parse(self)
         end
 
-      private
+        private
 
 
         # Method gets some arguments and returns source, context and additional
@@ -104,24 +105,27 @@ module PufferPages
         end
 
         def render_template source, context = {}, additional = {}
-          template = source.respond_to?(:template) ? source.template : ::Liquid::Template.parse(source)
-          context = merge_context(context, additional)
+          self.class.trace_execution_scoped(["Custom/render_template/#{self.name.underscore}"]) do
 
-          if context.is_a?(::Liquid::Context)
-            instrument_render! context do
-              template.send(render_method, context)
-            end
-          else
-            tracker = PufferPages::Liquid::Tracker.new
-            context = merge_context(context, registers: {
-              :file_system => PufferPages::Liquid::FileSystem.new,
-              :tracker => tracker
-            })
+            template = source.respond_to?(:template) ? source.template : ::Liquid::Template.parse(source)
+            context = merge_context(context, additional)
 
-            instrument_render! context do
-              tracker.cleanup template.send(render_method,
-                context[:drops].merge!(context[:environment]),
-                registers: context[:registers])
+            if context.is_a?(::Liquid::Context)
+              instrument_render! context do
+                template.send(render_method, context)
+              end
+            else
+              tracker = PufferPages::Liquid::Tracker.new
+              context = merge_context(context, registers: {
+                                        :file_system => PufferPages::Liquid::FileSystem.new,
+                                        :tracker => tracker
+                                      })
+
+              instrument_render! context do
+                tracker.cleanup template.send(render_method,
+                                              context[:drops].merge!(context[:environment]),
+                                              registers: context[:registers])
+              end
             end
           end
         end
