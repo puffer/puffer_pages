@@ -105,7 +105,7 @@ module PufferPages
         end
 
         def render_template source, context = {}, additional = {}
-          self.class.trace_execution_scoped(["Custom/render_template/#{self.name.underscore}"]) do
+          self.class.trace_execution_scoped(["Custom/render_template/#{self.name.try(:underscore) || 'other'}"]) do
 
             template = source.respond_to?(:template) ? source.template : ::Liquid::Template.parse(source)
             context = merge_context(context, additional)
