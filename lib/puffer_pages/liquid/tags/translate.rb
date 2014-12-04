@@ -51,7 +51,7 @@ module PufferPages
         end
 
         def array_to_key *array
-          array.flatten.map { |segment| segment.to_s.gsub(?., ?/) }.join(?.).to_sym
+          array.flatten.map { |segment| segment.to_s.tr(?., ?/) }.join(?.).to_sym
         end
 
         def blank?
