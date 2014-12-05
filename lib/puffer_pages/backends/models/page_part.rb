@@ -53,17 +53,12 @@ class PufferPages::Backends::PagePart < ActiveRecord::Base
   end
 
   def i18n_scope
-    i18n_scope_for page_segments, :page_parts, name
+    i18n_scope_for page_segments
   end
 
   def i18n_defaults
-    keys = page_segments.inject([]) do |memo, element|
-      memo.push (memo.last || []).dup.push(element)
-    end.unshift([]).inject([]) do |memo, segments|
-      memo.unshift i18n_scope_for(segments)
-      memo.unshift i18n_scope_for(segments, :page_parts, name)
-    end
-    keys[1..-1]
+    page_segments[0..-2].each_with_object([[]]) { |segment, result| result.push result.last + [segment] }.reverse.
+      map { |segments| i18n_scope_for(segments) }
   end
 
 private

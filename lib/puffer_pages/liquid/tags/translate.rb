@@ -34,12 +34,13 @@ module PufferPages
             end
           end
 
-          if processed && key.first == '.'
-            I18n.translate i18n_key(processed, key.last(-1)),
-              options.merge!(:default => i18n_defaults(processed, key.last(-1)))
-          else
-            I18n.translate key, options
-          end
+              if processed && key.first == '.'
+                default = i18n_defaults(processed, key.last(-1))
+                options.merge!(:default => default) if default.any?
+                I18n.translate i18n_key(processed, key.last(-1)), options
+              else
+                I18n.translate key, options
+              end
         end
 
         def i18n_key(processed, key)
