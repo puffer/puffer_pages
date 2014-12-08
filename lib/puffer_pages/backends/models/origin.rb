@@ -36,10 +36,11 @@ class PufferPages::Backends::Origin < ActiveRecord::Base
   end
 
   def self.export_json
-    %w(layouts snippets pages).each_with_object({}) do |table, result|
+    res = %w(layouts snippets pages).each_with_object({}) do |table, result|
       klass = "puffer_pages/#{table}".classify.constantize
       result[table] = klass.export_json
-    end.as_json.to_json
+    end
+    MultiJson.dump(res)
   end
 
 private
