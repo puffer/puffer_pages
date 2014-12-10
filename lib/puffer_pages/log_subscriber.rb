@@ -27,7 +27,7 @@ module PufferPages
     def persistent_log id, duration
       if Rails.env != 'development'
         message = "Template debug - id: #{CmsEngine::DomainConfig.current.locale}_#{id} time: #{duration}"
-        error message
+        debug message
       end
     end
 
