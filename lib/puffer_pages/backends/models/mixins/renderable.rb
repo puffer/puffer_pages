@@ -3,7 +3,7 @@ module PufferPages
     module Mixins
       module Renderable
         extend ActiveSupport::Concern
-        extend ::NewRelic::Agent::MethodTracer
+        extend ::NewRelic::Agent::MethodTracer if defined? ::NewRelic
 
         def template
           @template ||= ::Liquid::Template.parse(self)
