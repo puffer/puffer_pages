@@ -173,8 +173,10 @@ class PufferPages::Backends::Page < ActiveRecord::Base
       else
         instrument_render! context do
           inherited_page_parts.values.map(&:first).map do |part|
-            result = part.render context
-            part.main? ? result : "<% content_for :'#{part.name}' do %>#{result}<% end %>"
+            if part.main? || part.name.in?(%w(keywords title description))
+              result = part.render context
+              part.main? ? result : "<% content_for :'#{part.name}' do %>#{result}<% end %>"
+            end
           end.join
         end
       end
