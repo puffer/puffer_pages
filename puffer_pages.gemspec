@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   # specify any dependencies here; for example:
   s.add_runtime_dependency "rails", ">= 3.1"
   s.add_runtime_dependency "puffer"
-  s.add_runtime_dependency "liquid"
+  s.add_runtime_dependency "liquid", ">= 2.5.2"
   s.add_runtime_dependency "nested_set"
   s.add_runtime_dependency "activeuuid", ">= 0.4.0"
   s.add_runtime_dependency "contextuality"

@@ -6,7 +6,7 @@ module PufferPages
 
       private
 
-        def _read_template_from_file_system(context)
+        def read_template_from_file_system(context)
           file_system = context.registers[:file_system] || Liquid::Template.file_system
           template_name = "#{@tag_name.pluralize}/#{context[@template_name]}"
 

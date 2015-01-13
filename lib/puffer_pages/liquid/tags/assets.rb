@@ -28,6 +28,10 @@ module PufferPages
           context.registers[:tracker].register(erb)
         end
 
+        def blank?
+          false
+        end
+
       private
 
         def variables_from_string(markup)

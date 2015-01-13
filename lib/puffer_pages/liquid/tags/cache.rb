@@ -61,7 +61,7 @@ module PufferPages
         end
 
         def cache_key key
-          ActiveSupport::Cache.expand_cache_key key.unshift('puffer_pages_cache')
+          Digest::MD5.hexdigest ActiveSupport::Cache.expand_cache_key(key.unshift('puffer_pages_cache'))
         end
 
         def cache_store
@@ -70,6 +70,10 @@ module PufferPages
 
         def cache?
           PufferPages.config.perform_caching && cache_store
+        end
+
+        def blank?
+          false
         end
       end
 

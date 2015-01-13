@@ -6,6 +6,10 @@ module PufferPages
         def render(context)
           context.registers[:tracker].register("<%= javascript_tag do %>#{super}<% end %>")
         end
+
+        def blank?
+          false
+        end
       end
 
     end

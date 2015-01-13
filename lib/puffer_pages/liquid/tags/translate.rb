@@ -34,12 +34,13 @@ module PufferPages
             end
           end
 
-          if processed && key.first == '.'
-            I18n.translate i18n_key(processed, key.last(-1)),
-              options.merge!(:default => i18n_defaults(processed, key.last(-1)))
-          else
-            I18n.translate key, options
-          end
+              if processed && key.first == '.'
+                default = i18n_defaults(processed, key.last(-1))
+                options.merge!(:default => default) if default.any?
+                I18n.translate i18n_key(processed, key.last(-1)), options
+              else
+                I18n.translate key, options
+              end
         end
 
         def i18n_key(processed, key)
@@ -51,7 +52,11 @@ module PufferPages
         end
 
         def array_to_key *array
-          array.flatten.map { |segment| segment.to_s.gsub(?., ?/) }.join(?.).to_sym
+          array.flatten.map { |segment| segment.to_s.tr(?., ?/) }.join(?.).to_sym
+        end
+
+        def blank?
+          false
         end
       end
 

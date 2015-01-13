@@ -21,6 +21,10 @@ module PufferPages
           ''
         end
 
+        def blank?
+          false
+        end
+
       private
 
         def variables_from_string(markup)

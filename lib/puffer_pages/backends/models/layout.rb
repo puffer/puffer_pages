@@ -12,7 +12,9 @@ class PufferPages::Backends::Layout < ActiveRecord::Base
   validates_uniqueness_of :name
 
   def self.find_layout(name)
-    where(:name => name).first
+    layout = where(:name => name).first
+    layout.cache_translations if PufferPages.localize
+    layout
   end
 
   def render *args

@@ -14,6 +14,12 @@ module PufferPages
                 @globalize_migrator ||= PufferPages::Globalize::Migrator.new(self)
               end
 
+              define_method :cache_translations do
+                translations.with_locale(Globalize.fallbacks).each do |translation|
+                  translation_caches[translation.locale.to_sym] = translation
+                end
+              end
+
               fields.each do |field|
                 define_method "#{field}_translations" do
                   result = translations.each_with_object(HashWithIndifferentAccess.new) do |translation, result|

@@ -4,7 +4,7 @@ module PufferPages
 
       class Include < ::Liquid::Include
         def render(context)
-          source = _read_template_from_file_system(context)
+          source = read_template_from_file_system(context)
           variable = context[@variable_name || @template_name[1..-2]]
 
           context.stack do
